@@ -1,0 +1,22 @@
+{% extends "inverso_sa/dashboard.html" %}
+
+{% block contenido %}
+<h2>📄 Mis Recargas</h2>
+
+<table>
+    <tr>
+        <th>Fecha</th>
+        <th>Monto</th>
+        <th>Referencia</th>
+        <th>Estado</th>
+    </tr>
+    {% for r in recargas %}
+    <tr>
+        <td>{{ r.fecha }}</td>
+        <td>C$ {{ r.monto }}</td>
+        <td>{{ r.referencia }}</td>
+        <td>{{ r.get_estado_display }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

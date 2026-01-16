@@ -1,0 +1,73 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | Inverso</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="{% static 'inverso_sa/css/registro.css' %}">
+
+    <!-- GOOGLE FONT -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<main class="page-container">
+    <section class="login-card">
+        <div class="brand-header">
+            <div class="logo-wrapper">
+                <img src="{% static 'inverso_sa/img/logo.jpeg' %}" alt="Inverso" class="logo-img">
+            </div>
+            <h1 class="brand-title">INVE<span>RSO</span></h1>
+        </div>
+
+        {% if error %}
+            <p style="color:red; text-align:center;">{{ error }}</p>
+        {% endif %}
+
+        <!-- FORMULARIO DJANGO -->
+        <form method="POST" class="form-container">
+            {% csrf_token %}
+
+            <div class="input-group">
+                <label for="user">USUARIO</label>
+                <input type="text" id="user" name="username" placeholder="Tu nombre de usuario" required>
+            </div>
+
+            <div class="input-group">
+                <label for="pass">CONTRASEÑA</label>
+                <input type="password" id="pass" name="password" placeholder="••••••••" required>
+            </div>
+
+            <button type="submit" class="submit-btn">ACCEDER AHORA</button>
+            
+            <div class="form-footer">
+                <a href="#">¿Olvidaste tu contraseña?</a>
+                <span class="divider">|</span>
+                <a href="{% url 'registro' %}" class="highlight">Registrarse</a>
+            </div>
+        </form>
+    </section>
+</main>
+
+<script>
+document.querySelectorAll('a.highlight').forEach(link => {
+    link.addEventListener('click', function(e) {
+        e.preventDefault();
+        let target = this.href;
+
+        document.querySelector('section').style.opacity = '0';
+        document.querySelector('section').style.transform = 'translateY(-20px)';
+        document.querySelector('section').style.transition = 'all 0.4s ease';
+
+        setTimeout(() => {
+            window.location.href = target;
+        }, 400);
+    });
+});
+</script>
+
+</body>
+</html>

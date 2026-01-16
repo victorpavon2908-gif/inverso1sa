@@ -1,0 +1,72 @@
+{% extends "inverso_sa/dashboard.html" %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'inverso_sa/css/recarga.css' %}">
+{% endblock %}
+
+{% block contenido %}
+<div class="container">
+    <h2>💳 Recargar Saldo</h2>
+
+    <a href="{% url 'inicio' %}" class="btn-cta">⬅ Regresar</a>
+
+    {% if messages %}
+        {% for message in messages %}
+            <p style="color:red">{{ message }}</p>
+        {% endfor %}
+    {% endif %}
+
+    <div class="card-bg">
+        <p>
+            <strong>Banco:</strong> {{ cuenta.banco }}
+            <button type="button" onclick="copyText('{{ cuenta.banco }}')">Copiar</button>
+        </p>
+        <p>
+            <strong>Destinatario:</strong> {{ cuenta.destinatario }}
+            <button type="button" onclick="copyText('{{ cuenta.destinatario }}')">Copiar</button>
+        </p>
+        <p>
+            <strong>N° Cuenta:</strong> {{ cuenta.numero_cuenta }}
+            <button type="button" onclick="copyText('{{ cuenta.numero_cuenta }}')">Copiar</button>
+        </p>
+    </div>
+
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <label>Monto</label>
+        <input type="number" id="monto" name="monto" required>
+
+        <div class="quick-amounts">
+            {% for val in montos_rapidos %}
+                <button type="button" onclick="setMonto({{ val }})">
+                    C$ {{ val }}
+                </button>
+            {% endfor %}
+        </div>
+
+        <label>Foto del voucher</label>
+        <input type="file" name="voucher" required>
+
+        <label>Número de referencia</label>
+        <input type="text" name="referencia" required>
+
+        <button type="submit" class="btn-cta">Enviar Recarga</button>
+    </form>
+</div>
+
+<script>
+function setMonto(valor) {
+    document.getElementById('monto').value = valor;
+}
+
+function copyText(text) {
+    navigator.clipboard.writeText(text).then(() => {
+        alert("Copiado: " + text);
+    }).catch(() => {
+        alert("No se pudo copiar");
+    });
+}
+</script>
+{% endblock %}

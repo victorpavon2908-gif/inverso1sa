@@ -1,0 +1,132 @@
+/* ===============================
+   RECARGA DE SALDO
+================================ */
+
+.container h2 {
+    font-size: 1.8rem;
+    color: var(--green);
+    margin-bottom: 20px;
+}
+
+.btn-cta {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: var(--primary);
+    color: var(--text-white);
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+    margin-bottom: 20px;
+}
+
+.btn-cta:hover {
+    background-color: var(--green);
+}
+
+/* Mensajes de error / éxito */
+p {
+    font-size: 0.95rem;
+    margin: 5px 0;
+}
+
+/* Tarjeta con datos bancarios */
+.card-bg {
+    background-color: #0f113c;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 25px;
+    color: var(--text-white);
+    font-weight: 500;
+}
+
+.card-bg p {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 8px 0;
+}
+
+.card-bg button {
+    padding: 5px 10px;
+    background-color: var(--primary);
+    border: none;
+    border-radius: 6px;
+    color: var(--text-white);
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: background-color 0.3s ease;
+}
+
+.card-bg button:hover {
+    background-color: var(--green);
+}
+
+/* Formulario */
+form label {
+    display: block;
+    margin: 15px 0 5px;
+    font-weight: 600;
+    color: var(--text-white);
+}
+
+form input[type="number"],
+form input[type="text"],
+form input[type="file"] {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1px solid #2a2a70;
+    background-color: #141743;
+    color: var(--text-white);
+    margin-bottom: 15px;
+    font-size: 1rem;
+}
+
+form input[type="file"] {
+    padding: 5px 12px;
+}
+
+/* Botones de montos rápidos */
+.quick-amounts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.quick-amounts button {
+    background-color: #1a1f60;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 15px;
+    color: var(--text-white);
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+}
+
+.quick-amounts button:hover {
+    background-color: var(--primary);
+}
+
+/* Botón enviar */
+form .btn-cta {
+    width: 100%;
+    text-align: center;
+    margin-top: 10px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .container {
+        padding: 15px 20px;
+        margin: 20px 10px;
+    }
+
+    .quick-amounts {
+        justify-content: space-between;
+    }
+}

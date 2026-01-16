@@ -1,0 +1,83 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Registro | Inverso</title>
+    <link rel="stylesheet" href="{% static 'inverso_sa/css/registro.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <main class="page-container">
+        <section class="register-card">
+            <div class="brand-header">
+                <div class="logo-wrapper">
+                    <img src="{% static 'inverso_sa/img/logo.jpeg' %}" class="logo-img">
+                </div>
+                <h1 class="brand-title">UNETE A <span>INVERSO</span></h1>
+                <p class="brand-subtitle">Crea tu cuenta de inversión</p>
+            </div>
+
+            {% if error %}
+            <p style="color:red;text-align:center;">{{ error }}</p>
+            {% endif %}
+
+            <form method="POST" class="form-container">
+                {% csrf_token %}
+
+                <div class="form-grid">
+                    <div class="input-group">
+                        <label>NOMBRE</label>
+                        <input type="text" name="first_name" required>
+                    </div>
+
+                    <div class="input-group">
+                        <label>APELLIDO</label>
+                        <input type="text" name="last_name" required>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label>CORREO</label>
+                    <input type="email" name="email" required>
+                </div>
+
+                <div class="input-group">
+                    <label>USUARIO(recuerda tu usuario por favor)</label>
+                    <input type="text" name="username" required>
+                </div>
+                <div class="input-group">
+                    <label>CÓDIGO DE INVITACIÓN (opcional)</label>
+                    <input type="text" name="codigo_invitacion" placeholder="Ej: 458921">
+                </div>
+                <div class="input-group">
+                    <label>CONTRASEÑA</label>
+                    <input type="password" name="password1" required>
+                </div>
+
+                <div class="input-group">
+                    <label>CONFIRMAR CONTRASEÑA</label>
+                    <input type="password" name="password2" required>
+                </div>
+
+                <div class="terms-check">
+                    <input type="checkbox" required>
+                    <label>Acepto los términos</label>
+                </div>
+
+                <button class="submit-btn">CREAR CUENTA</button>
+
+                <div class="form-footer">
+                    <span>¿Ya tienes cuenta?</span>
+                    <a href="{% url 'login' %}" class="highlight">Inicia Sesión</a>
+                </div>
+            </form>
+        </section>
+    </main>
+
+</body>
+
+</html>

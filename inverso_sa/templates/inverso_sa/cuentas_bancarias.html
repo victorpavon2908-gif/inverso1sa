@@ -1,0 +1,64 @@
+{% extends "inverso_sa/panel.html" %}
+{% load static %}
+
+{% block title %}Cuentas Bancarias{% endblock %}
+{% block page_title %}Cuentas Bancarias{% endblock %}
+
+{% block content %}
+
+<div class="card">
+
+    <div class="card-header">
+        <h2>🏦 Gestión de Cuentas Bancarias</h2>
+        <a href="{% url 'crear_cuenta_bancaria' %}" class="btn-primary">
+            ➕ Agregar Cuenta
+        </a>
+    </div>
+
+    <div class="table-container">
+        <table class="styled-table">
+            <thead>
+                <tr>
+                    <th>Banco</th>
+                    <th>Destinatario</th>
+                    <th>N° Cuenta</th>
+                    <th>Estado</th>
+                    <th style="width:180px;">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for cuenta in cuentas %}
+                <tr>
+                    <td>{{ cuenta.banco }}</td>
+                    <td>{{ cuenta.destinatario }}</td>
+                    <td>{{ cuenta.numero_cuenta }}</td>
+                    <td>
+                        {% if cuenta.activa %}
+                            <span class="badge success">Activa</span>
+                        {% else %}
+                            <span class="badge danger">Inactiva</span>
+                        {% endif %}
+                    </td>
+                    <td class="actions">
+                        <a href="{% url 'editar_cuenta_bancaria' cuenta.id %}" class="btn-sm edit">✏ Editar</a>
+                        <a href="{% url 'eliminar_cuenta_bancaria' cuenta.id %}"
+                           class="btn-sm delete"
+                           onclick="return confirm('¿Eliminar esta cuenta bancaria?');">
+                           🗑 Eliminar
+                        </a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" style="text-align:center;">
+                        No hay cuentas bancarias registradas.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+{% endblock %}

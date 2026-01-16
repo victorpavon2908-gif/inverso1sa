@@ -1,0 +1,137 @@
+{% extends "inverso_sa/dashboard.html" %}
+{% load static %}
+
+{% block title %}Mío | INVERSO{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'inverso_sa/css/mio.css' %}">
+<link rel="icon" type="image/x-icon" href="{% static 'inverso_sa/img/favicon.jpeg' %}">
+{% endblock %}
+
+{% block nav_mio %}active{% endblock %}
+
+{% block contenido %}
+<div class="main-content container">
+
+    <!-- Header de usuario -->
+    <header class="user-header">
+        <div class="user-details">
+            <h1>Bienvenida: {{ usuario.username }}</h1>
+            <p>
+                Nombre: {{ usuario.first_name }} <br>
+                Apellido: {{ usuario.last_name }} <br>
+                Correo: {{ usuario.email }} <br>
+                Mi código de invitación: <strong>{{ usuario.codigo_invitacion }}</strong>
+                <i class="far fa-copy" id="copy-code" style="cursor:pointer; margin-left:5px;" title="Copiar código"></i>
+            </p>
+        </div>
+        <div class="history-badge">
+            <i class="fas fa-history"></i> Historial
+        </div>
+    </header>
+
+    <!-- Balance -->
+    <section class="balance-card-inverso">
+        <div class="balance-item">
+            <span class="amount">C$ {{ ganancias_hoy }}</span>
+            <span class="label">Ganancias de hoy</span>
+        </div>
+        <div class="balance-item">
+            <span class="amount">C$ {{ saldo }}</span>
+            <span class="label">Mi saldo</span>
+        </div>
+    </section>
+
+    <!-- Botones de acción -->
+    <section class="action-buttons-grid">
+        <a href="" class="btn-box blue">
+            <i class="fas fa-arrow-down"></i>
+            <div class="btn-info">
+                <strong>Recargar</strong>
+                <span>Mínimo C$ 400</span>
+            </div>
+        </a>
+        <a href="" class="btn-box green">
+            <i class="fas fa-university"></i>
+            <div class="btn-info">
+                <strong>Retirar</strong>
+                <span>Mínimo C$ 200</span>
+            </div>
+        </a>
+    </section>
+
+    <!-- Funciones -->
+    <h3 class="section-title">Mis Funciones</h3>
+    <section class="functions-grid">
+        <a href="" class="func-item">
+            <i class="fas fa-university"></i>
+            <div class="func-info">
+                <strong>Cuenta bancaria</strong>
+                <p>Vincular el banco</p>
+            </div>
+        </a>
+        <a href="" class="func-item">
+            <i class="fas fa-lock"></i>
+            <div class="func-info">
+                <strong>Contraseña</strong>
+                <p>Seguridad de fondos</p>
+            </div>
+        </a>
+        <a href="" class="func-item">
+            <i class="fas fa-info-circle"></i>
+            <div class="func-info">
+                <strong>Acerca de</strong>
+                <p>Historia de la plataforma</p>
+            </div>
+        </a>
+        <a href="" class="func-item">
+            <i class="fas fa-comment-dots"></i>
+            <div class="func-info">
+                <strong>Asistencia</strong>
+                <p>Centro de ayuda</p>
+            </div>
+        </a>
+        <a href="{% url 'logout' %}" class="func-item">
+            <i class="fas fa-sign-out-alt"></i>
+            <div class="func-info">
+                <strong>Cerrar Sesión</strong>
+                <p>Salir de la cuenta</p>
+            </div>
+        </a>
+    </section>
+
+</div>
+
+<!-- Scripts -->
+<script>
+function safeGet(id) {
+    return document.getElementById(id) || {onclick: function(){}, classList:{add(){}, remove(){}}};
+}
+
+const pcBtn = safeGet('pc-view');
+const mobileBtn = safeGet('mobile-view');
+const wrapper = document.querySelector('.main-content');
+
+pcBtn.onclick = () => changeView('pc');
+mobileBtn.onclick = () => changeView('mobile');
+
+function changeView(mode) {
+    if (mode === 'mobile') {
+        wrapper.classList.add('phone-mode');
+        mobileBtn.classList.add('active-icon');
+        pcBtn.classList.remove('active-icon');
+    } else {
+        wrapper.classList.remove('phone-mode');
+        pcBtn.classList.add('active-icon');
+        mobileBtn.classList.remove('active-icon');
+    }
+}
+
+// Copiar código de invitación
+safeGet('copy-code').onclick = function() {
+    navigator.clipboard.writeText("{{ usuario.codigo_invitacion }}")
+        .then(() => alert("Código copiado al portapapeles!"))
+        .catch(() => alert("No se pudo copiar el código."));
+};
+</script>
+{% endblock %}

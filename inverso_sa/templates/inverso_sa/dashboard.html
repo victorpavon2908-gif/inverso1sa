@@ -1,0 +1,98 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Inverso Web{% endblock %}</title>
+
+    <link rel="stylesheet" href="{% static '/inverso_sa/css/dashboard.css' %}">
+    <link rel="icon" type="image/x-icon" href="{% static 'inverso_sa/img/logo.jpeg' %}">
+    {% block extra_css %}{% endblock %}
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">INVERSO</div>
+
+            <div class="view-switch">
+                <button class="active-icon" onclick="changeView('pc')">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="3" width="20" height="14" rx="2"></rect>
+                        <line x1="8" y1="21" x2="16" y2="21"></line>
+                        <line x1="12" y1="17" x2="12" y2="21"></line>
+                    </svg>
+                </button>
+                <div class="divider"></div>
+                <button onclick="changeView('mobile')">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="5" y="2" width="14" height="20" rx="2"></rect>
+                        <line x1="12" y1="18" x2="12.01" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+
+            <ul class="nav-links">
+                <li class="{% block nav_inicio %}{% endblock %}">
+                    <a href="{% url 'inicio' %}">Inicio</a>
+                </li>
+                <li class="{% block nav_ingreso %}{% endblock %}">
+                    <a href="{% url 'ingreso' %}">Ingreso</a>
+                </li>
+
+                <li class="{% block nav_equipo %}{% endblock %}">
+                    <a href="{% url 'equipo' %}">Equipo</a>
+                </li>
+                <li class="{% block nav_mio %}{% endblock %}">
+                    <a href="{% url 'mio' %}">Mío</a>
+                </li>
+                {% if request.user.is_staff %}
+                <li class="{% block nav %}{% endblock %}">
+                    <a href="{% url 'panel' %}">Administración</a>
+                </li>
+                {% endif %}
+
+            </ul>
+        </div>
+    </nav>
+
+    <div class="main-content container">
+        {% block contenido %}{% endblock %}
+
+        <footer class="main-footer">
+            <div class="footer-content">
+                <p>&copy; 2026 <strong>INVERSO</strong>. Todos los derechos reservados.</p>
+                <div class="footer-links">
+                    <span>Términos y condiciones</span> | <span>Privacidad</span>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        function changeView(mode) {
+            const wrapper = document.querySelector('.main-content');
+            const pcBtn = document.querySelector('.view-switch button:first-child');
+            const mobileBtn = document.querySelector('.view-switch button:last-child');
+
+            if (mode === 'mobile') {
+                wrapper.classList.add('phone-mode');
+                mobileBtn.classList.add('active-icon');
+                pcBtn.classList.remove('active-icon');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } else {
+                wrapper.classList.remove('phone-mode');
+                pcBtn.classList.add('active-icon');
+                mobileBtn.classList.remove('active-icon');
+            }
+        }
+    </script>
+
+</body>
+
+</html>
