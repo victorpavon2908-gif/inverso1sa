@@ -1,0 +1,322 @@
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import Group
+from datetime import date
+from .models import Usuario, Transaccion, Producto, Recarga, CuentaBancaria
+from django.contrib.auth.hashers import make_password
+from django.db.models import Sum
+from.forms import ProductoForm, CuentaBancariaForm
+from django.contrib import messages
+import random
+# --------------------
+# LOGIN
+# --------------------
+def login_view(request):
+    if request.user.is_authenticated:
+        return redirect('dashboard')
+
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            login(request, user)
+            return redirect('dashboard')
+        else:
+            return render(request, 'inverso_sa/login.html', {
+                'error': 'Usuario o contraseña incorrectos'
+            })
+
+    return render(request, 'inverso_sa/login.html')
+
+
+# --------------------
+# DASHBOARD
+# --------------------
+@login_required(login_url='login')
+def dashboard(request):
+    return redirect('inicio')
+
+
+# --------------------
+# LOGOUT
+# --------------------
+def logout_view(request):
+    logout(request)
+    return redirect('login')
+
+
+# --------------------
+# REGISTRO
+# --------------------
+def registro_view(request):
+    if request.method == 'POST':
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        email = request.POST.get('email')
+        username = request.POST.get('username')
+        password1 = request.POST.get('password1')
+        password2 = request.POST.get('password2')
+        codigo_ingresado = request.POST.get('codigo_invitacion')
+
+        # Validaciones
+        if password1 != password2:
+            return render(request, 'inverso_sa/registro.html', {
+                'error': 'Las contraseñas no coinciden'
+            })
+
+        if Usuario.objects.filter(username=username).exists():
+            return render(request, 'inverso_sa/registro.html', {
+                'error': 'El usuario ya existe'
+            })
+
+        if Usuario.objects.filter(email=email).exists():
+            return render(request, 'inverso_sa/registro.html', {
+                'error': 'El correo ya está registrado'
+            })
+
+        # Crear usuario inversionista
+        usuario = Usuario.objects.create(
+            username=username,
+            email=email,
+            first_name=first_name,
+            last_name=last_name,
+            saldo=20.0,  # saldo inicial
+            password=make_password(password1)
+        )
+
+        # ➕ ASIGNAR ROL INVERSIONISTA
+        grupo_inversionista, _ = Group.objects.get_or_create(name='inversionista')
+        usuario.groups.add(grupo_inversionista)
+
+        # 🎁 LÓGICA DE INVITACIÓN
+        if codigo_ingresado:
+            try:
+                usuario_invitador = Usuario.objects.get(
+                    codigo_invitacion=codigo_ingresado
+                )
+                usuario_invitador.saldo += 5  # recompensa
+                usuario_invitador.save()
+            except Usuario.DoesNotExist:
+                pass  # código inválido → no pasa nada
+
+        return redirect('login')
+
+    return render(request, 'inverso_sa/registro.html')
+
+
+
+# --------------------
+# OTRAS VISTAS
+# --------------------
+@login_required
+def ingreso(request):
+    return render(request, 'inverso_sa/ingreso.html')
+
+
+def equipo_view(request):
+    recompensas = [1, 2, 3, 4, 5]
+    return render(request, 'inverso_sa/equipo.html', {'recompensas': recompensas})
+
+# --------------------
+# MIO
+# --------------------
+@login_required
+def mio_view(request):
+    usuario = request.user
+
+    # Ganancias de hoy
+    hoy = date.today()
+    ganancias_hoy = Transaccion.objects.filter(
+        usuario=usuario,
+        tipo='ingreso',
+        fecha=hoy
+    ).aggregate(total=Sum('monto'))['total'] or 0.0
+
+    context = {
+        'usuario': usuario,
+        'saldo': usuario.saldo,
+        'ganancias_hoy': ganancias_hoy,
+    }
+
+    return render(request, 'inverso_sa/mio.html', context)
+
+@login_required
+def panel_view(request):
+    usuarios = Usuario.objects.all()  # ahora sí obtiene todos los usuarios
+    return render(request, 'inverso_sa/usuarios.html', {'usuarios': usuarios})
+
+
+
+def inicio(request):
+    productos = Producto.objects.filter(activo=True)
+
+    return render(request, "inverso_sa/inicio.html", {
+        "productos": productos
+    })
+
+
+def agregar_producto(request):
+    if request.method == "POST":
+        form = ProductoForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('inicio')  # Redirige a la lista de productos
+    else:
+        form = ProductoForm()
+    return render(request, 'inverso_sa/agregar_producto.html', {'form': form})
+
+@login_required
+def recargar_view(request):
+    montos_rapidos = [
+        400, 600, 800, 1000, 1500,
+        3000, 5000, 10000, 50000, 100000
+    ]
+
+    cuentas = CuentaBancaria.objects.filter(activa=True)
+
+    if not cuentas.exists():
+        messages.error(request, 'No hay cuentas disponibles')
+        return redirect('inicio')
+
+    cuenta_random = random.choice(list(cuentas))
+
+    if request.method == 'POST':
+        referencia = request.POST.get('referencia')
+
+        if Recarga.objects.filter(referencia=referencia).exists():
+            messages.error(request, '⚠ Número de referencia repetido')
+            return redirect('recargar')
+
+        Recarga.objects.create(
+            usuario=request.user,
+            cuenta=cuenta_random,
+            monto=request.POST.get('monto'),
+            referencia=referencia,
+            voucher=request.FILES.get('voucher'),
+        )
+
+        messages.success(request, '✅ Recarga enviada, en revisión')
+        return redirect('mis_recargas')
+
+    return render(request, 'inverso_sa/recargar.html', {
+        'montos_rapidos': montos_rapidos,
+        'cuenta': cuenta_random
+    })
+
+@login_required
+def mis_recargas_view(request):
+    recargas = Recarga.objects.filter(usuario=request.user).order_by('-fecha')
+    return render(request, 'inverso_sa/mis_recargas.html', {'recargas': recargas})
+
+@login_required
+def cuentas_bancarias(request):
+    cuentas = CuentaBancaria.objects.all().order_by('-fecha_creacion')
+    return render(request, 'inverso_sa/cuentas_bancarias.html', {
+        'cuentas': cuentas
+    })
+
+
+@login_required
+def crear_cuenta_bancaria(request):
+    if request.method == 'POST':
+        form = CuentaBancariaForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, '✅ Cuenta bancaria agregada correctamente')
+            return redirect('cuentas_bancarias')
+    else:
+        form = CuentaBancariaForm()
+
+    return render(request, 'inverso_sa/cuenta_form.html', {
+        'form': form,
+        'titulo': 'Agregar Cuenta Bancaria'
+    })
+
+
+@login_required
+def editar_cuenta_bancaria(request, id):
+    cuenta = get_object_or_404(CuentaBancaria, id=id)
+
+    if request.method == 'POST':
+        form = CuentaBancariaForm(request.POST, instance=cuenta)
+        if form.is_valid():
+            form.save()
+            messages.success(request, '✏ Cuenta bancaria actualizada')
+            return redirect('cuentas_bancarias')
+    else:
+        form = CuentaBancariaForm(instance=cuenta)
+
+    return render(request, 'inverso_sa/cuenta_form.html', {
+        'form': form,
+        'titulo': 'Editar Cuenta Bancaria'
+    })
+
+
+@login_required
+def eliminar_cuenta_bancaria(request, id):
+    cuenta = get_object_or_404(CuentaBancaria, id=id)
+    cuenta.delete()
+    messages.success(request, '🗑 Cuenta bancaria eliminada')
+    return redirect('cuentas_bancarias')
+
+@login_required
+def solicitudes_recarga(request):
+    """
+    Vista para listar todas las solicitudes de recarga en revisión.
+    Permite aprobar o rechazar cada recarga mediante POST desde el template.
+    """
+    recargas = Recarga.objects.filter(estado='revision').order_by('-fecha')
+
+    if request.method == 'POST':
+        recarga_id = request.POST.get('recarga_id')
+        accion = request.POST.get('accion')  # 'aprobar' o 'rechazar'
+
+        recarga = get_object_or_404(Recarga, id=recarga_id)
+
+        if recarga.estado != 'revision':
+            messages.warning(request, '⚠ Esta recarga ya fue procesada.')
+            return redirect('solicitudes_recarga')
+
+        if accion == 'aprobar':
+            recarga.estado = 'aprobada'
+            # Sumar el monto al saldo del usuario
+            recarga.usuario.saldo += recarga.monto
+            recarga.usuario.save()
+            recarga.save()
+            messages.success(request, f'✅ Recarga de {recarga.usuario.username} aprobada correctamente.')
+        elif accion == 'rechazar':
+            recarga.estado = 'rechazada'
+            recarga.save()
+            messages.warning(request, f'❌ Recarga de {recarga.usuario.username} rechazada.')
+        else:
+            messages.error(request, 'Acción no válida.')
+
+        return redirect('solicitudes_recarga')
+
+    context = {
+        'recargas': recargas,
+    }
+    return render(request, 'inverso_sa/solicitudes_recarga.html', context)
+
+@login_required
+def aprobar_rechazar_recarga(request, id):
+    recarga = get_object_or_404(Recarga, id=id)
+
+    if request.method == "POST":
+        accion = request.POST.get('accion')
+        if accion == "aprobar" and recarga.estado == 'revision':
+            recarga.estado = 'aprobada'
+            recarga.usuario.saldo += recarga.monto
+            recarga.usuario.save()
+            recarga.save()
+            messages.success(request, f"✅ Recarga de {recarga.usuario.username} aprobada")
+        elif accion == "rechazar" and recarga.estado == 'revision':
+            recarga.estado = 'rechazada'
+            recarga.save()
+            messages.success(request, f"❌ Recarga de {recarga.usuario.username} rechazada")
+
+    return redirect('solicitudes_recarga')

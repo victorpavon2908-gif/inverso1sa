@@ -1,0 +1,35 @@
+{% extends "inverso_sa/panel.html" %}
+
+{% block title %}{{ titulo }}{% endblock %}
+{% block page_title %}{{ titulo }}{% endblock %}
+
+{% block content %}
+
+<div class="card" style="max-width:600px;margin:auto;">
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <label>Banco</label>
+        {{ form.banco }}
+
+        <label>Destinatario</label>
+        {{ form.destinatario }}
+
+        <label>Número de cuenta</label>
+        {{ form.numero_cuenta }}
+
+        <label style="margin-top:10px;">
+            {{ form.activa }} Activa
+        </label>
+
+        <div style="margin-top:20px;display:flex;gap:10px;">
+            <button class="btn-primary">Guardar</button>
+            <a href="{% url 'cuentas_bancarias' %}" class="btn-sm delete">Cancelar</a>
+        </div>
+
+    </form>
+
+</div>
+
+{% endblock %}

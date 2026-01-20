@@ -1,0 +1,171 @@
+{% extends "inverso_sa/dashboard.html" %}
+{% load static %}
+
+{% block title %}Inicio | Inverso{% endblock %}
+{% block nav_inicio %}active{% endblock %}
+
+{% block contenido %}
+
+<!-- HERO BANNER -->
+<header class="hero-banner">
+    <div class="banner-text">
+        <div class="stats">
+            <span>NIVEL 1: 29%</span>
+            <span>NIVEL 2: 1%</span>
+            <span>NIVEL 3: 1%</span>
+        </div>
+        <h2>Bonificación de Reembolso Por Primera Compra en Acciones</h2>
+        <button class="btn-cta">Comienza Ahora</button>
+    </div>
+    <img src="{% static 'inverso_sa/img/logo.jpeg' %}" class="banner-img">
+</header>
+
+<!-- ACTION ROW -->
+<section class="action-row">
+    <a href="{% url 'recargar' %}" class="action-card blue">
+        <div class="card-body">
+            <strong>Recargar</strong>
+            <span>Recargar saldo</span>
+        </div>
+    </a>
+
+    <div class="action-card dark-blue">
+        <div class="card-body">
+            <strong>Intercambio</strong>
+            <span>Canje</span>
+        </div>
+    </div>
+    <div class="action-card green">
+        <div class="card-body">
+            <strong>Retirar</strong>
+            <span>Retirar saldo</span>
+        </div>
+    </div>
+</section>
+
+<section class="products-grid-container">
+    <h3>Recomendaciones Favoritas</h3>
+
+    <div class="products-grid">
+        {% for producto in productos %}
+        <div class="product-item">
+            <img src="{{ producto.imagen.url }}">
+            <div class="product-details">
+                <h4>{{ producto.nombre }}</h4>
+                <p>Duracion: <strong>{{ producto.duracion }}</strong></p>
+                <p>Precio: <strong>C$ {{ producto.precio }}</strong></p>
+                <p>Ingreso diario:
+                    <span class="income">C$ {{ producto.ingreso_diario }}</span>
+                </p>
+                <small>Límite: {{ producto.comprados }}/{{ producto.limite }}</small>
+                <button class="btn-invert">Invertir</button>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+
+
+
+<!-- QUIÉNES SOMOS -->
+<section class="about-us">
+    <h3>Quiénes Somos</h3>
+    <p class="about-intro">En Inverso, nos enfocamos en brindarte herramientas financieras modernas, seguras y
+        confiables, para que tus inversiones crezcan de manera inteligente.</p>
+    <div class="about-cards">
+        <div class="about-card">
+            <i class="fas fa-shield-alt"></i>
+            <h4>Seguridad</h4>
+            <p>Protegemos tus inversiones con tecnología de vanguardia y total transparencia.</p>
+        </div>
+        <div class="about-card">
+            <i class="fas fa-rocket"></i>
+            <h4>Innovación</h4>
+            <p>Plataforma intuitiva y herramientas de inversión modernas para todos los niveles.</p>
+        </div>
+        <div class="about-card">
+            <i class="fas fa-hand-holding-usd"></i>
+            <h4>Apoyo Financiero</h4>
+            <p>Asesoría personalizada para ayudarte a tomar las mejores decisiones.</p>
+        </div>
+        <div class="about-card">
+            <i class="fas fa-users"></i>
+            <h4>Comunidad</h4>
+            <p>Únete a nuestra comunidad de inversores y comparte experiencias y oportunidades.</p>
+        </div>
+    </div>
+</section>
+
+<!-- SERVICIOS / BENEFICIOS -->
+<section class="services">
+    <h3>Nuestros Servicios</h3>
+    <div class="services-cards">
+        <div class="service-card">
+            <i class="fas fa-chart-line"></i>
+            <h4>Crecimiento Garantizado</h4>
+            <p>Programas de inversión diseñados para maximizar tus ingresos diarios.</p>
+        </div>
+        <div class="service-card">
+            <i class="fas fa-mobile-alt"></i>
+            <h4>Acceso desde cualquier lugar</h4>
+            <p>Controla y monitorea tus inversiones desde tu computadora o teléfono.</p>
+        </div>
+        <div class="service-card">
+            <i class="fas fa-lock"></i>
+            <h4>Pagos Seguros</h4>
+            <p>Transacciones cifradas para mantener tu dinero protegido en todo momento.</p>
+        </div>
+        <div class="service-card">
+            <i class="fas fa-bolt"></i>
+            <h4>Rendimiento Rápido</h4>
+            <p>Recibe ingresos y bonificaciones de manera rápida y confiable.</p>
+        </div>
+    </div>
+</section>
+
+<!-- TESTIMONIOS -->
+<section class="testimonials">
+    <h3>Testimonios</h3>
+    <div class="testimonial-cards">
+        <div class="testimonial-card">
+            <p>"Invertir en Inverso ha sido la mejor decisión. Seguridad y rentabilidad en un solo lugar."</p>
+            <h5>- María G.</h5>
+        </div>
+        <div class="testimonial-card">
+            <p>"La plataforma es muy intuitiva, y el soporte siempre está disponible para cualquier consulta."</p>
+            <h5>- Carlos R.</h5>
+        </div>
+        <div class="testimonial-card">
+            <p>"Gracias a Inverso mis ingresos diarios han aumentado y me siento seguro con mis inversiones."</p>
+            <h5>- Ana L.</h5>
+        </div>
+    </div>
+</section>
+
+<!-- CTA – ÚNETE HOY -->
+<section class="cta">
+    <h3>Empieza a Invertir Hoy</h3>
+    <p>Únete a miles de usuarios que ya están creciendo con Inverso. Es seguro, rápido y fácil.</p>
+    <button class="btn-cta">Invertir</button>
+</section>
+
+<!-- FAQ / PREGUNTAS FRECUENTES -->
+<section class="faq">
+    <h3>Preguntas Frecuentes</h3>
+    <div class="faq-item">
+        <h4>¿Es seguro invertir en Inverso?</h4>
+        <p>Sí, todas las transacciones están protegidas con cifrado de alto nivel.</p>
+    </div>
+    <div class="faq-item">
+        <h4>¿Puedo retirar mis fondos en cualquier momento?</h4>
+        <p>Sí, los retiros son rápidos y seguros directamente a tu cuenta bancaria.</p>
+    </div>
+    <div class="faq-item">
+        <h4>¿Necesito experiencia previa?</h4>
+        <p>No, la plataforma está diseñada para principiantes y expertos por igual.</p>
+    </div>
+</section>
+
+
+{% endblock %}
