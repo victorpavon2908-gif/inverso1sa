@@ -24,5 +24,7 @@ urlpatterns = [
     path('recargas/solicitudes/', views.solicitudes_recarga, name='solicitudes_recarga'),
     path('recargas/accion/<int:id>/', views.aprobar_rechazar_recarga, name='aprobar_rechazar_recarga'),
 
+    path('invertir/<int:id>/', views.invertir_producto, name='invertir'),
+
 ]
 

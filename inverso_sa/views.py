@@ -320,3 +320,36 @@ def aprobar_rechazar_recarga(request, id):
             messages.success(request, f"❌ Recarga de {recarga.usuario.username} rechazada")
 
     return redirect('solicitudes_recarga')
+
+
+from django.utils import timezone
+from .models import Inversion
+
+@login_required
+def invertir_producto(request, id):
+    producto = get_object_or_404(Producto, id=id)
+    usuario = request.user
+
+    # ❌ sin saldo
+    if usuario.saldo < producto.precio:
+        messages.error(request, "❌ Saldo insuficiente")
+        return redirect('inicio')
+
+    # ❌ límite alcanzado
+    inversiones_actuales = Inversion.objects.filter(producto=producto, activa=True).count()
+    if inversiones_actuales >= producto.limite:
+        messages.error(request, "⚠ Producto agotado")
+        return redirect('inicio')
+
+    # ✅ descontar saldo
+    usuario.saldo -= producto.precio
+    usuario.save()
+
+    # ✅ crear inversión
+    Inversion.objects.create(
+        usuario=usuario,
+        producto=producto
+    )
+
+    messages.success(request, "✅ Inversión realizada correctamente")
+    return redirect('mio')

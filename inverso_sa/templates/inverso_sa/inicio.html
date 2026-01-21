@@ -63,7 +63,11 @@
                     <span class="income">C$ {{ producto.ingreso_diario }}</span>
                 </p>
                 <small>Límite: {{ producto.comprados }}/{{ producto.limite }}</small>
-                <button class="btn-invert">Invertir</button>
+                <form method="POST" action="{% url 'invertir' producto.id %}">
+                    {% csrf_token %}
+                    <button class="btn-invert">Invertir</button>
+                </form>
+
             </div>
         </div>
         {% endfor %}

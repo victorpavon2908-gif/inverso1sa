@@ -114,3 +114,12 @@ class Recarga(models.Model):
         return f"{self.usuario.username} - {self.monto} - {self.estado}"
     
 
+class Inversion(models.Model):
+    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+    producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
+
+    fecha_inicio = models.DateTimeField(auto_now_add=True)
+    ultimo_pago = models.DateTimeField(null=True, blank=True)
+
+    activa = models.BooleanField(default=True)
+
