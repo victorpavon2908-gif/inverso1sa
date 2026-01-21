@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group
 from datetime import date
-from .models import Usuario, Transaccion, Producto, Recarga, CuentaBancaria
+from .models import Usuario, Transaccion, Producto, Recarga, CuentaBancaria, Inversion
 from django.contrib.auth.hashers import make_password
 from django.db.models import Sum
 from.forms import ProductoForm, CuentaBancariaForm
@@ -114,7 +114,26 @@ def registro_view(request):
 # --------------------
 @login_required
 def ingreso(request):
-    return render(request, 'inverso_sa/ingreso.html')
+    usuario = request.user
+
+    inversiones_activas = Inversion.objects.filter(
+        usuario=usuario,
+        activa=True
+    )
+
+    inversiones_expiradas = Inversion.objects.filter(
+        usuario=usuario,
+        activa=False
+    )
+
+    context = {
+        'saldo': usuario.saldo,
+        'inversiones_activas': inversiones_activas,
+        'inversiones_expiradas': inversiones_expiradas
+    }
+
+    return render(request, 'inverso_sa/ingreso.html', context)
+
 
 
 def equipo_view(request):
@@ -128,18 +147,28 @@ def equipo_view(request):
 def mio_view(request):
     usuario = request.user
 
-    # Ganancias de hoy
+    inversiones = Inversion.objects.filter(
+        usuario=usuario,
+        activa=True
+    )
+
+    # 🔁 generar ingresos si ya pasaron 24h
+    for inversion in inversiones:
+        if inversion.puede_pagar():
+            inversion.pagar()
+
     hoy = date.today()
     ganancias_hoy = Transaccion.objects.filter(
         usuario=usuario,
         tipo='ingreso',
         fecha=hoy
-    ).aggregate(total=Sum('monto'))['total'] or 0.0
+    ).aggregate(total=Sum('monto'))['total'] or 0
 
     context = {
         'usuario': usuario,
         'saldo': usuario.saldo,
         'ganancias_hoy': ganancias_hoy,
+        'inversiones': inversiones
     }
 
     return render(request, 'inverso_sa/mio.html', context)
@@ -322,21 +351,23 @@ def aprobar_rechazar_recarga(request, id):
     return redirect('solicitudes_recarga')
 
 
-from django.utils import timezone
-from .models import Inversion
 
 @login_required
 def invertir_producto(request, id):
     producto = get_object_or_404(Producto, id=id)
     usuario = request.user
 
-    # ❌ sin saldo
+    # ❌ saldo insuficiente
     if usuario.saldo < producto.precio:
         messages.error(request, "❌ Saldo insuficiente")
         return redirect('inicio')
 
     # ❌ límite alcanzado
-    inversiones_actuales = Inversion.objects.filter(producto=producto, activa=True).count()
+    inversiones_actuales = Inversion.objects.filter(
+        producto=producto,
+        activa=True
+    ).count()
+
     if inversiones_actuales >= producto.limite:
         messages.error(request, "⚠ Producto agotado")
         return redirect('inicio')
