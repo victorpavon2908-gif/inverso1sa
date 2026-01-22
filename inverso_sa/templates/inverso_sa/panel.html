@@ -7,108 +7,119 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Panel de Control{% endblock %}</title>
 
-    <!-- Estilos globales -->
+    <!-- ESTILOS GLOBALES -->
     <link rel="stylesheet" href="{% static 'inverso_sa/css/panel.css' %}">
 
-    <!-- Bloque CSS para templates hijos -->
+    <!-- CSS DE PLANTILLAS HIJAS -->
     {% block css %}{% endblock %}
 
     <link rel="icon" type="image/x-icon" href="{% static 'inverso_sa/img/logo.jpeg' %}">
 </head>
 
 <body>
-    <div class="container">
 
-        <!-- SIDEBAR -->
-        <aside class="sidebar">
-            <div class="sidebar-header">
-                <img class="logo" src="{% static 'inverso_sa/img/logo.jpeg' %}" alt="Logo">
-                <div class="brand-name">DashBoard</div>
-            </div>
+<div class="container">
 
-            <nav>
-                <ul class="nav-menu">
-                    <li class="nav-item {% if request.path == '/recargas/solicitudes/' %}active{% endif %}">
-                        <a href="{% url 'solicitudes_recarga' %}" class="nav-link">
-                            <span class="nav-icon">💷</span> Recargas Solicitudes
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="" class="nav-link">
-                            <span class="nav-icon">👥</span> Usuarios
-                        </a>
-                    </li>
-                    <li class="nav-item {% if request.path == '/productos/agregar/' %}active{% endif %}">
-                        <a href="{% url 'agregar_producto' %}" class="nav-link">
-                            <span class="nav-icon">📋</span> Agregar Producto
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{% url 'ver_productos' %}" class="nav-link">
-                            <span class="nav-icon">📦</span> Ver productos
-                        </a>
-                    </li>
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
 
-                    <li class="nav-item {% if request.path == '/cuentas/bancarias/' %}active{% endif %}">
-                        <a href="{% url 'cuentas_bancarias' %}" class="nav-link">
-                            <span class="nav-icon">🏦</span> Cuenta Bancaria
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="" class="nav-link">
-                            <span class="nav-icon">👤</span> Clientes
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="" class="nav-link">
-                            <span class="nav-icon">✅</span> Tareas
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-
-            <a href="{% url 'logout' %}" class="logout-btn">
-                <span class="nav-icon">🚪</span> Cerrar Sesión
-            </a>
-        </aside>
-
-        <!-- MAIN -->
-        <div class="main-wrapper">
-
-            <!-- HEADER -->
-            <header class="header">
-                <div class="header-top">
-                    <div class="header-info">
-                        <h1 id="pageTitle">{% block page_title %}Panel de Control{% endblock %}</h1>
-                        <p id="pageSubtitle">
-                            ¡Bienvenido {{ request.user.first_name|default:request.user.username }}!
-                        </p>
-                    </div>
-                    <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
-                </div>
-            </header>
-
-            <!-- MAIN CONTENT -->
-            <main class="main-content">
-                {% block content %}
-                <!-- Cada template hijo inyectará su contenido aquí -->
-                {% endblock %}
-            </main>
-
-            <!-- FOOTER -->
-            <footer class="footer">
-                &copy; 2026 Panel de Control — Django Ready 🚀
-            </footer>
-
+        <div class="sidebar-header">
+            <img src="{% static 'inverso_sa/img/logo.jpeg' %}" class="logo">
+            <div class="brand-name">INVERO ADMIN</div>
         </div>
+
+        <nav>
+            <ul class="nav-menu">
+
+                <li class="nav-item {% if request.path == '/recargas/solicitudes/' %}active{% endif %}">
+                    <a href="{% url 'solicitudes_recarga' %}" class="nav-link">
+                        <span class="nav-icon">💷</span> Solicitudes de recarga
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <span class="nav-icon">👥</span> Usuarios
+                    </a>
+                </li>
+
+                <li class="nav-item {% if request.path == '/productos/agregar/' %}active{% endif %}">
+                    <a href="{% url 'agregar_producto' %}" class="nav-link">
+                        <span class="nav-icon">📋</span> Agregar producto
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="{% url 'ver_productos' %}" class="nav-link">
+                        <span class="nav-icon">📦</span> Ver productos
+                    </a>
+                </li>
+
+                <li class="nav-item {% if request.path == '/cuentas/bancarias/' %}active{% endif %}">
+                    <a href="{% url 'cuentas_bancarias' %}" class="nav-link">
+                        <span class="nav-icon">🏦</span> Cuentas bancarias
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <span class="nav-icon">👤</span> Clientes
+                    </a>
+                </li>
+
+                <li class="nav-item {% if request.path == '/retiros/solicitudes/' %}active{% endif %}">
+                    <a href="{% url 'solicitudes_retiro' %}" class="nav-link">
+                        <span class="nav-icon">✅</span> Solicitudes de retiro
+                    </a>
+                </li>
+
+            </ul>
+        </nav>
+
+        <a href="{% url 'logout' %}" class="logout-btn">
+            <span class="nav-icon">🚪</span> Cerrar sesión
+        </a>
+
+    </aside>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <div class="main-wrapper">
+
+        <!-- HEADER -->
+        <header class="header">
+            <div class="header-top">
+                <div class="header-info">
+                    <h1>{% block page_title %}Panel de Control{% endblock %}</h1>
+                    <p>
+                        Bienvenido
+                        {{ request.user.first_name|default:request.user.username }}
+                    </p>
+                </div>
+
+                <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+            </div>
+        </header>
+
+        <!-- CONTENIDO -->
+        <main class="main-content">
+            {% block content %}
+            {% endblock %}
+        </main>
+
+        <!-- FOOTER -->
+        <footer class="footer">
+            © 2026 INVERSO — Panel Administrativo 🚀
+        </footer>
+
     </div>
 
-    <!-- JS global -->
-    <script src="{% static 'inverso_sa/js/panel.js' %}"></script>
+</div>
 
-    <!-- Bloque JS para templates hijos -->
-    {% block js %}{% endblock %}
+<!-- JS GLOBAL -->
+<script src="{% static 'inverso_sa/js/panel.js' %}"></script>
+
+<!-- JS DE PLANTILLAS HIJAS -->
+{% block js %}{% endblock %}
 
 </body>
-
 </html>

@@ -1,9 +1,8 @@
-# Create your models here.
-# users/models.py
-from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.contrib.auth.models import AbstractUser
 from django.utils import timezone
 from datetime import timedelta
+
 
 class Usuario(AbstractUser):
     codigo_invitacion = models.CharField(max_length=20, unique=True, blank=True)
@@ -16,46 +15,27 @@ class Usuario(AbstractUser):
         super().save(*args, **kwargs)
 
 
-# inverso_sa/models.py (continúa)
 class Transaccion(models.Model):
-    TIPO_CHOICES = [
-        ('ingreso', 'Ingreso'),
-        ('retiro', 'Retiro'),
-    ]
-
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
     monto = models.DecimalField(max_digits=10, decimal_places=2)
-    tipo = models.CharField(max_length=10, choices=TIPO_CHOICES)
+    tipo = models.CharField(max_length=10)
     fecha = models.DateField(auto_now_add=True)
 
-    def __str__(self):
-        return f"{self.usuario.username} - {self.tipo} - {self.monto}"
-    
-class Producto(models.Model):
-    DURACION_CHOICES = [
-        ('1mes', '1 Mes'),
-        ('2meses', '2 Meses'),
-        ('6meses', '6 Meses'),
-        ('12meses', '1 Año'),
-    ]
 
+class Producto(models.Model):
     nombre = models.CharField(max_length=100)
     precio = models.DecimalField(max_digits=10, decimal_places=2)
     ingreso_diario = models.DecimalField(max_digits=10, decimal_places=2)
     limite = models.PositiveIntegerField(default=0)
-    duracion = models.CharField(max_length=10, choices=DURACION_CHOICES, default='1mes')  # NUEVO CAMPO
-    imagen = models.ImageField(upload_to="productos/", blank=True, null=True)
+    duracion = models.CharField(max_length=20)
+    imagen = models.ImageField(upload_to='productos/', null=True, blank=True)
     activo = models.BooleanField(default=True)
     creado = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.nombre
-    
 
 
 class CuentaBancaria(models.Model):
     banco = models.CharField(max_length=100)
-    destinatario = models.CharField(max_length=150)
+    destinatario = models.CharField(max_length=100)
     numero_cuenta = models.CharField(max_length=50)
     activa = models.BooleanField(default=True)
     fecha_creacion = models.DateTimeField(auto_now_add=True)
@@ -64,72 +44,49 @@ class CuentaBancaria(models.Model):
         return f"{self.banco} - {self.numero_cuenta}"
 
 
+class CuentaUsuario(models.Model):
+    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+    banco = models.CharField(max_length=100)
+    titular = models.CharField(max_length=150)
+    numero_cuenta = models.CharField(max_length=50)
+    fecha = models.DateTimeField(auto_now_add=True)
+
 
 class Recarga(models.Model):
-    ESTADO_CHOICES = [
+    ESTADOS = (
         ('revision', 'En revisión'),
         ('aprobada', 'Aprobada'),
         ('rechazada', 'Rechazada'),
-    ]
+    )
 
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
     cuenta = models.ForeignKey(CuentaBancaria, on_delete=models.PROTECT)
-
     monto = models.DecimalField(max_digits=12, decimal_places=2)
     referencia = models.CharField(max_length=50, unique=True)
     voucher = models.ImageField(upload_to='recargas/')
-
-    estado = models.CharField(
-        max_length=10,
-        choices=ESTADO_CHOICES,
-        default='revision'
-    )
-
+    estado = models.CharField(max_length=15, choices=ESTADOS, default='revision')
     fecha = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.usuario.username} - {self.monto} - {self.estado}"
-    ESTADO_CHOICES = [
-        ('revision', 'En revisión'),
-        ('aprobada', 'Aprobada'),
-        ('rechazada', 'Rechazada'),
-    ]
+        return f"{self.usuario.username} - {self.monto}"
 
-    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
-    banco = models.CharField(max_length=100)
-    destinatario = models.CharField(max_length=150)
-    numero_cuenta = models.CharField(max_length=50)
-
-    monto = models.DecimalField(max_digits=12, decimal_places=2)
-    referencia = models.CharField(max_length=50, unique=True)
-    voucher = models.ImageField(upload_to='recargas/')
-
-    estado = models.CharField(
-        max_length=10,
-        choices=ESTADO_CHOICES,
-        default='revision'
-    )
-
-    fecha = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"{self.usuario.username} - {self.monto} - {self.estado}"
-    
 
 class Inversion(models.Model):
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
     producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
-
     fecha_inicio = models.DateTimeField(auto_now_add=True)
     ultimo_pago = models.DateTimeField(null=True, blank=True)
     activa = models.BooleanField(default=True)
 
     def puede_pagar(self):
         ahora = timezone.now()
-
-        if self.ultimo_pago:
-            proximo = self.ultimo_pago + timedelta(hours=24)
-        else:
-            proximo = self.fecha_inicio + timedelta(hours=24)
-
+        proximo = (self.ultimo_pago or self.fecha_inicio) + timedelta(hours=24)
         return ahora >= proximo
+
+
+class Retiro(models.Model):
+    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+    cuenta = models.ForeignKey(CuentaUsuario, on_delete=models.PROTECT)
+    monto = models.DecimalField(max_digits=12, decimal_places=2)
+    estado = models.CharField(max_length=15, default='pendiente')
+    fecha = models.DateTimeField(auto_now_add=True)

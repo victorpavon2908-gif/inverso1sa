@@ -1,0 +1,56 @@
+{% extends "inverso_sa/panel.html" %}
+
+{% block page_title %}Solicitudes de Retiro{% endblock %}
+
+{% block content %}
+
+<table class="custom-table">
+    <thead>
+        <tr>
+            <th>Usuario</th>
+            <th>Monto</th>
+            <th>Banco</th>
+            <th>Titular</th>
+            <th>Cuenta</th>
+            <th>Estado</th>
+            <th>Acción</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for retiro in retiros %}
+        <tr>
+            <td>{{ retiro.usuario.username }}</td>
+            <td>C$ {{ retiro.monto }}</td>
+            <td>{{ retiro.cuenta.banco }}</td>
+            <td>{{ retiro.cuenta.titular }}</td>
+            <td>{{ retiro.cuenta.numero_cuenta }}</td>
+
+            <td>
+                {% if retiro.estado == 'pendiente' %}
+                    <span class="badge pendiente">Pendiente</span>
+                {% elif retiro.estado == 'aprobado' %}
+                    <span class="badge aprobado">Aprobado</span>
+                {% endif %}
+            </td>
+
+            <td>
+                {% if retiro.estado == 'pendiente' %}
+                <form method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="retiro_id" value="{{ retiro.id }}">
+                    <button name="accion" value="aprobar">✅ Aprobar</button>
+                    <button name="accion" value="rechazar">❌ Rechazar</button>
+                </form>
+                {% endif %}
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="7">No hay retiros</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

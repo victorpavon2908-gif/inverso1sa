@@ -39,12 +39,11 @@
             <span>Canje</span>
         </div>
     </div>
-    <div class="action-card green">
+    <a href="{% url 'retirar' %}" class="action-card blue">
         <div class="card-body">
-            <strong>Retirar</strong>
-            <span>Retirar saldo</span>
+            <span>Retirar</span>
         </div>
-    </div>
+    </a>
 </section>
 
 <section class="products-grid-container">
@@ -62,10 +61,11 @@
                     <span class="income">C$ {{ producto.ingreso_diario }}</span>
                 </p>
                 <small>Límite: {{ producto.comprados }}/{{ producto.limite }}</small>
-                <form method="POST" action="{% url 'invertir' producto.id %}">
+                <form method="POST" action="{% url 'invertir_producto' producto.id %}">
                     {% csrf_token %}
                     <button class="btn-invert">Invertir</button>
                 </form>
+
 
             </div>
         </div>

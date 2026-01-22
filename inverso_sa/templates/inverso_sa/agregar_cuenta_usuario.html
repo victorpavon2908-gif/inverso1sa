@@ -1,0 +1,42 @@
+{% extends "inverso_sa/dashboard.html" %}
+
+{% block title %}Mi cuenta bancaria{% endblock %}
+
+{% block contenido %}
+
+<div style="max-width: 500px; margin: 40px auto; background: #fff; padding: 25px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,.1);">
+
+    <h2 style="margin-bottom: 20px;">🏦 Agregar cuenta bancaria</h2>
+
+    {% if messages %}
+        {% for message in messages %}
+            <p style="color: red;">{{ message }}</p>
+        {% endfor %}
+    {% endif %}
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <div style="margin-bottom: 15px;">
+            <label>Banco</label>
+            <input type="text" name="banco" required style="width:100%; padding:10px;">
+        </div>
+
+        <div style="margin-bottom: 15px;">
+            <label>Titular</label>
+            <input type="text" name="titular" required style="width:100%; padding:10px;">
+        </div>
+
+        <div style="margin-bottom: 15px;">
+            <label>Número de cuenta</label>
+            <input type="text" name="numero_cuenta" required style="width:100%; padding:10px;">
+        </div>
+
+        <button type="submit" style="padding:10px 20px;">
+            Guardar cuenta
+        </button>
+    </form>
+
+</div>
+
+{% endblock %}

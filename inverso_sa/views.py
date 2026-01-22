@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group
 from datetime import date
-from .models import Usuario, Transaccion, Producto, Recarga, CuentaBancaria, Inversion
+from .models import Usuario, Transaccion, Producto, Recarga, CuentaBancaria, Inversion, Retiro, CuentaUsuario
 from django.contrib.auth.hashers import make_password
 from django.db.models import Sum
 from.forms import ProductoForm, CuentaBancariaForm
@@ -200,41 +200,42 @@ def agregar_producto(request):
 
 @login_required
 def recargar_view(request):
-    montos_rapidos = [
-        400, 600, 800, 1000, 1500,
-        3000, 5000, 10000, 50000, 100000
-    ]
+
+    montos_rapidos = [400, 600, 800, 1000, 1500, 3000, 5000]
 
     cuentas = CuentaBancaria.objects.filter(activa=True)
 
     if not cuentas.exists():
-        messages.error(request, 'No hay cuentas disponibles')
-        return redirect('inicio')
+        messages.error(request, "No hay cuentas bancarias disponibles")
+        return redirect("inicio")
 
-    cuenta_random = random.choice(list(cuentas))
+    cuenta = random.choice(list(cuentas))
 
-    if request.method == 'POST':
-        referencia = request.POST.get('referencia')
+    if request.method == "POST":
+        monto = request.POST.get("monto")
+        referencia = request.POST.get("referencia")
+        voucher = request.FILES.get("voucher")
 
         if Recarga.objects.filter(referencia=referencia).exists():
-            messages.error(request, '⚠ Número de referencia repetido')
-            return redirect('recargar')
+            messages.error(request, "Número de referencia repetido")
+            return redirect("recargar")
 
         Recarga.objects.create(
             usuario=request.user,
-            cuenta=cuenta_random,
-            monto=request.POST.get('monto'),
+            cuenta=cuenta,
+            monto=monto,
             referencia=referencia,
-            voucher=request.FILES.get('voucher'),
+            voucher=voucher
         )
 
-        messages.success(request, '✅ Recarga enviada, en revisión')
-        return redirect('mis_recargas')
+        messages.success(request, "✅ Recarga enviada correctamente")
+        return redirect("mis_recargas")
 
-    return render(request, 'inverso_sa/recargar.html', {
-        'montos_rapidos': montos_rapidos,
-        'cuenta': cuenta_random
+    return render(request, "inverso_sa/recargar.html", {
+        "cuenta": cuenta,
+        "montos_rapidos": montos_rapidos
     })
+
 
 @login_required
 def mis_recargas_view(request):
@@ -424,3 +425,135 @@ def toggle_producto(request, id):
         messages.warning(request, "⛔ Producto desactivado")
 
     return redirect('ver_productos')
+
+
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from django.shortcuts import render, redirect
+from .models import CuentaUsuario
+
+
+@login_required
+def agregar_cuenta_usuario(request):
+
+    if request.method == "POST":
+        banco = request.POST.get("banco")
+        titular = request.POST.get("titular")
+        numero_cuenta = request.POST.get("numero_cuenta")
+
+        if not banco or not titular or not numero_cuenta:
+            messages.error(request, "Todos los campos son obligatorios")
+            return redirect("agregar_cuenta_usuario")
+
+        if CuentaUsuario.objects.filter(
+            usuario=request.user,
+            numero_cuenta=numero_cuenta
+        ).exists():
+            messages.warning(request, "Esta cuenta ya fue registrada")
+            return redirect("agregar_cuenta_usuario")
+
+        CuentaUsuario.objects.create(
+            usuario=request.user,
+            banco=banco,
+            titular=titular,
+            numero_cuenta=numero_cuenta
+        )
+
+        messages.success(request, "Cuenta bancaria agregada correctamente")
+        return redirect("inicio")
+
+    return render(request, "inverso_sa/agregar_cuenta_usuario.html")
+
+
+from decimal import Decimal
+
+@login_required
+def retirar_view(request):
+
+    cuentas = CuentaUsuario.objects.filter(usuario=request.user)
+
+    if not cuentas.exists():
+        messages.warning(request, "Primero debes agregar una cuenta bancaria")
+        return redirect("agregar_cuenta_usuario")
+
+    if request.method == "POST":
+        try:
+            monto = Decimal(request.POST.get("monto"))
+        except:
+            messages.error(request, "Monto inválido")
+            return redirect("retirar")
+
+        cuenta_id = request.POST.get("cuenta")
+
+        if monto <= 0:
+            messages.error(request, "El monto debe ser mayor a 0")
+            return redirect("retirar")
+
+        if monto > request.user.saldo:
+            messages.error(request, "Saldo insuficiente")
+            return redirect("retirar")
+
+        cuenta = get_object_or_404(
+            CuentaUsuario,
+            id=cuenta_id,
+            usuario=request.user
+        )
+
+        # 🔻 DESCONTAR SALDO (YA ES DECIMAL)
+        request.user.saldo -= monto
+        request.user.save()
+
+        # 📝 CREAR RETIRO
+        Retiro.objects.create(
+            usuario=request.user,
+            cuenta=cuenta,
+            monto=monto,
+            estado='pendiente'
+        )
+
+        messages.success(request, "✅ Retiro enviado correctamente")
+        return redirect("mio")
+
+    return render(request, "inverso_sa/retirar.html", {
+        "cuentas": cuentas,
+        "saldo": request.user.saldo
+    })
+
+
+
+@login_required
+def solicitudes_retiro(request):
+    retiros = Retiro.objects.filter(estado='pendiente').order_by('-fecha')
+
+    return render(request, 'inverso_sa/solicitudes_retiro.html', {
+        'retiros': retiros
+    })
+
+
+@login_required
+def procesar_retiro(request, id):
+    retiro = get_object_or_404(Retiro, id=id)
+
+    if request.method == "POST":
+        accion = request.POST.get("accion")
+
+        if retiro.estado != "pendiente":
+            messages.warning(request, "Este retiro ya fue procesado")
+            return redirect("solicitudes_retiro")
+
+        if accion == "aprobar":
+            retiro.estado = "aprobado"
+            retiro.save()
+            messages.success(request, "✅ Retiro aprobado correctamente")
+
+        elif accion == "rechazar":
+            retiro.estado = "rechazado"
+
+            # 🔁 devolver dinero
+            retiro.usuario.saldo += retiro.monto
+            retiro.usuario.save()
+            retiro.save()
+
+            messages.warning(request, "❌ Retiro rechazado y dinero devuelto")
+
+    return redirect("solicitudes_retiro")

@@ -1,7 +1,7 @@
 {% extends "inverso_sa/dashboard.html" %}
 {% load static %}
 
-{% block title %}Mío | INVERSO{% endblock %}
+{% block title %}Mi Cuenta | INVERSO{% endblock %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'inverso_sa/css/mio.css' %}">
@@ -13,99 +13,117 @@
 {% block contenido %}
 <div class="main-content container">
 
-    <!-- Header de usuario -->
+    <!-- HEADER USUARIO -->
     <header class="user-header">
         <div class="user-details">
-            <h1>Bienvenida: {{ usuario.username }}</h1>
+            <h1>Bienvenido: {{ usuario.username }}</h1>
             <p>
                 Nombre: {{ usuario.first_name }} <br>
                 Apellido: {{ usuario.last_name }} <br>
                 Correo: {{ usuario.email }} <br>
-                Mi código de invitación: <strong>{{ usuario.codigo_invitacion }}</strong>
-                <i class="far fa-copy" id="copy-code" style="cursor:pointer; margin-left:5px;" title="Copiar código"></i>
+                Mi código de invitación:
+                <strong>{{ usuario.codigo_invitacion }}</strong>
+                <i class="far fa-copy" id="copy-code"
+                   style="cursor:pointer; margin-left:5px;"
+                   title="Copiar código"></i>
             </p>
         </div>
+
         <div class="history-badge">
             <i class="fas fa-history"></i> Historial
         </div>
     </header>
 
-    <!-- Balance -->
+    <!-- BALANCE -->
     <section class="balance-card-inverso">
         <div class="balance-item">
             <span class="amount">C$ {{ ganancias_hoy }}</span>
             <span class="label">Ganancias de hoy</span>
         </div>
+
         <div class="balance-item">
             <span class="amount">C$ {{ saldo }}</span>
             <span class="label">Mi saldo</span>
         </div>
     </section>
 
-    <!-- Botones de acción -->
+    <!-- ACCIONES -->
     <section class="action-buttons-grid">
-        <a href="" class="btn-box blue">
+
+        <a href="{% url 'recargar' %}" class="btn-box blue">
             <i class="fas fa-arrow-down"></i>
             <div class="btn-info">
                 <strong>Recargar</strong>
                 <span>Mínimo C$ 400</span>
             </div>
         </a>
-        <a href="" class="btn-box green">
+
+        <a href="{% url 'retirar' %}" class="btn-box green">
             <i class="fas fa-university"></i>
             <div class="btn-info">
                 <strong>Retirar</strong>
                 <span>Mínimo C$ 200</span>
             </div>
         </a>
+
     </section>
 
-    <!-- Funciones -->
+    <!-- FUNCIONES -->
     <h3 class="section-title">Mis Funciones</h3>
+
     <section class="functions-grid">
-        <a href="" class="func-item">
+
+        <a href="{% url 'agregar_cuenta_usuario' %}" class="func-item">
             <i class="fas fa-university"></i>
             <div class="func-info">
                 <strong>Cuenta bancaria</strong>
-                <p>Vincular el banco</p>
+                <p>Vincular banco</p>
             </div>
         </a>
-        <a href="" class="func-item">
+
+        <a href="#" class="func-item">
             <i class="fas fa-lock"></i>
             <div class="func-info">
                 <strong>Contraseña</strong>
                 <p>Seguridad de fondos</p>
             </div>
         </a>
-        <a href="" class="func-item">
+
+        <a href="#" class="func-item">
             <i class="fas fa-info-circle"></i>
             <div class="func-info">
                 <strong>Acerca de</strong>
                 <p>Historia de la plataforma</p>
             </div>
         </a>
-        <a href="" class="func-item">
+
+        <a href="#" class="func-item">
             <i class="fas fa-comment-dots"></i>
             <div class="func-info">
                 <strong>Asistencia</strong>
                 <p>Centro de ayuda</p>
             </div>
         </a>
+
         <a href="{% url 'logout' %}" class="func-item">
             <i class="fas fa-sign-out-alt"></i>
             <div class="func-info">
-                <strong>Cerrar Sesión</strong>
+                <strong>Cerrar sesión</strong>
                 <p>Salir de la cuenta</p>
             </div>
         </a>
+
     </section>
 
 </div>
 
-<!-- Scripts -->
+<!-- JS -->
 <script>
 function safeGet(id) {
-    return document.getElementById(id) || {onclick: function(){}, classList:{add(){}, remove(){}}};
+    return document.getElementById(id) || {
+        onclick: function(){},
+        classList: { add(){}, remove(){} }
+    };
 }
 
 const pcBtn = safeGet('pc-view');
@@ -127,11 +145,12 @@ function changeView(mode) {
     }
 }
 
-// Copiar código de invitación
-safeGet('copy-code').onclick = function() {
+// COPIAR CÓDIGO
+safeGet('copy-code').onclick = function () {
     navigator.clipboard.writeText("{{ usuario.codigo_invitacion }}")
-        .then(() => alert("Código copiado al portapapeles!"))
-        .catch(() => alert("No se pudo copiar el código."));
+        .then(() => alert("Código copiado correctamente"))
+        .catch(() => alert("No se pudo copiar el código"));
 };
 </script>
+
 {% endblock %}
