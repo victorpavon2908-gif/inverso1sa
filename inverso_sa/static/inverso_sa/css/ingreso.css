@@ -1,78 +1,32 @@
-:root {
-    --primary: #2ab5f1;
-    --dark: #050521;
-    --green: #ffb800;
-    --light-bg: #050521;
-    --card-bg: #0a0c37;
-    --text-white: #ffffff;
-    --text-muted: #8e96b7;
-}
-
-body {
-    margin: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: var(--light-bg);
-    color: var(--text-white);
-}
-
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
-}
-
-
-.navbar {
-    background: var(--card-bg);
-    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
-    padding: 15px 0;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-}
-
-.navbar .container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.nav-links {
-    list-style: none;
-    display: flex;
-    gap: 30px;
-    flex: 1;
-    justify-content: flex-end;
-}
-
-.nav-links li a {
-    text-decoration: none;
-    color: var(--text-muted);
-    font-weight: 500;
-}
-
-.nav-links li.active a {
-    color: var(--primary);
-}
-
-.logo { font-weight: bold; font-size: 1.5rem; color: var(--text-white); flex: 1; }
-
-.view-switch { display: flex; align-items: center; gap: 15px; flex: 1; justify-content: center; }
-.view-switch button { background: none; border: none; color: var(--text-muted); cursor: pointer; display: flex; align-items: center; transition: 0.3s; }
-.view-switch .active-icon { color: #6366f1; }
-.divider { width: 1px; height: 20px; background: rgba(255, 255, 255, 0.2); }
-
-
+/* ===============================
+   CONTENEDOR GENERAL
+================================ */
 .investment-container {
-    padding: 40px 0;
+    max-width: 1100px;
+    margin: auto;
+    padding: 25px 15px;
 }
 
+/* ===============================
+   TÍTULOS
+================================ */
 .main-title {
-    text-align: center;
-    font-size: 1.8rem;
-    margin-bottom: 40px;
+    font-size: 26px;
+    font-weight: 700;
+    color: #0b1d2d;
+    margin-bottom: 20px;
 }
 
+.sub-title {
+    font-size: 20px;
+    font-weight: 600;
+    margin: 25px 0 15px;
+    color: #1a1a1a;
+}
+
+/* ===============================
+   RESUMEN SUPERIOR
+================================ */
 .investment-summary {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -80,65 +34,158 @@ body {
 }
 
 .summary-item {
-    padding: 25px;
-    border-radius: 15px;
     display: flex;
     align-items: center;
-    gap: 15px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    padding: 18px;
+    border-radius: 16px;
+    color: #fff;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
 }
 
-.card-blue { background: linear-gradient(135deg, #0088ff, #0055cc); }
-.card-orange { background: linear-gradient(135deg, #ff9900, #ff6600); }
+.icon-box {
+    background: rgba(255, 255, 255, 0.25);
+    padding: 12px;
+    border-radius: 12px;
+    margin-right: 15px;
+}
 
-.icon-box { background: rgba(255, 255, 255, 0.2); padding: 10px; border-radius: 10px; display: flex; }
-.summary-text span { display: block; font-size: 0.9rem; opacity: 0.8; }
-.summary-text strong { font-size: 1.4rem; }
+.summary-text span {
+    font-size: 14px;
+    opacity: 0.9;
+}
 
-.sub-title { margin: 40px 0 20px; font-size: 1.3rem; }
+.summary-text strong {
+    display: block;
+    font-size: 20px;
+    margin-top: 4px;
+}
 
+/* ===============================
+   COLORES TARJETAS
+================================ */
+.card-blue {
+    background: linear-gradient(135deg, #009ffd, #2a2a72);
+}
+
+.card-orange {
+    background: linear-gradient(135deg, #ff9800, #ff5722);
+}
+
+/* ===============================
+   TABS
+================================ */
 .investment-tabs {
     display: flex;
-    gap: 30px;
-    border-bottom: 1px solid rgba(255,255,255,0.1);
+    gap: 12px;
     margin-bottom: 20px;
 }
 
 .tab-btn {
-    background: none; border: none; color: var(--text-muted);
-    padding: 10px 0; font-size: 1rem; cursor: pointer;
-    display: flex; align-items: center; gap: 8px;
-    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    border: none;
+    background: #e9edf3;
+    padding: 10px 18px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+    color: #444;
+    transition: 0.25s;
 }
 
-.tab-btn.active { color: var(--primary); font-weight: bold; }
-.tab-btn.active::after { content: ''; position: absolute; bottom: -1px; left: 0; width: 100%; height: 3px; background: var(--primary); }
+.tab-btn:hover {
+    background: #dce3ee;
+}
 
-.empty-state {
-    padding: 80px 20px;
-    text-align: center;
-    background: var(--card-bg);
+.tab-btn.active {
+    background: #0b1d2d;
+    color: #fff;
+}
+
+/* ===============================
+   TARJETAS DE INVERSIÓN
+================================ */
+.investment-card {
+    background: #fff;
+    border-radius: 18px;
+    padding: 22px;
+    margin-bottom: 18px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.07);
+    transition: 0.25s;
+}
+
+.investment-card:hover {
+    transform: translateY(-3px);
+}
+
+.investment-card h4 {
+    font-size: 18px;
+    margin-bottom: 12px;
+    color: #0b1d2d;
+}
+
+.investment-card p {
+    font-size: 15px;
+    margin-bottom: 6px;
+    color: #333;
+}
+
+/* ===============================
+   TEXTO Y BADGES
+================================ */
+.text-green {
+    color: #1bbf72;
+    font-weight: 700;
+}
+
+.badge-green {
+    background: #1bbf72;
+    color: #fff;
+    padding: 4px 10px;
     border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
 }
 
-.empty-text { color: var(--text-muted); margin-top: 15px; }
-
-
-.main-footer { margin-top: 50px; padding: 30px 0; border-top: 1px solid rgba(255, 255, 255, 0.05); text-align: center; }
-.footer-content p { color: var(--text-muted); font-size: 0.9rem; }
-.footer-links { color: var(--text-muted); font-size: 0.8rem; margin-top: 10px; }
-
-
-.main-content { transition: all 0.5s ease; width: 100%; }
-
-.phone-mode {
-    max-width: 375px !important;
-    margin: 20px auto !important;
-    border: 10px solid #1a1a1a;
-    border-radius: 35px;
-    padding: 15px !important;
-    box-shadow: 0 30px 60px rgba(0,0,0,0.8);
+/* ===============================
+   ESTADO VACÍO
+================================ */
+.empty-state {
+    text-align: center;
+    margin-top: 30px;
 }
 
-.phone-mode .investment-summary { grid-template-columns: 1fr; }
-.phone-mode .nav-links { display: none; }
+.empty-text {
+    color: #777;
+    font-size: 16px;
+}
+
+/* ===============================
+   RESPONSIVE
+================================ */
+@media (max-width: 900px) {
+
+    .investment-summary {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 600px) {
+
+    .main-title {
+        font-size: 22px;
+    }
+
+    .sub-title {
+        font-size: 18px;
+    }
+
+    .summary-item {
+        padding: 16px;
+    }
+
+    .investment-card {
+        padding: 18px;
+    }
+}

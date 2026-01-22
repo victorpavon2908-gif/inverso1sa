@@ -1,134 +1,237 @@
-/* Colores del Index aplicados a Equipo */
-:root {
-    --primary: #2ab5f1;
-    --dark: #050521;
-    --green: #ffb800;
-    --card-bg: #0a0c37;
-    --text-white: #ffffff;
-    --text-muted: #8e96b7;
-}
-
+/* ===============================
+   CONTENEDOR GENERAL
+================================ */
 .main-header h1 {
-    font-size: 24px;
-    margin: 30px 0;
-    color: var(--text-white);
-}
-
-.dashboard-grid {
-    display: grid;
-    grid-template-columns: 1.5fr 1fr;
-    gap: 20px;
-}
-
-.card-section {
-    background: var(--card-bg);
-    padding: 20px;
-    border-radius: 15px;
-    border: 1px solid rgba(255,255,255,0.05);
+    font-size: 26px;
+    font-weight: 700;
+    color: #0b1d2d;
     margin-bottom: 20px;
 }
 
-.card-section h3 {
-    margin-top: 0;
-    font-size: 1.1rem;
-    color: var(--primary);
-    border-bottom: 1px solid rgba(255,255,255,0.1);
-    padding-bottom: 10px;
-    margin-bottom: 15px;
+/* ===============================
+   GRID PRINCIPAL
+================================ */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: 2fr 1.2fr;
+    gap: 25px;
 }
 
-/* Compartir */
+/* ===============================
+   TARJETAS GENERALES
+================================ */
+.card-section {
+    background: #fff;
+    border-radius: 18px;
+    padding: 22px;
+    margin-bottom: 22px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+}
+
+.card-section h3 {
+    font-size: 18px;
+    margin-bottom: 15px;
+    color: #0b1d2d;
+}
+
+/* ===============================
+   MÉTODO DE COMPARTIR
+================================ */
 .share-container {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 15px;
 }
 
 .share-box {
-    background: rgba(255,255,255,0.05);
-    padding: 15px;
-    border-radius: 10px;
     display: flex;
     align-items: center;
-    gap: 15px;
+    background: #f4f6fb;
+    padding: 15px;
+    border-radius: 14px;
 }
 
-.share-box .label { color: var(--text-muted); font-size: 0.8rem; }
-.share-box .code { color: var(--green); font-weight: bold; font-size: 1.2rem; }
-.share-box .link { color: var(--primary); font-size: 0.75rem; word-break: break-all; }
+.share-box .icon {
+    font-size: 26px;
+    margin-right: 15px;
+}
+
+.details {
+    flex: 1;
+}
+
+.details .label {
+    display: block;
+    font-size: 13px;
+    color: #777;
+}
+
+.details .code,
+.details .link {
+    font-weight: 700;
+    color: #0b1d2d;
+    font-size: 15px;
+    word-break: break-all;
+}
 
 .copy-pill {
-    background: var(--primary);
-    color: white;
+    background: #0b1d2d;
+    color: #fff;
     border: none;
-    padding: 5px 12px;
-    border-radius: 5px;
+    padding: 8px 16px;
+    border-radius: 20px;
     cursor: pointer;
+    font-size: 14px;
 }
 
-/* Niveles */
+/* ===============================
+   NIVELES
+================================ */
 .levels-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
+    gap: 15px;
 }
 
 .level-card {
-    padding: 15px;
-    border-radius: 12px;
-    color: white;
+    border-radius: 16px;
+    overflow: hidden;
+    color: #fff;
 }
 
-.lvl-1 { background: linear-gradient(135deg, #1d60af, #2ab5f1); }
-.lvl-2 { background: linear-gradient(135deg, #050521, #161a5c); border: 1px solid var(--primary); }
-.lvl-3 { background: linear-gradient(135deg, #ffb800, #e67e22); color: #050521; }
+.lvl-header {
+    padding: 10px;
+    font-weight: 600;
+    text-align: center;
+}
 
-.main-stat { font-size: 1.5rem; font-weight: bold; }
-.sub-stats { font-size: 0.7rem; margin-top: 5px; opacity: 0.8; display: flex; flex-direction: column; }
+.lvl-body {
+    padding: 15px;
+    text-align: center;
+}
 
-/* Recompensas */
+.main-stat {
+    font-size: 26px;
+    font-weight: 700;
+}
+
+.main-stat small {
+    display: block;
+    font-size: 14px;
+    opacity: 0.9;
+}
+
+.sub-stats span {
+    display: block;
+    font-size: 13px;
+    margin-top: 5px;
+}
+
+/* COLORES */
+.lvl-1 { background: linear-gradient(135deg, #ff9800, #ff5722); }
+.lvl-2 { background: linear-gradient(135deg, #2196f3, #3f51b5); }
+.lvl-3 { background: linear-gradient(135deg, #4caf50, #009688); }
+
+/* ===============================
+   RECOMPENSAS
+================================ */
+.rewards-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
 .reward-item {
     display: flex;
     gap: 15px;
+    background: #f7f9fc;
     padding: 15px;
-    background: rgba(255,255,255,0.03);
-    border-radius: 10px;
-    margin-bottom: 10px;
+    border-radius: 14px;
 }
 
 .badge {
-    background: var(--primary);
-    width: 25px;
-    height: 25px;
-    border-radius: 5px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.8rem;
+    background: #0b1d2d;
+    color: #fff;
+    font-weight: 700;
+    padding: 10px 14px;
+    border-radius: 12px;
+    font-size: 14px;
+    height: fit-content;
 }
 
-.hlt { color: var(--green); }
+.reward-info p {
+    font-size: 14px;
+    margin-bottom: 8px;
+}
 
+.hlt {
+    color: #1bbf72;
+    font-weight: 700;
+}
+
+/* ===============================
+   PROGRESS BAR
+================================ */
 .progress-bar-bg {
-    background: rgba(255,255,255,0.1);
-    height: 6px;
-    border-radius: 3px;
-    margin: 10px 0;
+    background: #e4e9f1;
+    border-radius: 20px;
+    height: 8px;
+    overflow: hidden;
+    margin: 8px 0;
+}
+
+.progress-bar-fill {
+    background: linear-gradient(90deg, #1bbf72, #00c853);
+    height: 100%;
+    width: 0%;
+}
+
+/* ===============================
+   FOOTER DE RECOMPENSA
+================================ */
+.reward-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
 }
 
 .btn-get {
-    background: var(--text-muted);
+    background: #0b1d2d;
+    color: #fff;
     border: none;
-    padding: 5px 15px;
+    padding: 6px 14px;
     border-radius: 20px;
-    color: white;
-    font-size: 0.8rem;
+    cursor: pointer;
 }
 
-/* Adaptación a modo teléfono (usando la clase del script) */
-.phone-mode .dashboard-grid {
-    grid-template-columns: 1fr;
+.btn-get:disabled {
+    background: #ccc;
+    cursor: not-allowed;
 }
-.phone-mode .levels-grid {
-    grid-template-columns: 1fr;
+
+/* ===============================
+   RESPONSIVE
+================================ */
+@media (max-width: 1000px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 600px) {
+
+    .levels-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .reward-item {
+        flex-direction: column;
+    }
+
+    .reward-footer {
+        flex-direction: column;
+        gap: 8px;
+        align-items: flex-start;
+    }
 }
