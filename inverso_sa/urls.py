@@ -26,5 +26,11 @@ urlpatterns = [
 
     path('invertir/<int:id>/', views.invertir_producto, name='invertir'),
 
+    path('productos/', views.ver_productos, name='ver_productos'),
+    path('productos/editar/<int:id>/', views.editar_producto, name='editar_producto'),
+    path('productos/toggle/<int:id>/', views.toggle_producto, name='toggle_producto'),
+
+
+
 ]
 

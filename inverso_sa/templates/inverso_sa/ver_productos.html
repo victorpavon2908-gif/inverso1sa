@@ -1,0 +1,91 @@
+{% extends "inverso_sa/panel.html" %}
+{% load static %}
+
+{% block title %}Productos{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'inverso_sa/css/ver_productos.css' %}">
+{% endblock %}
+
+{% block page_title %}
+Productos registrados
+{% endblock %}
+
+{% block content %}
+
+<div class="productos-container">
+
+    <table class="productos-table">
+        <thead>
+            <tr>
+                <th>Imagen</th>
+                <th>Nombre</th>
+                <th>Precio</th>
+                <th>Ingreso diario</th>
+                <th>Duración</th>
+                <th>Límite</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for p in productos %}
+            <tr>
+
+                <td>
+                    {% if p.imagen %}
+                        <img src="{{ p.imagen.url }}" class="producto-img">
+                    {% else %}
+                        <span>Sin imagen</span>
+                    {% endif %}
+                </td>
+
+                <td>{{ p.nombre }}</td>
+                <td>C$ {{ p.precio }}</td>
+                <td>C$ {{ p.ingreso_diario }}</td>
+                <td>{{ p.get_duracion_display }}</td>
+                <td>{{ p.limite }}</td>
+
+                <td>
+                    {% if p.activo %}
+                        <span class="estado activo">Activo</span>
+                    {% else %}
+                        <span class="estado inactivo">Inactivo</span>
+                    {% endif %}
+                </td>
+
+                <!-- ✅ ACCIONES CORRECTAS -->
+                <td>
+                    <div class="acciones">
+
+                        <a href="{% url 'editar_producto' p.id %}" class="btn editar">
+                            ✏ Editar
+                        </a>
+
+                        <form method="POST" action="{% url 'toggle_producto' p.id %}">
+                            {% csrf_token %}
+                            {% if p.activo %}
+                                <button type="submit" class="btn desactivar">⛔ Desactivar</button>
+                            {% else %}
+                                <button type="submit" class="btn activar">✅ Activar</button>
+                            {% endif %}
+                        </form>
+
+                    </div>
+                </td>
+
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="8" class="empty">
+                    No hay productos registrados
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+
+{% endblock %}

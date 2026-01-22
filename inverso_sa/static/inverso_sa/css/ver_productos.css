@@ -1,0 +1,94 @@
+.productos-container {
+    background: #000000;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.05);
+}
+
+.productos-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.productos-table th {
+    background: #1f2937;
+    color: #000000;
+    padding: 12px;
+    text-align: center;
+}
+
+.productos-table td {
+    padding: 10px;
+    text-align: center;
+    border-bottom: 1px solid #000000;
+}
+
+.productos-table tr:hover {
+    background: #f9fafb;
+}
+
+.producto-img {
+    width: 55px;
+    height: 55px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+}
+
+.estado {
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.estado.activo {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.estado.inactivo {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.empty {
+    padding: 20px;
+    text-align: center;
+    color: #6b7280;
+}
+.acciones {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    align-items: center;
+}
+
+.btn {
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    cursor: pointer;
+    border: none;
+    font-weight: 600;
+}
+
+.btn.editar {
+    background: #2563eb;
+    color: #fff;
+}
+
+.btn.desactivar {
+    background: #dc2626;
+    color: #fff;
+}
+
+.btn.activar {
+    background: #16a34a;
+    color: #fff;
+}
+
+.btn:hover {
+    opacity: 0.85;
+}

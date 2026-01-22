@@ -383,4 +383,44 @@ def invertir_producto(request, id):
     )
 
     messages.success(request, "✅ Inversión realizada correctamente")
-    return redirect('mio')
+    return redirect('ingreso')
+
+
+@login_required
+def ver_productos(request):
+    productos = Producto.objects.all().order_by('-creado')
+    return render(request, 'inverso_sa/ver_productos.html', {
+        'productos': productos
+    })
+
+@login_required
+def editar_producto(request, id):
+    producto = get_object_or_404(Producto, id=id)
+
+    if request.method == 'POST':
+        form = ProductoForm(request.POST, request.FILES, instance=producto)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "✏ Producto actualizado correctamente")
+            return redirect('ver_productos')
+    else:
+        form = ProductoForm(instance=producto)
+
+    return render(request, 'inverso_sa/editar_producto.html', {
+        'form': form,
+        'producto': producto
+    })
+
+
+@login_required
+def toggle_producto(request, id):
+    producto = get_object_or_404(Producto, id=id)
+    producto.activo = not producto.activo
+    producto.save()
+
+    if producto.activo:
+        messages.success(request, "✅ Producto activado")
+    else:
+        messages.warning(request, "⛔ Producto desactivado")
+
+    return redirect('ver_productos')

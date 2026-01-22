@@ -1,0 +1,41 @@
+{% extends "inverso_sa/panel.html" %}
+{% load static %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'inverso_sa/css/editar_producto.css' %}">
+{% endblock %}
+
+
+{% block title %}Editar producto{% endblock %}
+
+{% block page_title %}
+Editar producto
+{% endblock %}
+
+{% block content %}
+
+<div class="form-container">
+
+    <h2 class="form-title">✏ Editar producto</h2>
+
+    <form method="POST" enctype="multipart/form-data" class="producto-form">
+        {% csrf_token %}
+
+        {{ form.as_p }}
+
+        {% if producto.imagen %}
+            <div class="preview">
+                <p>Imagen actual:</p>
+                <img src="{{ producto.imagen.url }}" width="120">
+            </div>
+        {% endif %}
+
+        <div class="form-actions">
+            <button type="submit" class="btn guardar">💾 Guardar cambios</button>
+            <a href="{% url 'ver_productos' %}" class="btn cancelar">↩ Volver</a>
+        </div>
+
+    </form>
+
+</div>
+
+{% endblock %}
