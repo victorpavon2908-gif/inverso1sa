@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils import timezone
 from datetime import timedelta
+from decimal import Decimal
 
 
 class Usuario(AbstractUser):
@@ -15,6 +16,7 @@ class Usuario(AbstractUser):
     )
     saldo = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     bono_primera_recarga = models.BooleanField(default=False)
+    recarga_comision_pagada = models.BooleanField(default=False)
 
     def save(self, *args, **kwargs):
         if not self.codigo_invitacion:
@@ -88,9 +90,29 @@ class Inversion(models.Model):
 
     def puede_pagar(self):
         ahora = timezone.now()
-        proximo = (self.ultimo_pago or self.fecha_inicio) + timedelta(hours=24)
-        return ahora >= proximo
+        proximo_pago = (self.ultimo_pago or self.fecha_inicio) + timedelta(hours=24)
+        return ahora >= proximo_pago
 
+    def pagar(self):
+        if not self.puede_pagar():
+            return
+
+        ingreso = Decimal(self.producto.ingreso_diario)
+
+        # 💰 sumar al saldo
+        self.usuario.saldo += ingreso
+        self.usuario.save()
+
+        # 🧾 registrar transacción
+        Transaccion.objects.create(
+            usuario=self.usuario,
+            monto=ingreso,
+            tipo='ingreso'
+        )
+
+        # ⏱ actualizar fecha
+        self.ultimo_pago = timezone.now()
+        self.save()
 
 class Retiro(models.Model):
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)

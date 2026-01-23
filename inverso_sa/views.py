@@ -346,7 +346,7 @@ def aprobar_rechazar_recarga(request, id):
                 and not usuario.recarga_comision_pagada
             ):
                 invitador = usuario.referido_por
-                comision = recarga.monto * 0.08
+                comision = recarga.monto * Decimal("0.04")
 
                 invitador.saldo += comision
                 invitador.save()
