@@ -62,7 +62,6 @@ def registro_view(request):
         password2 = request.POST.get('password2')
         codigo_ingresado = request.POST.get('codigo_invitacion')
 
-        # Validaciones
         if password1 != password2:
             return render(request, 'inverso_sa/registro.html', {
                 'error': 'Las contraseñas no coinciden'
@@ -78,34 +77,31 @@ def registro_view(request):
                 'error': 'El correo ya está registrado'
             })
 
-        # Crear usuario inversionista
         usuario = Usuario.objects.create(
             username=username,
             email=email,
             first_name=first_name,
             last_name=last_name,
-            saldo=20.0,  # saldo inicial
+            saldo=20,
             password=make_password(password1)
         )
 
-        # ➕ ASIGNAR ROL INVERSIONISTA
-        grupo_inversionista, _ = Group.objects.get_or_create(name='inversionista')
-        usuario.groups.add(grupo_inversionista)
+        grupo, _ = Group.objects.get_or_create(name='inversionista')
+        usuario.groups.add(grupo)
 
-        # 🎁 LÓGICA DE INVITACIÓN
+        # 🔗 GUARDAR QUIÉN LO INVITÓ
         if codigo_ingresado:
             try:
-                usuario_invitador = Usuario.objects.get(
-                    codigo_invitacion=codigo_ingresado
-                )
-                usuario_invitador.saldo += 5  # recompensa
-                usuario_invitador.save()
+                invitador = Usuario.objects.get(codigo_invitacion=codigo_ingresado)
+                usuario.referido_por = invitador
+                usuario.save()
             except Usuario.DoesNotExist:
-                pass  # código inválido → no pasa nada
+                pass
 
         return redirect('login')
 
     return render(request, 'inverso_sa/registro.html')
+
 
 
 
@@ -133,13 +129,6 @@ def ingreso(request):
     }
 
     return render(request, 'inverso_sa/ingreso.html', context)
-
-
-
-def equipo_view(request):
-    recompensas = [1, 2, 3, 4, 5]
-    return render(request, 'inverso_sa/equipo.html', {'recompensas': recompensas})
-
 # --------------------
 # MIO
 # --------------------
@@ -337,19 +326,48 @@ def aprobar_rechazar_recarga(request, id):
     recarga = get_object_or_404(Recarga, id=id)
 
     if request.method == "POST":
-        accion = request.POST.get('accion')
-        if accion == "aprobar" and recarga.estado == 'revision':
+        accion = request.POST.get("accion")
+
+        if recarga.estado != 'revision':
+            messages.warning(request, "Esta recarga ya fue procesada")
+            return redirect('solicitudes_recarga')
+
+        if accion == "aprobar":
             recarga.estado = 'aprobada'
-            recarga.usuario.saldo += recarga.monto
-            recarga.usuario.save()
+
+            usuario = recarga.usuario
+            usuario.saldo += recarga.monto
+            usuario.save()
             recarga.save()
-            messages.success(request, f"✅ Recarga de {recarga.usuario.username} aprobada")
-        elif accion == "rechazar" and recarga.estado == 'revision':
+
+            # ✅ COMISIÓN SOLO PRIMERA RECARGA
+            if (
+                usuario.referido_por
+                and not usuario.recarga_comision_pagada
+            ):
+                invitador = usuario.referido_por
+                comision = recarga.monto * 0.08
+
+                invitador.saldo += comision
+                invitador.save()
+
+                usuario.recarga_comision_pagada = True
+                usuario.save()
+
+                messages.success(
+                    request,
+                    f"🎉 Comisión de C$ {comision:.2f} pagada al invitador"
+                )
+
+            messages.success(request, "✅ Recarga aprobada correctamente")
+
+        elif accion == "rechazar":
             recarga.estado = 'rechazada'
             recarga.save()
-            messages.success(request, f"❌ Recarga de {recarga.usuario.username} rechazada")
+            messages.warning(request, "❌ Recarga rechazada")
 
     return redirect('solicitudes_recarga')
+
 
 
 
@@ -557,3 +575,31 @@ def procesar_retiro(request, id):
             messages.warning(request, "❌ Retiro rechazado y dinero devuelto")
 
     return redirect("solicitudes_retiro")
+
+
+@login_required
+def equipo_view(request):
+    usuario = request.user
+
+    # 🔗 NIVELES DE EQUIPO
+    nivel_1 = Usuario.objects.filter(referido_por=usuario)
+    nivel_2 = Usuario.objects.filter(referido_por__in=nivel_1)
+    nivel_3 = Usuario.objects.filter(referido_por__in=nivel_2)
+
+    # 🔢 CONTADORES
+    n1_total = nivel_1.count()
+    n2_total = nivel_2.count()
+    n3_total = nivel_3.count()
+
+    # 🔗 LINK DE INVITACIÓN
+    link = f"https://inverso1sa-5.onrender.com/registro/?ref={usuario.codigo_invitacion}"
+
+    context = {
+        "codigo": usuario.codigo_invitacion,
+        "link": link,
+        "n1_total": n1_total,
+        "n2_total": n2_total,
+        "n3_total": n3_total,
+    }
+
+    return render(request, "inverso_sa/equipo.html", context)

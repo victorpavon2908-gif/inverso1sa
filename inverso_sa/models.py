@@ -6,7 +6,15 @@ from datetime import timedelta
 
 class Usuario(AbstractUser):
     codigo_invitacion = models.CharField(max_length=20, unique=True, blank=True)
+    referido_por = models.ForeignKey(
+        "self",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="referidos"
+    )
     saldo = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    bono_primera_recarga = models.BooleanField(default=False)
 
     def save(self, *args, **kwargs):
         if not self.codigo_invitacion:

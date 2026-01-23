@@ -13,16 +13,17 @@
 
     <main class="page-container">
         <section class="register-card">
+
             <div class="brand-header">
                 <div class="logo-wrapper">
                     <img src="{% static 'inverso_sa/img/logo.jpeg' %}" class="logo-img">
                 </div>
-                <h1 class="brand-title">UNETE A <span>INVERSO</span></h1>
+                <h1 class="brand-title">ÚNETE A <span>INVERSO</span></h1>
                 <p class="brand-subtitle">Crea tu cuenta de inversión</p>
             </div>
 
             {% if error %}
-            <p style="color:red;text-align:center;">{{ error }}</p>
+                <p style="color:red;text-align:center;">{{ error }}</p>
             {% endif %}
 
             <form method="POST" class="form-container">
@@ -46,13 +47,19 @@
                 </div>
 
                 <div class="input-group">
-                    <label>USUARIO(recuerda tu usuario por favor)</label>
+                    <label>USUARIO</label>
                     <input type="text" name="username" required>
                 </div>
+
+                <!-- ✅ CÓDIGO AUTOMÁTICO -->
                 <div class="input-group">
                     <label>CÓDIGO DE INVITACIÓN (opcional)</label>
-                    <input type="text" name="codigo_invitacion" placeholder="Ej: 458921">
+                    <input type="text"
+                           name="codigo_invitacion"
+                           value="{{ request.GET.ref }}"
+                           placeholder="Ej: 458921">
                 </div>
+
                 <div class="input-group">
                     <label>CONTRASEÑA</label>
                     <input type="password" name="password1" required>
@@ -74,10 +81,11 @@
                     <span>¿Ya tienes cuenta?</span>
                     <a href="{% url 'login' %}" class="highlight">Inicia Sesión</a>
                 </div>
+
             </form>
+
         </section>
     </main>
 
 </body>
-
 </html>

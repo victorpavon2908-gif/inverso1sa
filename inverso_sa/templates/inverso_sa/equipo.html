@@ -11,90 +11,84 @@
 
 {% block contenido %}
 <div class="main-content container">
+
     <header class="main-header">
-        <h1>Panel de Equipo</h1>
+        <h1>👥 Mi Equipo</h1>
     </header>
 
-    <div class="dashboard-grid">
-        <div class="left-column">
-            <section class="card-section">
-                <h3>Método de compartir</h3>
-                <div class="share-container">
-                    <div class="share-box">
-                        <div class="icon">🎁</div>
-                        <div class="details">
-                            <span class="label">Código de invitación</span>
-                            <span class="code">461341</span>
-                        </div>
-                    </div>
-                    <div class="share-box">
-                        <div class="icon">🔗</div>
-                        <div class="details">
-                            <span class="label">Enlace de invitación</span>
-                            <span class="link">https://ni.easyhub.world/#/join?expold=461341</span>
-                        </div>
-                        <button class="copy-pill">Copiar</button>
-                    </div>
-                </div>
-            </section>
+    <!-- 🔗 MÉTODO DE COMPARTIR -->
+    <section class="card-section">
+        <h3>Método de compartir</h3>
 
-            <section class="card-section">
-                <h3>Beneficios de mi equipo</h3>
-                <div class="levels-grid">
-                    <div class="level-card lvl-1">
-                        <div class="lvl-header">👑 Nivel 1</div>
-                        <div class="lvl-body">
-                            <div class="main-stat">29% <small>Comisión</small></div>
-                            <div class="sub-stats">
-                                <span>0 Miembros</span>
-                                <span>C$ 0.00 Contribución</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="level-card lvl-2">
-                        <div class="lvl-header">🥈 Nivel 2</div>
-                        <div class="lvl-body">
-                            <div class="main-stat">1% <small>Comisión</small></div>
-                            <div class="sub-stats">
-                                <span>0 Miembros</span>
-                                <span>C$ 0.00 Contribución</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="level-card lvl-3">
-                        <div class="lvl-header">🥉 Nivel 3</div>
-                        <div class="lvl-body">
-                            <div class="main-stat">1% <small>Comisión</small></div>
-                            <div class="sub-stats">
-                                <span>0 Miembros</span>
-                                <span>C$ 0.00 Contribución</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </div>
+        <div class="share-container">
 
-        <div class="right-column">
-            <section class="card-section">
-                <h3>Recompensas de inversión</h3>
-                {% for i in recompensas %}
-                <div class="rewards-list">
-                    <div class="reward-item">
-                        <div class="badge">{{ i }}</div>
-                        <div class="reward-info">
-                            <p>Inversión total Lvl 1: <span class="hlt">C$ 3000</span>. Bono: <span class="hlt">C$ 300</span></p>
-                            <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: 0%"></div></div>
-                            <div class="reward-footer">
-                                <span>Progreso: 0/3000</span>
-                                <button class="btn-get" disabled>Recibir</button>
-                            </div>
-                        </div>
+            <div class="share-box">
+                <div class="icon">🎁</div>
+                <div class="details">
+                    <span class="label">Código de invitación</span>
+                    <span class="code">{{ codigo }}</span>
+                </div>
+            </div>
+
+            <div class="share-box">
+                <div class="icon">🔗</div>
+                <div class="details">
+                    <span class="label">Enlace de invitación</span>
+                    <span class="link">{{ link }}</span>
+                </div>
+                <button class="copy-pill"
+                        onclick="navigator.clipboard.writeText('{{ link }}')">
+                    Copiar
+                </button>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- 🏆 BENEFICIOS -->
+    <section class="card-section">
+        <h3>Beneficios de mi equipo</h3>
+
+        <div class="levels-grid">
+
+            <!-- NIVEL 1 -->
+            <div class="level-card lvl-1">
+                <div class="lvl-header">👑 Nivel 1</div>
+                <div class="lvl-body">
+                    <div class="main-stat">29% <small>Comisión</small></div>
+                    <div class="sub-stats">
+                        <span>{{ n1_total }} Miembros</span>
+                        <span>Comisión directa</span>
                     </div>
                 </div>
-                {% endfor %}
-            </section>
+            </div>
+
+            <!-- NIVEL 2 -->
+            <div class="level-card lvl-2">
+                <div class="lvl-header">🥈 Nivel 2</div>
+                <div class="lvl-body">
+                    <div class="main-stat">1% <small>Comisión</small></div>
+                    <div class="sub-stats">
+                        <span>{{ n2_total }} Miembros</span>
+                        <span>Comisión indirecta</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- NIVEL 3 -->
+            <div class="level-card lvl-3">
+                <div class="lvl-header">🥉 Nivel 3</div>
+                <div class="lvl-body">
+                    <div class="main-stat">1% <small>Comisión</small></div>
+                    <div class="sub-stats">
+                        <span>{{ n3_total }} Miembros</span>
+                        <span>Comisión pasiva</span>
+                    </div>
+                </div>
+            </div>
+
         </div>
-    </div>
+    </section>
+
 </div>
 {% endblock %}
