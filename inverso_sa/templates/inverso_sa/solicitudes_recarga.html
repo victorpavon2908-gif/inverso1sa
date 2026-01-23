@@ -7,11 +7,14 @@
 <link rel="stylesheet" href="{% static 'inverso_sa/css/solicitudes_recarga.css' %}">
 {% endblock %}
 
-{% block page_title %}💷 Solicitudes de Recarga{% endblock %}
+{% block page_title %}
+💷 Solicitudes de Recarga
+{% endblock %}
 
 {% block content %}
+
 <div class="table-container">
-    <table class="recargas-table styled-table">
+    <table class="recargas-table">
         <thead>
             <tr>
                 <th>Usuario</th>
@@ -23,6 +26,7 @@
                 <th>Acción</th>
             </tr>
         </thead>
+
         <tbody>
             {% for recarga in recargas %}
             <tr>
@@ -41,26 +45,34 @@
                 </td>
                 <td>{{ recarga.fecha|date:"d/m/Y H:i" }}</td>
                 <td>
-                    <button class="btn-sm edit" onclick="openModal({{ recarga.id }})">Ver</button>
+                    <button class="btn-sm edit"
+                            onclick="openModal({{ recarga.id }})">
+                        Ver
+                    </button>
                 </td>
             </tr>
             {% empty %}
             <tr>
-                <td colspan="7" style="text-align:center;">No hay solicitudes de recarga.</td>
+                <td colspan="7" style="text-align:center;">
+                    No hay solicitudes de recarga
+                </td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
 </div>
 
-<!-- MODALES -->
+<!-- ================= MODALES ================= -->
 {% for recarga in recargas %}
-<div id="modal-{{ recarga.id }}" class="modal">
-    <div class="modal-content card">
-        <div class="modal-header card-header">
+<div class="modal" id="modal-{{ recarga.id }}">
+    <div class="modal-content">
+
+        <div class="modal-header">
             <h3>Solicitud de Recarga</h3>
-            <span class="close-modal" onclick="closeModal({{ recarga.id }})">&times;</span>
+            <span class="close-modal"
+                  onclick="closeModal({{ recarga.id }})">&times;</span>
         </div>
+
         <div class="modal-body">
             <p><strong>Usuario:</strong> {{ recarga.usuario.username }}</p>
             <p><strong>Correo:</strong> {{ recarga.usuario.email }}</p>
@@ -69,25 +81,52 @@
             <p><strong>N° Cuenta:</strong> {{ recarga.cuenta.numero_cuenta }}</p>
             <p><strong>Monto:</strong> C$ {{ recarga.monto }}</p>
             <p><strong>Referencia:</strong> {{ recarga.referencia }}</p>
+
             {% if recarga.voucher %}
-            <p><strong>Voucher:</strong></p>
-            <img src="{{ recarga.voucher.url }}" alt="Voucher" class="voucher-img">
+                <img src="{{ recarga.voucher.url }}" class="voucher-img">
             {% endif %}
         </div>
+
         {% if recarga.estado == 'revision' %}
-        <div class="modal-footer action-buttons">
-            <form method="POST" action="{% url 'aprobar_rechazar_recarga' recarga.id %}">
+        <div class="modal-footer">
+            <form method="POST"
+                  action="{% url 'aprobar_rechazar_recarga' recarga.id %}">
                 {% csrf_token %}
-                <button type="submit" name="accion" value="aprobar" class="btn-sm edit">Aprobar</button>
-                <button type="submit" name="accion" value="rechazar" class="btn-sm delete">Rechazar</button>
+                <button class="btn-sm edit" name="accion" value="aprobar">
+                    Aprobar
+                </button>
+                <button class="btn-sm delete" name="accion" value="rechazar">
+                    Rechazar
+                </button>
             </form>
         </div>
         {% endif %}
+
     </div>
 </div>
 {% endfor %}
-{% endblock %}
 
-{% block js %}
-<script src="{% static 'inverso_sa/js/solicitudes_recarga.js' %}"></script>
+<!-- ================= JS AQUÍ MISMO ================= -->
+<script>
+    function openModal(id) {
+        const modal = document.getElementById("modal-" + id);
+        if (modal) {
+            modal.classList.add("show");
+        }
+    }
+
+    function closeModal(id) {
+        const modal = document.getElementById("modal-" + id);
+        if (modal) {
+            modal.classList.remove("show");
+        }
+    }
+
+    window.addEventListener("click", function (e) {
+        if (e.target.classList.contains("modal")) {
+            e.target.classList.remove("show");
+        }
+    });
+</script>
+
 {% endblock %}

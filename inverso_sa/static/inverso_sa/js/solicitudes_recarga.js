@@ -1,16 +1,19 @@
-// Abrir modal
 function openModal(id) {
-    document.getElementById('modal-' + id).style.display = 'block';
-}
-
-// Cerrar modal
-function closeModal(id) {
-    document.getElementById('modal-' + id).style.display = 'none';
-}
-
-// Cerrar modal al hacer click fuera del contenido
-window.onclick = function(event) {
-    if (event.target.classList.contains('modal')) {
-        event.target.style.display = 'none';
+    const modal = document.getElementById("modal-" + id);
+    if (modal) {
+        modal.classList.add("show");
     }
 }
+
+function closeModal(id) {
+    const modal = document.getElementById("modal-" + id);
+    if (modal) {
+        modal.classList.remove("show");
+    }
+}
+
+window.addEventListener("click", function (e) {
+    if (e.target.classList.contains("modal")) {
+        e.target.classList.remove("show");
+    }
+});
