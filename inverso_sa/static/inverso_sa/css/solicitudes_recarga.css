@@ -4,18 +4,13 @@
     background: rgba(2, 6, 23, 0.85);
     z-index: 9999;
 
-    display: flex;
+    display: none;
     justify-content: center;
     align-items: center;
-
-    opacity: 0;
-    pointer-events: none;
-    transition: 0.3s ease;
 }
 
 .modal.show {
-    opacity: 1;
-    pointer-events: auto;
+    display: flex;
 }
 
 .modal-content {
@@ -27,16 +22,9 @@
     max-height: 90vh;
 
     border-radius: 16px;
-    padding: 20px;
+    padding: 22px;
 
     overflow-y: auto;
-
-    transform: scale(0.9);
-    transition: 0.3s ease;
-}
-
-.modal.show .modal-content {
-    transform: scale(1);
 }
 
 .close-modal {
@@ -49,7 +37,7 @@
 .voucher-img {
     width: 100%;
     max-width: 350px;
-    display: block;
     margin: 15px auto;
+    display: block;
     border-radius: 12px;
 }

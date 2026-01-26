@@ -125,10 +125,12 @@ def ingreso(request):
     context = {
         'saldo': usuario.saldo,
         'inversiones_activas': inversiones_activas,
-        'inversiones_expiradas': inversiones_expiradas
+        'inversiones_expiradas': inversiones_expiradas,
+        'total_proyectos': inversiones_activas.count(),  # ✅ AQUÍ
     }
 
     return render(request, 'inverso_sa/ingreso.html', context)
+
 # --------------------
 # MIO
 # --------------------

@@ -88,6 +88,15 @@ class Inversion(models.Model):
     ultimo_pago = models.DateTimeField(null=True, blank=True)
     activa = models.BooleanField(default=True)
 
+    ganancia_total = models.DecimalField(
+        max_digits=12,
+        decimal_places=2,
+        default=0
+    )
+
+    dias_pagados = models.PositiveIntegerField(default=0)
+    
+
     def puede_pagar(self):
         ahora = timezone.now()
         proximo_pago = (self.ultimo_pago or self.fecha_inicio) + timedelta(hours=24)
@@ -102,6 +111,10 @@ class Inversion(models.Model):
         # 💰 sumar al saldo
         self.usuario.saldo += ingreso
         self.usuario.save()
+
+         # 📊 acumular ganancia
+        self.ganancia_total += ingreso
+        self.dias_pagados += 1
 
         # 🧾 registrar transacción
         Transaccion.objects.create(

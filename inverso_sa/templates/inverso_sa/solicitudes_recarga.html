@@ -3,7 +3,7 @@
 
 {% block title %}Solicitudes de Recarga{% endblock %}
 
-{% block extra_css %}
+{% block css %}
 <link rel="stylesheet" href="{% static 'inverso_sa/css/solicitudes_recarga.css' %}">
 {% endblock %}
 
@@ -49,12 +49,6 @@
                             onclick="openModal({{ recarga.id }})">
                         Ver
                     </button>
-                </td>
-            </tr>
-            {% empty %}
-            <tr>
-                <td colspan="7" style="text-align:center;">
-                    No hay solicitudes de recarga
                 </td>
             </tr>
             {% endfor %}
@@ -106,27 +100,8 @@
 </div>
 {% endfor %}
 
-<!-- ================= JS AQUÍ MISMO ================= -->
-<script>
-    function openModal(id) {
-        const modal = document.getElementById("modal-" + id);
-        if (modal) {
-            modal.classList.add("show");
-        }
-    }
+{% endblock %}
 
-    function closeModal(id) {
-        const modal = document.getElementById("modal-" + id);
-        if (modal) {
-            modal.classList.remove("show");
-        }
-    }
-
-    window.addEventListener("click", function (e) {
-        if (e.target.classList.contains("modal")) {
-            e.target.classList.remove("show");
-        }
-    });
-</script>
-
+{% block js %}
+<script src="{% static 'inverso_sa/js/solicitudes_recarga.js' %}"></script>
 {% endblock %}

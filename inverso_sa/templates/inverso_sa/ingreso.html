@@ -11,89 +11,79 @@
 
 {% block contenido %}
 <div class="investment-container">
+
     <h2 class="main-title">Inversión</h2>
 
+    <!-- ================= RESUMEN ================= -->
     <div class="investment-summary">
+
+        <!-- SALDO -->
         <div class="summary-item card-blue">
-            <div class="icon-box">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
-                    <path d="M23 6l-9.5 9.5-5-5L1 18"></path>
-                    <path d="M17 6h6v6"></path>
-                </svg>
-            </div>
             <div class="summary-text">
                 <span>Mi saldo</span>
-               <strong>C$ {{ saldo }}</strong>
-
+                <strong>C$ {{ saldo }}</strong>
             </div>
         </div>
 
+        <!-- PROYECTOS -->
         <div class="summary-item card-orange">
-            <div class="icon-box">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
-                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                    <line x1="3" y1="9" x2="21" y2="9"></line>
-                    <line x1="9" y1="21" x2="9" y2="9"></line>
-                </svg>
-            </div>
             <div class="summary-text">
-                <span>Número de proyectos</span>
-                <strong>0</strong>
+                <span>Mis proyectos</span>
+                <strong>{{ total_proyectos }}</strong>
             </div>
         </div>
+
     </div>
 
     <h3 class="sub-title">Mi proyecto de inversión</h3>
 
-    <div class="investment-tabs">
-        <button class="tab-btn active">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="white">
-                <rect x="3" y="10" width="4" height="11"></rect>
-                <rect x="10" y="5" width="4" height="16"></rect>
-                <rect x="17" y="13" width="4" height="8"></rect>
-            </svg>
-            En progreso
-        </button>
-        <button class="tab-btn">Expirado</button>
-    </div>
-
+    <!-- ================= INVERSIONES ================= -->
     <div class="empty-state">
+
         {% if inversiones_activas %}
-        {% for inv in inversiones_activas %}
-        <div class="investment-card">
+            {% for inv in inversiones_activas %}
 
-            <h4>{{ inv.producto.nombre }}</h4>
+            <div class="investment-card">
 
-            <p>
-                💰 Inversión:
-                <strong>C$ {{ inv.producto.precio }}</strong>
-            </p>
+                <h4>{{ inv.producto.nombre }}</h4>
 
-            <p>
-                📈 Ingreso diario:
-                <strong class="text-green">
-                    C$ {{ inv.producto.ingreso_diario }}
-                </strong>
-            </p>
+                <p>
+                    💰 Inversión:
+                    <strong>C$ {{ inv.producto.precio }}</strong>
+                </p>
 
-            <p>
-                📅 Inicio:
-                {{ inv.fecha_inicio|date:"d/m/Y H:i" }}
-            </p>
+                <p>
+                    📈 Ingreso diario:
+                    <strong class="text-green">
+                        C$ {{ inv.producto.ingreso_diario }}
+                    </strong>
+                </p>
 
-            <p>
-                ⏳ Estado:
-                <span class="badge-green">En progreso</span>
-            </p>
+                <p>
+                    📆 Días pagados:
+                    <strong>{{ inv.dias_pagados }}</strong>
+                </p>
 
-        </div>
-        {% endfor %}
+                <p>
+                    💵 Ganancia acumulada:
+                    <strong class="text-green">
+                        C$ {{ inv.ganancia_total }}
+                    </strong>
+                </p>
+
+                <p>
+                    ⏳ Estado:
+                    <span class="badge-green">En progreso</span>
+                </p>
+
+            </div>
+
+            {% endfor %}
         {% else %}
-        <div class="empty-state">
             <p class="empty-text">¡Sin inversiones aún!</p>
-        </div>
         {% endif %}
 
     </div>
+
 </div>
 {% endblock %}
