@@ -1,5 +1,8 @@
 {% extends "inverso_sa/dashboard.html" %}
-
+{% load static %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'inverso_sa/css/misrecargas.css' %}">
+{% endblock %}
 {% block contenido %}
 <h2>📄 Mis Recargas</h2>
 
