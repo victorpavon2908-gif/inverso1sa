@@ -663,6 +663,7 @@ def editar_usuario(request, id):
         "usuario": usuario
     })
 
+
 @login_required
 def eliminar_usuario(request, id):
     usuario = get_object_or_404(Usuario, id=id)
