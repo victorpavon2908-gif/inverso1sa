@@ -10,8 +10,20 @@
 
     <h2>💳 Recargar saldo</h2>
 
-    <a href="{% url 'inicio' %}" class="btn-cta">⬅ Regresar</a>
+    <!-- BOTONES -->
+    <div style="display:flex; gap:10px; margin-bottom:20px; flex-wrap:wrap;">
 
+        <a href="{% url 'inicio' %}" class="btn-cta">
+            ⬅ Regresar
+        </a>
+
+        <a href="{% url 'historial_recargas' %}" class="btn-cta">
+            📄 Historial de recargas
+        </a>
+
+    </div>
+
+    <!-- MENSAJES -->
     {% for message in messages %}
         <p style="color:red">{{ message }}</p>
     {% endfor %}
@@ -58,11 +70,11 @@
             <button type="button" onclick="setMonto(300)">C$300</button>
             <button type="button" onclick="setMonto(500)">C$500</button>
             <button type="button" onclick="setMonto(1000)">C$1000</button>
-            <button type="button" onclick="setMonto(1000)">C$3000</button>
-            <button type="button" onclick="setMonto(1000)">C$5000</button>
-            <button type="button" onclick="setMonto(1000)">C$1000</button>
-            <button type="button" onclick="setMonto(1000)">C$50000</button>
-            <button type="button" onclick="setMonto(1000)">C$100000</button>
+            <button type="button" onclick="setMonto(3000)">C$3000</button>
+            <button type="button" onclick="setMonto(5000)">C$5000</button>
+            <button type="button" onclick="setMonto(10000)">C$10000</button>
+            <button type="button" onclick="setMonto(50000)">C$50000</button>
+            <button type="button" onclick="setMonto(100000)">C$100000</button>
         </div>
 
         <label>Referencia</label>
