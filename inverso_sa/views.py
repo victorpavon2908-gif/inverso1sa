@@ -519,8 +519,8 @@ def retirar_view(request):
 
         cuenta_id = request.POST.get("cuenta")
 
-        if monto <= 0:
-            messages.error(request, "El monto debe ser mayor a 0")
+        if monto <= 300:
+            messages.error(request, "El monto debe ser mayor a 300")
             return redirect("retirar")
 
         if monto > request.user.saldo:
@@ -557,8 +557,7 @@ def retirar_view(request):
 
 @login_required
 def solicitudes_retiro(request):
-    retiros = Retiro.objects.filter(estado='pendiente').order_by('-fecha')
-
+    retiros = Retiro.objects.filter(estado="pendiente").order_by("-fecha")
     return render(request, 'inverso_sa/solicitudes_retiro.html', {
         'retiros': retiros
     })
@@ -583,7 +582,6 @@ def procesar_retiro(request, id):
         elif accion == "rechazar":
             retiro.estado = "rechazado"
 
-            # 🔁 devolver dinero
             retiro.usuario.saldo += retiro.monto
             retiro.usuario.save()
             retiro.save()

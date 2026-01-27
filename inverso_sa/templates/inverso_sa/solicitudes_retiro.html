@@ -28,20 +28,20 @@
 
             <td>
                 {% if retiro.estado == 'pendiente' %}
-                    <span class="badge pendiente">Pendiente</span>
+                <span class="badge pendiente">Pendiente</span>
                 {% elif retiro.estado == 'aprobado' %}
-                    <span class="badge aprobado">Aprobado</span>
+                <span class="badge aprobado">Aprobado</span>
                 {% endif %}
             </td>
 
             <td>
                 {% if retiro.estado == 'pendiente' %}
-                <form method="POST">
+                <form method="POST" action="{% url 'procesar_retiro' retiro.id %}">
                     {% csrf_token %}
-                    <input type="hidden" name="retiro_id" value="{{ retiro.id }}">
                     <button name="accion" value="aprobar">✅ Aprobar</button>
                     <button name="accion" value="rechazar">❌ Rechazar</button>
                 </form>
+
                 {% endif %}
             </td>
         </tr>
