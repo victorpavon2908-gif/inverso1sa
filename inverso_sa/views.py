@@ -204,6 +204,8 @@ def agregar_producto(request):
         form = ProductoForm()
     return render(request, 'inverso_sa/agregar_producto.html', {'form': form})
 
+from decimal import Decimal, InvalidOperation
+
 @login_required
 def recargar_view(request):
 
@@ -218,12 +220,28 @@ def recargar_view(request):
     cuenta = random.choice(list(cuentas))
 
     if request.method == "POST":
-        monto = request.POST.get("monto")
+        try:
+            monto = Decimal(request.POST.get("monto"))
+        except (InvalidOperation, TypeError):
+            messages.error(request, "Monto inválido")
+            return redirect("recargar")
+
         referencia = request.POST.get("referencia")
         voucher = request.FILES.get("voucher")
 
+        # ✅ VALIDACIÓN MÍNIMA
+        if monto < 400:
+            messages.error(request, "⚠ El monto mínimo de recarga es C$400")
+            return redirect("recargar")
+
+        # ❌ referencia repetida
         if Recarga.objects.filter(referencia=referencia).exists():
             messages.error(request, "Número de referencia repetido")
+            return redirect("recargar")
+
+        # ❌ voucher obligatorio
+        if not voucher:
+            messages.error(request, "Debe adjuntar el comprobante")
             return redirect("recargar")
 
         Recarga.objects.create(
@@ -404,7 +422,7 @@ def invertir_producto(request, id):
     # ❌ saldo insuficiente
     if usuario.saldo < producto.precio:
         messages.error(request, "❌ Saldo insuficiente")
-        return redirect('inicio')
+        return redirect('recargar')
 
     # ❌ límite alcanzado
     inversiones_actuales = Inversion.objects.filter(
