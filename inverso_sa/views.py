@@ -293,9 +293,17 @@ def editar_cuenta_bancaria(request, id):
 @login_required
 def eliminar_cuenta_bancaria(request, id):
     cuenta = get_object_or_404(CuentaBancaria, id=id)
-    cuenta.delete()
-    messages.success(request, '🗑 Cuenta bancaria eliminada')
+
+    cuenta.activa = False
+    cuenta.save()
+
+    messages.warning(
+        request,
+        "⛔ Cuenta bancaria desactivada (no se puede eliminar porque tiene movimientos)"
+    )
+
     return redirect('cuentas_bancarias')
+
 
 @login_required
 def solicitudes_recarga(request):
@@ -646,7 +654,6 @@ def modificar_saldo(request, id):
     return redirect("panel")
 
 
-@login_required
 def editar_usuario(request, id):
     usuario = get_object_or_404(Usuario, id=id)
 
@@ -654,9 +661,13 @@ def editar_usuario(request, id):
         usuario.first_name = request.POST.get("first_name")
         usuario.last_name = request.POST.get("last_name")
         usuario.email = request.POST.get("email")
+        usuario.username = request.POST.get("username")
+
+        usuario.saldo = Decimal(request.POST.get("saldo"))
+
         usuario.save()
 
-        messages.success(request, "Usuario actualizado")
+        messages.success(request, "Usuario actualizado correctamente")
         return redirect("panel")
 
     return render(request, "inverso_sa/editar_usuario.html", {
