@@ -10,85 +10,97 @@
 {% block nav_equipo %}active{% endblock %}
 
 {% block contenido %}
-<div class="main-content container">
 
-    <header class="main-header">
-        <h1>👥 Mi Equipo</h1>
-    </header>
-
-    <!-- 🔗 MÉTODO DE COMPARTIR -->
-    <section class="card-section">
-        <h3>Método de compartir</h3>
-
-        <div class="share-container">
-
-            <div class="share-box">
-                <div class="icon">🎁</div>
-                <div class="details">
-                    <span class="label">Código de invitación</span>
-                    <span class="code">{{ codigo }}</span>
-                </div>
-            </div>
-
-            <div class="share-box">
-                <div class="icon">🔗</div>
-                <div class="details">
-                    <span class="label">Enlace de invitación</span>
-                    <span class="link">{{ link }}</span>
-                </div>
-                <button class="copy-pill"
-                        onclick="navigator.clipboard.writeText('{{ link }}')">
-                    Copiar
-                </button>
-            </div>
-
+<!-- MENSAJES -->
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert {{ message.tags }}">
+            {{ message }}
         </div>
-    </section>
+    {% endfor %}
+{% endif %}
 
-    <!-- 🏆 BENEFICIOS -->
-    <section class="card-section">
-        <h3>Beneficios de mi equipo</h3>
+<header class="main-header">
+    <h1>👥 Mi Equipo</h1>
+</header>
 
-        <div class="levels-grid">
+<!-- 🔗 MÉTODO DE COMPARTIR -->
+<section class="card-section">
+    <h3>Método de compartir</h3>
 
-            <!-- NIVEL 1 -->
-            <div class="level-card lvl-1">
-                <div class="lvl-header">👑 Nivel 1</div>
-                <div class="lvl-body">
-                    <div class="main-stat">8% <small>Comisión</small></div>
-                    <div class="sub-stats">
-                        <span>{{ n1_total }} Miembros</span>
-                        <span>Comisión directa</span>
-                    </div>
-                </div>
+    <div class="share-container">
+
+        <div class="share-box">
+            <div class="icon">🎁</div>
+            <div class="details">
+                <span class="label">Código de invitación</span>
+                <span class="code">{{ codigo }}</span>
             </div>
-
-            <!-- NIVEL 2 -->
-            <div class="level-card lvl-2">
-                <div class="lvl-header">🥈 Nivel 2</div>
-                <div class="lvl-body">
-                    <div class="main-stat">1% <small>Comisión</small></div>
-                    <div class="sub-stats">
-                        <span>{{ n2_total }} Miembros</span>
-                        <span>Comisión indirecta</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- NIVEL 3 -->
-            <div class="level-card lvl-3">
-                <div class="lvl-header">🥉 Nivel 3</div>
-                <div class="lvl-body">
-                    <div class="main-stat">1% <small>Comisión</small></div>
-                    <div class="sub-stats">
-                        <span>{{ n3_total }} Miembros</span>
-                        <span>Comisión pasiva</span>
-                    </div>
-                </div>
-            </div>
-
         </div>
-    </section>
 
-</div>
+        <div class="share-box">
+            <div class="icon">🔗</div>
+            <div class="details">
+                <span class="label">Enlace de invitación</span>
+                <span class="link">{{ link }}</span>
+            </div>
+
+            <button class="copy-pill"
+                    onclick="copiarLink('{{ link }}')">
+                Copiar
+            </button>
+        </div>
+
+    </div>
+</section>
+
+<!-- 🏆 BENEFICIOS -->
+<section class="card-section">
+    <h3>Beneficios de mi equipo</h3>
+
+    <div class="levels-grid">
+
+        <div class="level-card lvl-1">
+            <div class="lvl-header">👑 Nivel 1</div>
+            <div class="lvl-body">
+                <div class="main-stat">8% <small>Comisión</small></div>
+                <div class="sub-stats">
+                    <span>{{ n1_total }} Miembros</span>
+                    <span>Comisión directa</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="level-card lvl-2">
+            <div class="lvl-header">🥈 Nivel 2</div>
+            <div class="lvl-body">
+                <div class="main-stat">1% <small>Comisión</small></div>
+                <div class="sub-stats">
+                    <span>{{ n2_total }} Miembros</span>
+                    <span>Comisión indirecta</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="level-card lvl-3">
+            <div class="lvl-header">🥉 Nivel 3</div>
+            <div class="lvl-body">
+                <div class="main-stat">1% <small>Comisión</small></div>
+                <div class="sub-stats">
+                    <span>{{ n3_total }} Miembros</span>
+                    <span>Comisión pasiva</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<script>
+function copiarLink(texto) {
+    navigator.clipboard.writeText(texto);
+    alert("✅ Enlace copiado correctamente");
+}
+</script>
+
 {% endblock %}

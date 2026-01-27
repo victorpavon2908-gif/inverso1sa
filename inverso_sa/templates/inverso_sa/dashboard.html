@@ -53,6 +53,16 @@
 
     <!-- CONTENIDO -->
     <div class="main-content container">
+
+        {# 🔔 MENSAJES DJANGO — AQUÍ ESTABA EL ERROR #}
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert {{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
         {% block contenido %}{% endblock %}
 
         <footer class="main-footer">

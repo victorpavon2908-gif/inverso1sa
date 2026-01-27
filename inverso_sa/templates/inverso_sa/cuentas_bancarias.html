@@ -8,6 +8,15 @@
 
 <div class="card">
 
+    {# 🔔 MENSAJES DJANGO #}
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert {{ message.tags }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
     <div class="card-header">
         <h2>🏦 Gestión de Cuentas Bancarias</h2>
         <a href="{% url 'crear_cuenta_bancaria' %}" class="btn-primary">
@@ -40,7 +49,10 @@
                         {% endif %}
                     </td>
                     <td class="actions">
-                        <a href="{% url 'editar_cuenta_bancaria' cuenta.id %}" class="btn-sm edit">✏ Editar</a>
+                        <a href="{% url 'editar_cuenta_bancaria' cuenta.id %}" class="btn-sm edit">
+                            ✏ Editar
+                        </a>
+
                         <a href="{% url 'eliminar_cuenta_bancaria' cuenta.id %}"
                            class="btn-sm delete"
                            onclick="return confirm('¿Desactivar esta cuenta bancaria?');">

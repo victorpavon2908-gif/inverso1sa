@@ -25,11 +25,7 @@ class Usuario(AbstractUser):
         super().save(*args, **kwargs)
 
 
-class Transaccion(models.Model):
-    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
-    monto = models.DecimalField(max_digits=10, decimal_places=2)
-    tipo = models.CharField(max_length=10)
-    fecha = models.DateField(auto_now_add=True)
+
 
 
 class Producto(models.Model):
@@ -52,6 +48,16 @@ class CuentaBancaria(models.Model):
 
     def __str__(self):
         return f"{self.banco} - {self.numero_cuenta}"
+    
+
+class Transaccion(models.Model):
+    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+    cuenta = models.ForeignKey(CuentaBancaria, on_delete=models.PROTECT, null=True, blank=True)
+    monto = models.DecimalField(max_digits=10, decimal_places=2)
+    tipo = models.CharField(max_length=10)  # ingreso / egreso
+    referencia = models.CharField(max_length=50, blank=True, null=True)
+    fecha = models.DateTimeField(auto_now_add=True)
+
 
 
 class CuentaUsuario(models.Model):

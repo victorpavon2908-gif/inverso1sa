@@ -7,6 +7,8 @@ urlpatterns = [
     path("usuarios/toggle/<int:id>/", views.toggle_usuario, name="toggle_usuario"),
     path('usuarios/editar/<int:id>/', views.editar_usuario, name='editar_usuario'),
     path("usuarios/eliminar/<int:id>/", views.eliminar_usuario, name="eliminar_usuario"),
+    path('usuarios/desactivar/<int:id>/', views.desactivar_usuario, name='desactivar_usuario'),
+    path('usuarios/activar/<int:id>/', views.activar_usuario, name='activar_usuario'),
 
     # 🔐 AUTH
     path('', views.login_view, name='login'),
@@ -70,4 +72,7 @@ urlpatterns = [
     path('cuentas/bancarias/nueva/', views.crear_cuenta_bancaria, name='crear_cuenta_bancaria'),
     path('cuentas/bancarias/editar/<int:id>/', views.editar_cuenta_bancaria, name='editar_cuenta_bancaria'),
     path('cuentas/bancarias/eliminar/<int:id>/', views.eliminar_cuenta_bancaria, name='eliminar_cuenta_bancaria'),
+
+    path('finanzas/', views.ingresos_egresos, name='ingresos_egresos'),
+
 ]

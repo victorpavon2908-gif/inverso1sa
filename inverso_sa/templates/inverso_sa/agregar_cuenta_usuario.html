@@ -4,37 +4,32 @@
 
 {% block contenido %}
 
-<div style="max-width: 500px; margin: 40px auto; background: #fff; padding: 25px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,.1);">
+<div class="card-form">
 
-    <h2 style="margin-bottom: 20px;">🏦 Agregar cuenta bancaria</h2>
-
-    {% if messages %}
-        {% for message in messages %}
-            <p style="color: red;">{{ message }}</p>
-        {% endfor %}
-    {% endif %}
+    <h2 class="form-title">🏦 Agregar cuenta bancaria</h2>
 
     <form method="POST">
         {% csrf_token %}
 
-        <div style="margin-bottom: 15px;">
+        <div class="form-group">
             <label>Banco</label>
-            <input type="text" name="banco" required style="width:100%; padding:10px;">
+            <input type="text" name="banco" required>
         </div>
 
-        <div style="margin-bottom: 15px;">
+        <div class="form-group">
             <label>Titular</label>
-            <input type="text" name="titular" required style="width:100%; padding:10px;">
+            <input type="text" name="titular" required>
         </div>
 
-        <div style="margin-bottom: 15px;">
+        <div class="form-group">
             <label>Número de cuenta</label>
-            <input type="text" name="numero_cuenta" required style="width:100%; padding:10px;">
+            <input type="text" name="numero_cuenta" required>
         </div>
 
-        <button type="submit" style="padding:10px 20px;">
+        <button type="submit" class="btn-primary">
             Guardar cuenta
         </button>
+
     </form>
 
 </div>

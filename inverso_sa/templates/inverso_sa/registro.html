@@ -1,91 +1,102 @@
+{% extends "inverso_sa/dashboard.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="es">
 
-<head>
-    <meta charset="UTF-8">
-    <title>Registro | Inverso</title>
-    <link rel="stylesheet" href="{% static 'inverso_sa/css/registro.css' %}">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&display=swap" rel="stylesheet">
-</head>
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'inverso_sa/css/recarga.css' %}">
+{% endblock %}
 
-<body>
+{% block contenido %}
+<div class="container">
 
-    <main class="page-container">
-        <section class="register-card">
+    <h2>💳 Recargar saldo</h2>
 
-            <div class="brand-header">
-                <div class="logo-wrapper">
-                    <img src="{% static 'inverso_sa/img/logo.jpeg' %}" class="logo-img">
+    <a href="{% url 'inicio' %}" class="btn-cta">⬅ Regresar</a>
+
+    <!-- ✅ MENSAJES -->
+    {% if messages %}
+        <div class="alerts-container">
+            {% for message in messages %}
+                <div class="alert {{ message.tags }}">
+                    {{ message }}
                 </div>
-                <h1 class="brand-title">ÚNETE A <span>INVERSO</span></h1>
-                <p class="brand-subtitle">Crea tu cuenta de inversión</p>
-            </div>
+            {% endfor %}
+        </div>
+    {% endif %}
 
-            {% if error %}
-                <p style="color:red;text-align:center;">{{ error }}</p>
-            {% endif %}
+    <!-- ===============================
+        TARJETA DATOS BANCARIOS
+    =============================== -->
+    <div class="card-bg">
 
-            <form method="POST" class="form-container">
-                {% csrf_token %}
+        <p>
+            <span><strong>Banco:</strong> {{ cuenta.banco }}</span>
+            <button type="button" onclick="copiar('{{ cuenta.banco }}')">
+                Copiar
+            </button>
+        </p>
 
-                <div class="form-grid">
-                    <div class="input-group">
-                        <label>NOMBRE</label>
-                        <input type="text" name="first_name" required>
-                    </div>
+        <p>
+            <span><strong>Destinatario:</strong> {{ cuenta.destinatario }}</span>
+            <button type="button" onclick="copiar('{{ cuenta.destinatario }}')">
+                Copiar
+            </button>
+        </p>
 
-                    <div class="input-group">
-                        <label>APELLIDO</label>
-                        <input type="text" name="last_name" required>
-                    </div>
-                </div>
+        <p>
+            <span><strong>N° Cuenta:</strong> {{ cuenta.numero_cuenta }}</span>
+            <button type="button" onclick="copiar('{{ cuenta.numero_cuenta }}')">
+                Copiar
+            </button>
+        </p>
 
-                <div class="input-group">
-                    <label>CORREO</label>
-                    <input type="email" name="email" required>
-                </div>
+    </div>
 
-                <div class="input-group">
-                    <label>USUARIO</label>
-                    <input type="text" name="username" required>
-                </div>
+    <!-- ===============================
+        FORMULARIO
+    =============================== -->
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
 
-                <!-- ✅ CÓDIGO AUTOMÁTICO -->
-                <div class="input-group">
-                    <label>CÓDIGO DE INVITACIÓN (opcional)</label>
-                    <input type="text"
-                           name="codigo_invitacion"
-                           value="{{ request.GET.ref }}"
-                           placeholder="Ej: 458921">
-                </div>
+        <label>Monto</label>
+        <input type="number" name="monto" id="monto" required>
 
-                <div class="input-group">
-                    <label>CONTRASEÑA</label>
-                    <input type="password" name="password1" required>
-                </div>
+        <!-- montos rápidos -->
+        <div class="quick-amounts">
+            <button type="button" onclick="setMonto(300)">C$300</button>
+            <button type="button" onclick="setMonto(500)">C$500</button>
+            <button type="button" onclick="setMonto(1000)">C$1000</button>
+            <button type="button" onclick="setMonto(3000)">C$3000</button>
+            <button type="button" onclick="setMonto(5000)">C$5000</button>
+            <button type="button" onclick="setMonto(10000)">C$10000</button>
+            <button type="button" onclick="setMonto(50000)">C$50000</button>
+            <button type="button" onclick="setMonto(100000)">C$100000</button>
+        </div>
 
-                <div class="input-group">
-                    <label>CONFIRMAR CONTRASEÑA</label>
-                    <input type="password" name="password2" required>
-                </div>
+        <label>Referencia</label>
+        <input type="text" name="referencia" required>
 
-                <div class="terms-check">
-                    <input type="checkbox" required>
-                    <label>Acepto los términos</label>
-                </div>
+        <label>Voucher</label>
+        <input type="file" name="voucher" required>
 
-                <button class="submit-btn">CREAR CUENTA</button>
+        <button type="submit" class="btn-cta">
+            Enviar recarga
+        </button>
+    </form>
 
-                <div class="form-footer">
-                    <span>¿Ya tienes cuenta?</span>
-                    <a href="{% url 'login' %}" class="highlight">Inicia Sesión</a>
-                </div>
+</div>
 
-            </form>
+<!-- ===============================
+    JS COPIAR
+================================ -->
+<script>
+function copiar(texto) {
+    navigator.clipboard.writeText(texto);
+    alert("Copiado correctamente ✅");
+}
 
-        </section>
-    </main>
+function setMonto(valor) {
+    document.getElementById("monto").value = valor;
+}
+</script>
 
-</body>
-</html>
+{% endblock %}

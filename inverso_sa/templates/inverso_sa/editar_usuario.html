@@ -1,37 +1,61 @@
 {% extends "inverso_sa/panel.html" %}
 {% load static %}
-{% block css %}
-<link rel="stylesheet" href="{% static 'inverso_sa/css/editarusuario.css' %}">
-{% endblock %}
 
 {% block title %}Editar usuario{% endblock %}
 {% block page_title %}Editar usuario{% endblock %}
 
+{% block css %}
+<link rel="stylesheet" href="{% static 'inverso_sa/css/editarusuario.css' %}">
+{% endblock %}
+
 {% block content %}
+
 <div class="form-container">
 
- <form method="post" class="form-box">
-    {% csrf_token %}
+    <!-- MENSAJES -->
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert {{ message.tags }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
 
-    <label>Nombre</label>
-    <input type="text" name="first_name" value="{{ usuario.first_name }}" required>
+    <form method="post" class="form-box">
+        {% csrf_token %}
 
-    <label>Apellido</label>
-    <input type="text" name="last_name" value="{{ usuario.last_name }}" required>
+        <label>Nombre</label>
+        <input type="text" name="first_name"
+               value="{{ usuario.first_name }}" required>
 
-    <label>Email</label>
-    <input type="email" name="email" value="{{ usuario.email }}" required>
+        <label>Apellido</label>
+        <input type="text" name="last_name"
+               value="{{ usuario.last_name }}" required>
 
-    <label>Username</label>
-    <input type="text" name="username" value="{{ usuario.username }}" required>
+        <label>Email</label>
+        <input type="email" name="email"
+               value="{{ usuario.email }}" required>
 
-    <label>Saldo</label>
-    <input type="number" step="0.01" name="saldo"
-           value="{{ usuario.saldo }}" required>
+        <label>Usuario</label>
+        <input type="text" name="username"
+               value="{{ usuario.username }}" required>
 
-    <button type="submit" class="btn-save">Guardar cambios</button>
-</form>
+        <label>Saldo</label>
+        <input type="number" step="0.01"
+               name="saldo"
+               value="{{ usuario.saldo }}" required>
 
+        <div class="form-actions">
+            <button type="submit" class="btn-save">
+                💾 Guardar cambios
+            </button>
+
+            <a href="{% url 'panel_usuarios' %}" class="btn-cancel">
+                ↩ Cancelar
+            </a>
+        </div>
+    </form>
 
 </div>
+
 {% endblock %}

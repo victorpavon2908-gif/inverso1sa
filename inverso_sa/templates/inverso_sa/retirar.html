@@ -1,32 +1,65 @@
 {% extends "inverso_sa/dashboard.html" %}
-{% block title %}Retirar saldo{% endblock %}
 {% load static %}
+
+{% block title %}Retirar saldo{% endblock %}
+
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'inverso_sa/css/retirar.css' %}">
 {% endblock %}
 
 {% block contenido %}
 
-<h2>Solicitar retiro</h2>
+<div class="container-retiro">
 
-<p><strong>Saldo disponible:</strong> C$ {{ request.user.saldo }}</p>
+    <h2>💸 Solicitar retiro</h2>
 
-<form method="POST">
-    {% csrf_token %}
+    <p class="saldo-disponible">
+        <strong>Saldo disponible:</strong>
+        C$ {{ request.user.saldo }}
+    </p>
 
-    <label>Monto a retirar</label>
-    <input type="number" name="monto" step="0.01" required>
+    <!-- ✅ MENSAJES -->
+    {% if messages %}
+        <div class="alerts-container">
+            {% for message in messages %}
+                <div class="alert {{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
 
-    <label>Cuenta bancaria</label>
-    <select name="cuenta" required>
-        {% for cuenta in cuentas %}
-            <option value="{{ cuenta.id }}">
-                {{ cuenta.banco }} - {{ cuenta.numero_cuenta }}
-            </option>
-        {% endfor %}
-    </select>
+    <form method="POST" class="retiro-form">
+        {% csrf_token %}
 
-    <button type="submit">Solicitar retiro</button>
-</form>
+        <label>Monto a retirar</label>
+        <input
+            type="number"
+            name="monto"
+            step="0.01"
+            min="1"
+            max="{{ request.user.saldo }}"
+            required
+        >
+
+        <label>Cuenta bancaria</label>
+        <select name="cuenta" required>
+            {% for cuenta in cuentas %}
+                <option value="{{ cuenta.id }}">
+                    {{ cuenta.banco }} - {{ cuenta.numero_cuenta }}
+                </option>
+            {% empty %}
+                <option disabled>
+                    No tienes cuentas bancarias registradas
+                </option>
+            {% endfor %}
+        </select>
+
+        <button type="submit" class="btn-retirar">
+            Solicitar retiro
+        </button>
+    </form>
+
+</div>
 
 {% endblock %}

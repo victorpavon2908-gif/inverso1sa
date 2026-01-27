@@ -9,6 +9,7 @@
 
         <h2 class="table-title">Usuarios</h2>
 
+        <!-- FILTRO -->
         <form method="get" class="filter-bar">
             <select name="rol" onchange="this.form.submit()">
                 <option value="">Todos</option>
@@ -31,6 +32,7 @@
             </select>
         </form>
 
+        <!-- TABLA -->
         <table>
             <thead>
                 <tr>
@@ -68,32 +70,38 @@
 
                     <td class="action-buttons">
 
+                        <!-- EDITAR -->
                         <a href="{% url 'editar_usuario' user.id %}" class="btn-edit">
                             Editar
                         </a>
 
+                        <!-- ELIMINAR DEFINITIVO -->
                         <a href="{% url 'eliminar_usuario' user.id %}"
-                           class="btn-delete"
-                           onclick="return confirm('¿Seguro que deseas eliminar este usuario?');">
+                           class="btn-delete">
                             Eliminar
                         </a>
 
+                        <!-- ACTIVAR / DESACTIVAR -->
                         {% if user.is_active %}
-                            <a href="#" class="btn-disable">Desactivar</a>
+                            <a href="{% url 'desactivar_usuario' user.id %}"
+                               class="btn-disable"
+                               onclick="return confirm('¿Deseas desactivar este usuario?');">
+                                Desactivar
+                            </a>
                         {% else %}
-                            <a href="#" class="btn-enable">Activar</a>
+                            <a href="{% url 'activar_usuario' user.id %}"
+                               class="btn-enable"
+                               onclick="return confirm('¿Deseas activar este usuario?');">
+                                Activar
+                            </a>
                         {% endif %}
-
-                        <a href="#" class="btn-disable-permanent">
-                            Desactivar definitivo
-                        </a>
 
                     </td>
                 </tr>
 
                 {% empty %}
                 <tr>
-                    <td colspan="9">No hay usuarios</td>
+                    <td colspan="9">No hay usuarios registrados</td>
                 </tr>
                 {% endfor %}
             </tbody>

@@ -1,14 +1,11 @@
 {% extends "inverso_sa/panel.html" %}
 {% load static %}
-{% block css %}
-<link rel="stylesheet" href="{% static 'inverso_sa/css/editar_producto.css' %}">
-{% endblock %}
-
 
 {% block title %}Editar producto{% endblock %}
+{% block page_title %}Editar producto{% endblock %}
 
-{% block page_title %}
-Editar producto
+{% block css %}
+<link rel="stylesheet" href="{% static 'inverso_sa/css/editar_producto.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -20,13 +17,51 @@ Editar producto
     <form method="POST" enctype="multipart/form-data" class="producto-form">
         {% csrf_token %}
 
-        {{ form.as_p }}
+        <div class="form-group">
+            {{ form.nombre.label_tag }}
+            {{ form.nombre }}
+            {{ form.nombre.errors }}
+        </div>
+
+        <div class="form-group">
+            {{ form.precio.label_tag }}
+            {{ form.precio }}
+            {{ form.precio.errors }}
+        </div>
+
+        <div class="form-group">
+            {{ form.ingreso_diario.label_tag }}
+            {{ form.ingreso_diario }}
+            {{ form.ingreso_diario.errors }}
+        </div>
+
+        <div class="form-group">
+            {{ form.limite.label_tag }}
+            {{ form.limite }}
+            {{ form.limite.errors }}
+        </div>
+
+        <div class="form-group">
+            {{ form.duracion.label_tag }}
+            {{ form.duracion }}
+            {{ form.duracion.errors }}
+        </div>
+
+        <div class="form-group">
+            {{ form.imagen.label_tag }}
+            {{ form.imagen }}
+            {{ form.imagen.errors }}
+        </div>
+
+        <div class="form-group checkbox">
+            {{ form.activo }} {{ form.activo.label_tag }}
+        </div>
 
         {% if producto.imagen %}
-            <div class="preview">
-                <p>Imagen actual:</p>
-                <img src="{{ producto.imagen.url }}" width="120">
-            </div>
+        <div class="preview">
+            <p>Imagen actual:</p>
+            <img src="{{ producto.imagen.url }}" width="140">
+        </div>
         {% endif %}
 
         <div class="form-actions">

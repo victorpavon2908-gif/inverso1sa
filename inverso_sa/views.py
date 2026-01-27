@@ -9,6 +9,8 @@ from django.db.models import Sum
 from.forms import ProductoForm, CuentaBancariaForm
 from django.contrib import messages
 import random
+from django.utils import timezone
+from datetime import timedelta
 # --------------------
 # LOGIN
 # --------------------
@@ -679,13 +681,86 @@ def eliminar_usuario(request, id):
 
     if request.user.id == usuario.id:
         messages.error(request, "❌ No puedes eliminar tu propio usuario")
-        return redirect("panel")
+        return redirect("panel_usuarios")
 
     if request.method == "POST":
         usuario.delete()
         messages.success(request, "🗑 Usuario eliminado correctamente")
-        return redirect("panel")
+        return redirect("panel_usuarios")
 
     return render(request, "inverso_sa/confirmar_eliminar.html", {
         "usuario": usuario
+    })
+
+
+@login_required
+def desactivar_usuario(request, id):
+    usuario = get_object_or_404(Usuario, id=id)
+
+    # evitar auto-eliminarse
+    if usuario == request.user:
+        return redirect('panel_usuarios')
+
+    usuario.is_active = False
+    usuario.save()
+
+    return redirect('panel_usuarios')
+
+@login_required
+def activar_usuario(request, id):
+    usuario = get_object_or_404(Usuario, id=id)
+    usuario.is_active = True
+    usuario.save()
+
+    return redirect('panel_usuarios')
+
+
+@login_required
+def ingresos_egresos(request):
+
+    hoy = timezone.now().date()
+    filtro = request.GET.get('filtro', 'dia')
+    cuenta_id = request.GET.get('cuenta')
+
+    transacciones = Transaccion.objects.all().order_by('-fecha')
+
+    # 🕒 FILTROS DE TIEMPO
+    if filtro == 'dia':
+        transacciones = transacciones.filter(fecha__date=hoy)
+
+    elif filtro == 'semana':
+        transacciones = transacciones.filter(
+            fecha__date__gte=hoy - timedelta(days=7)
+        )
+
+    elif filtro == 'mes':
+        transacciones = transacciones.filter(
+            fecha__year=hoy.year,
+            fecha__month=hoy.month
+        )
+
+    # 🏦 FILTRO POR CUENTA
+    if cuenta_id:
+        transacciones = transacciones.filter(cuenta_id=cuenta_id)
+
+    total_ingresos = transacciones.filter(tipo='ingreso').aggregate(
+        total=Sum('monto')
+    )['total'] or 0
+
+    total_egresos = transacciones.filter(tipo='egreso').aggregate(
+        total=Sum('monto')
+    )['total'] or 0
+
+    balance = total_ingresos - total_egresos
+
+    cuentas = CuentaBancaria.objects.filter(activa=True)
+
+    return render(request, 'inverso_sa/ingresos_egresos.html', {
+        'transacciones': transacciones,
+        'total_ingresos': total_ingresos,
+        'total_egresos': total_egresos,
+        'balance': balance,
+        'cuentas': cuentas,
+        'filtro': filtro,
+        'cuenta_id': cuenta_id
     })
