@@ -166,8 +166,21 @@ def mio_view(request):
 
 @login_required
 def panel_view(request):
-    usuarios = Usuario.objects.all()  # ahora sí obtiene todos los usuarios
-    return render(request, 'inverso_sa/usuarios.html', {'usuarios': usuarios})
+
+    filtro = request.GET.get("rol")
+
+    usuarios = Usuario.objects.all()
+
+    if filtro == "admin":
+        usuarios = usuarios.filter(is_staff=True)
+    elif filtro == "user":
+        usuarios = usuarios.filter(is_staff=False)
+
+    return render(request, 'inverso_sa/usuarios.html', {
+        'usuarios': usuarios,
+        'filtro': filtro
+    })
+
 
 
 
@@ -446,13 +459,6 @@ def toggle_producto(request, id):
 
     return redirect('ver_productos')
 
-
-from django.contrib.auth.decorators import login_required
-from django.contrib import messages
-from django.shortcuts import render, redirect
-from .models import CuentaUsuario
-
-
 @login_required
 def agregar_cuenta_usuario(request):
 
@@ -605,3 +611,71 @@ def equipo_view(request):
     }
 
     return render(request, "inverso_sa/equipo.html", context)
+
+@login_required
+def toggle_usuario(request, id):
+    usuario = get_object_or_404(Usuario, id=id)
+    usuario.is_active = not usuario.is_active
+    usuario.save()
+
+    return redirect("panel")
+
+@login_required
+def modificar_saldo(request, id):
+    usuario = get_object_or_404(Usuario, id=id)
+
+    if request.method == "POST":
+        accion = request.POST.get("accion")
+        monto = Decimal(request.POST.get("monto"))
+
+        if monto <= 0:
+            messages.error(request, "Monto inválido")
+            return redirect("panel")
+
+        if accion == "sumar":
+            usuario.saldo += monto
+        elif accion == "restar":
+            if usuario.saldo < monto:
+                messages.error(request, "Saldo insuficiente")
+                return redirect("panel")
+            usuario.saldo -= monto
+
+        usuario.save()
+        messages.success(request, "Saldo actualizado correctamente")
+
+    return redirect("panel")
+
+
+@login_required
+def editar_usuario(request, id):
+    usuario = get_object_or_404(Usuario, id=id)
+
+    if request.method == "POST":
+        usuario.first_name = request.POST.get("first_name")
+        usuario.last_name = request.POST.get("last_name")
+        usuario.email = request.POST.get("email")
+        usuario.save()
+
+        messages.success(request, "Usuario actualizado")
+        return redirect("panel")
+
+    return render(request, "inverso_sa/editar_usuario.html", {
+        "usuario": usuario
+    })
+
+@login_required
+def eliminar_usuario(request, id):
+    usuario = get_object_or_404(Usuario, id=id)
+
+    if request.user.id == usuario.id:
+        messages.error(request, "❌ No puedes eliminar tu propio usuario")
+        return redirect("panel")
+
+    if request.method == "POST":
+        usuario.delete()
+        messages.success(request, "🗑 Usuario eliminado correctamente")
+        return redirect("panel")
+
+    return render(request, "inverso_sa/confirmar_eliminar.html", {
+        "usuario": usuario
+    })

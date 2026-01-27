@@ -1,0 +1,26 @@
+{% extends "inverso_sa/panel.html" %}
+
+{% block title %}Eliminar usuario{% endblock %}
+{% block page_title %}Eliminar usuario{% endblock %}
+
+{% block content %}
+<div class="delete-box">
+
+    <h3>¿Estás seguro?</h3>
+    <p>
+        El usuario <strong>{{ usuario.username }}</strong>
+        será eliminado definitivamente.
+    </p>
+
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn-delete">
+            Sí, eliminar
+        </button>
+        <a href="{% url 'usuarios_panel' %}" class="btn-cancel">
+            Cancelar
+        </a>
+    </form>
+
+</div>
+{% endblock %}
