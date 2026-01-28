@@ -459,12 +459,17 @@ def ver_productos(request):
 def editar_producto(request, id):
     producto = get_object_or_404(Producto, id=id)
 
-    if request.method == 'POST':
-        form = ProductoForm(request.POST, request.FILES, instance=producto)
+    if request.method == "POST":
+        form = ProductoForm(
+            request.POST,
+            request.FILES,     # 🔥 ESTO ES LA CLAVE
+            instance=producto
+        )
+
         if form.is_valid():
             form.save()
-            messages.success(request, "✏ Producto actualizado correctamente")
             return redirect('ver_productos')
+
     else:
         form = ProductoForm(instance=producto)
 
