@@ -55,6 +55,13 @@ def logout_view(request):
 # REGISTRO
 # --------------------
 def registro_view(request):
+
+    # 🔗 CAPTURAR REFERIDO DESDE URL
+    ref = request.GET.get('ref')
+
+    if ref:
+        request.session['ref_codigo'] = ref
+
     if request.method == 'POST':
         first_name = request.POST.get('first_name')
         last_name = request.POST.get('last_name')
@@ -62,8 +69,8 @@ def registro_view(request):
         username = request.POST.get('username')
         password1 = request.POST.get('password1')
         password2 = request.POST.get('password2')
-        codigo_ingresado = request.POST.get('codigo_invitacion')
 
+        # 🔐 validar passwords
         if password1 != password2:
             return render(request, 'inverso_sa/registro.html', {
                 'error': 'Las contraseñas no coinciden'
@@ -88,21 +95,28 @@ def registro_view(request):
             password=make_password(password1)
         )
 
+        # 👥 grupo
         grupo, _ = Group.objects.get_or_create(name='inversionista')
         usuario.groups.add(grupo)
 
-        # 🔗 GUARDAR QUIÉN LO INVITÓ
-        if codigo_ingresado:
+        # ✅ USAR REFERIDO GUARDADO
+        codigo = request.session.get('ref_codigo')
+
+        if codigo:
             try:
-                invitador = Usuario.objects.get(codigo_invitacion=codigo_ingresado)
+                invitador = Usuario.objects.get(codigo_invitacion=codigo)
                 usuario.referido_por = invitador
                 usuario.save()
             except Usuario.DoesNotExist:
                 pass
 
+            # 🔥 limpiar sesión
+            del request.session['ref_codigo']
+
         return redirect('login')
 
     return render(request, 'inverso_sa/registro.html')
+
 
 
 
