@@ -644,7 +644,7 @@ def toggle_usuario(request, id):
     usuario.is_active = not usuario.is_active
     usuario.save()
 
-    return redirect("panel")
+    return redirect("panel_usuarios")
 
 @login_required
 def modificar_saldo(request, id):
@@ -656,20 +656,20 @@ def modificar_saldo(request, id):
 
         if monto <= 0:
             messages.error(request, "Monto inválido")
-            return redirect("panel")
+            return redirect("panel_usuarios")
 
         if accion == "sumar":
             usuario.saldo += monto
         elif accion == "restar":
             if usuario.saldo < monto:
                 messages.error(request, "Saldo insuficiente")
-                return redirect("panel")
+                return redirect("panel_usuarios")
             usuario.saldo -= monto
 
         usuario.save()
         messages.success(request, "Saldo actualizado correctamente")
 
-    return redirect("panel")
+    return redirect("panel_usuarios")
 
 
 def editar_usuario(request, id):
@@ -686,7 +686,7 @@ def editar_usuario(request, id):
         usuario.save()
 
         messages.success(request, "Usuario actualizado correctamente")
-        return redirect("panel")
+        return redirect("panel_usuarios")
 
     return render(request, "inverso_sa/editar_usuario.html", {
         "usuario": usuario

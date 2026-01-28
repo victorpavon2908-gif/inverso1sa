@@ -6,7 +6,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Inverso Web{% endblock %}</title>
-
     <link rel="stylesheet" href="{% static 'inverso_sa/css/dashboard.css' %}">
     <link rel="icon" type="image/x-icon" href="{% static 'inverso_sa/img/logo.jpeg' %}">
     {% block extra_css %}{% endblock %}
@@ -14,47 +13,57 @@
 
 <body>
 
+    <!-- NAVBAR -->
     <nav class="navbar">
-        <div class="container">
 
-            <!-- LOGO -->
-            <div class="logo">INVERSO</div>
+        <!-- BOTÓN HAMBURGUESA -->
+        <button class="menu-toggle" onclick="toggleMenu()">☰</button>
 
-            <!-- BOTÓN HAMBURGUESA -->
-            <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+        <!-- LOGO -->
+        <div class="logo">INVERSO</div>
 
-            <!-- MENÚ -->
-            <ul class="nav-links" id="mobileMenu">
-                <li class="{% block nav_inicio %}{% endblock %}">
-                    <a href="{% url 'inicio' %}">Inicio</a>
-                </li>
-
-                <li class="{% block nav_ingreso %}{% endblock %}">
-                    <a href="{% url 'ingreso' %}">Ingreso</a>
-                </li>
-
-                <li class="{% block nav_equipo %}{% endblock %}">
-                    <a href="{% url 'equipo' %}">Equipo</a>
-                </li>
-
-                <li class="{% block nav_mio %}{% endblock %}">
-                    <a href="{% url 'mio' %}">Mío</a>
-                </li>
-
-                {% if request.user.is_staff %}
-                <li>
-                    <a href="{% url 'panel_usuarios' %}">Administración</a>
-                </li>
-                {% endif %}
-            </ul>
-
-        </div>
     </nav>
 
-    <!-- CONTENIDO -->
-    <div class="main-content container">
+    <!-- PANEL LATERAL -->
+    <div class="sidebar" id="mobileMenu">
 
-        {# 🔔 MENSAJES DJANGO — AQUÍ ESTABA EL ERROR #}
+        <div class="sidebar-header">
+            <span>MENÚ</span>
+            <button onclick="toggleMenu()">✖</button>
+        </div>
+
+        <ul>
+            <li class="{% block nav_inicio %}{% endblock %}">
+                <a href="{% url 'inicio' %}">🏠 Inicio</a>
+            </li>
+
+            <li class="{% block nav_ingreso %}{% endblock %}">
+                <a href="{% url 'ingreso' %}">💰 Ingreso</a>
+            </li>
+
+            <li class="{% block nav_equipo %}{% endblock %}">
+                <a href="{% url 'equipo' %}">👥 Equipo</a>
+            </li>
+
+            <li class="{% block nav_mio %}{% endblock %}">
+                <a href="{% url 'mio' %}">👤 Mío</a>
+            </li>
+
+            {% if request.user.is_staff %}
+            <li>
+                <a href="{% url 'panel_usuarios' %}">⚙ Administración</a>
+            </li>
+            {% endif %}
+        </ul>
+
+    </div>
+
+    <!-- OVERLAY -->
+    <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+
+    <!-- CONTENIDO -->
+    <div class="main-content">
+
         {% if messages %}
             {% for message in messages %}
                 <div class="alert {{ message.tags }}">
@@ -73,8 +82,8 @@
     <!-- JS -->
     <script>
         function toggleMenu() {
-            document.getElementById("mobileMenu")
-                .classList.toggle("show");
+            document.getElementById("mobileMenu").classList.toggle("open");
+            document.getElementById("overlay").classList.toggle("show");
         }
     </script>
 
