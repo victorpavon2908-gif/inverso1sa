@@ -150,12 +150,13 @@ def mio_view(request):
         if inversion.puede_pagar():
             inversion.pagar()
 
-    hoy = date.today()
+    
+    hoy = timezone.now().date()
+
     ganancias_hoy = Transaccion.objects.filter(
-        usuario=usuario,
-        tipo='ingreso',
-        fecha=hoy
-    ).aggregate(total=Sum('monto'))['total'] or 0
+    usuario=usuario,
+    tipo='ingreso',
+    fecha__date=hoy).aggregate(total=Sum('monto'))['total'] or 0
 
     context = {
         'usuario': usuario,
@@ -797,3 +798,10 @@ def acerca_de(request):
 @login_required
 def asistencia(request):
     return render(request, "inverso_sa/asistencia.html")
+
+
+def custom_404_view(request, exception):
+    if request.user.is_authenticated:
+        return redirect('inicio')   # tu home logueado
+    else:
+        return redirect('login')    # tu login

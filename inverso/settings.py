@@ -26,7 +26,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'inverso_sa',
 ]
 
 MIDDLEWARE = [
@@ -38,6 +37,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'inverso_sa.middleware.Redirect404Middleware',  # 👈 ESTE
 ]
 
 ROOT_URLCONF = 'inverso.urls'
