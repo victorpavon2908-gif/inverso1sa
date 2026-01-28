@@ -46,6 +46,7 @@ def dashboard(request):
 # --------------------
 # LOGOUT
 # --------------------
+@login_required
 def logout_view(request):
     logout(request)
     return redirect('login')
@@ -200,7 +201,7 @@ def panel_view(request):
 
 
 
-
+@login_required
 def inicio(request):
     productos = Producto.objects.filter(activo=True)
 
@@ -208,7 +209,7 @@ def inicio(request):
         "productos": productos
     })
 
-
+@login_required
 def agregar_producto(request):
     if request.method == "POST":
         form = ProductoForm(request.POST, request.FILES)
@@ -815,7 +816,5 @@ def asistencia(request):
 
 
 def custom_404_view(request, exception):
-    if request.user.is_authenticated:
-        return redirect('inicio')   # tu home logueado
-    else:
-        return redirect('login')    # tu login
+    # No redirige al login; deja que la URL de registro funcione normalmente
+    return render(request, "inverso_sa/404.html", status=404)
