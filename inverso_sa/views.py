@@ -56,13 +56,34 @@ def logout_view(request):
 # REGISTRO
 # --------------------
 def registro_view(request):
-
-    # 🔗 CAPTURAR REFERIDO DESDE URL
+    # -------------------------------
+    # 1️⃣ Capturar código de referido
+    # -------------------------------
     ref = request.GET.get('ref')
-
     if ref:
         request.session['ref_codigo'] = ref
 
+    # --------------------------------------
+    # 2️⃣ Cerrar sesión si ya está logueado
+    # --------------------------------------
+    if request.user.is_authenticated:
+        logout(request)
+        messages.info(request, "Se ha cerrado tu sesión para registrarte como nuevo usuario.")
+
+    # --------------------------------------
+    # 3️⃣ Mostrar invitador si existe
+    # --------------------------------------
+    invitador = None
+    codigo = request.session.get('ref_codigo')
+    if codigo:
+        try:
+            invitador = Usuario.objects.get(codigo_invitacion=codigo)
+        except Usuario.DoesNotExist:
+            invitador = None
+
+    # --------------------------------------
+    # 4️⃣ Procesar formulario POST
+    # --------------------------------------
     if request.method == 'POST':
         first_name = request.POST.get('first_name')
         last_name = request.POST.get('last_name')
@@ -71,52 +92,57 @@ def registro_view(request):
         password1 = request.POST.get('password1')
         password2 = request.POST.get('password2')
 
-        # 🔐 validar passwords
+        # 🔐 Validar contraseñas
         if password1 != password2:
             return render(request, 'inverso_sa/registro.html', {
-                'error': 'Las contraseñas no coinciden'
+                'error': 'Las contraseñas no coinciden',
+                'invitador': invitador
             })
 
+        # 🔐 Validar usuario y email únicos
         if Usuario.objects.filter(username=username).exists():
             return render(request, 'inverso_sa/registro.html', {
-                'error': 'El usuario ya existe'
+                'error': 'El usuario ya existe',
+                'invitador': invitador
             })
 
         if Usuario.objects.filter(email=email).exists():
             return render(request, 'inverso_sa/registro.html', {
-                'error': 'El correo ya está registrado'
+                'error': 'El correo ya está registrado',
+                'invitador': invitador
             })
 
+        # ✅ Crear usuario
         usuario = Usuario.objects.create(
             username=username,
             email=email,
             first_name=first_name,
             last_name=last_name,
-            saldo=20,
+            saldo=20,  # saldo inicial
             password=make_password(password1)
         )
 
-        # 👥 grupo
+        # 👥 Asignar grupo
         grupo, _ = Group.objects.get_or_create(name='inversionista')
         usuario.groups.add(grupo)
 
-        # ✅ USAR REFERIDO GUARDADO
-        codigo = request.session.get('ref_codigo')
+        # ✅ Aplicar referido si existe
+        if invitador:
+            usuario.referido_por = invitador
+            usuario.save()
 
-        if codigo:
-            try:
-                invitador = Usuario.objects.get(codigo_invitacion=codigo)
-                usuario.referido_por = invitador
-                usuario.save()
-            except Usuario.DoesNotExist:
-                pass
-
-            # 🔥 limpiar sesión
+            # 🔥 Limpiar sesión
             del request.session['ref_codigo']
 
+        messages.success(request, "Registro exitoso. ¡Ahora puedes iniciar sesión!")
         return redirect('login')
 
-    return render(request, 'inverso_sa/registro.html')
+    # --------------------------------------
+    # 5️⃣ Renderizar template GET
+    # --------------------------------------
+    return render(request, 'inverso_sa/registro.html', {
+        'invitador': invitador
+    })
 
 
 
