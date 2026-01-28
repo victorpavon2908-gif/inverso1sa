@@ -75,4 +75,8 @@ urlpatterns = [
 
     path('finanzas/', views.ingresos_egresos, name='ingresos_egresos'),
 
+path("acerca/", views.acerca_de, name="acerca_de"),
+path("asistencia/", views.asistencia, name="asistencia"),
+
+
 ]

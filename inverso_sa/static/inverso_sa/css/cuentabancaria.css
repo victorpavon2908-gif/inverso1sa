@@ -1,0 +1,211 @@
+/* =====================================
+   CONTENEDOR GENERAL
+===================================== */
+
+.card {
+    background: #ffffff;
+    padding: 28px;
+    border-radius: 18px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.06);
+}
+
+/* =====================================
+   HEADER
+===================================== */
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.card-header h2 {
+    font-size: 22px;
+    font-weight: 800;
+    color: #111827;
+}
+
+/* BOTÓN AGREGAR */
+
+.btn-primary {
+    background: #2563eb;
+    color: #ffffff;
+    padding: 11px 18px;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 14px;
+    text-decoration: none;
+    transition: 0.2s ease;
+}
+
+.btn-primary:hover {
+    background: #1d4ed8;
+    transform: translateY(-1px);
+}
+
+/* =====================================
+   ALERTAS DJANGO
+===================================== */
+
+.alert {
+    padding: 12px 16px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.alert.success {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.alert.error {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.alert.warning {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+/* =====================================
+   TABLA
+===================================== */
+
+.table-container {
+    overflow-x: auto;
+}
+
+.styled-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: 14px;
+    min-width: 720px;
+}
+
+/* HEADER */
+
+.styled-table thead th {
+    background: #f9fafb;
+    color: #374151;
+    font-weight: 700;
+    text-align: left;
+    padding: 14px 16px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+/* FILAS */
+
+.styled-table tbody tr {
+    transition: background 0.2s ease;
+}
+
+.styled-table tbody tr:hover {
+    background: #f9fafb;
+}
+
+/* CELDAS */
+
+.styled-table td {
+    padding: 14px 16px;
+    border-bottom: 1px solid #f1f5f9;
+    color: #374151;
+}
+
+/* =====================================
+   BADGES
+===================================== */
+
+.badge {
+    padding: 5px 14px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    display: inline-block;
+}
+
+.badge.success {
+    background: #dcfce7;
+    color: #15803d;
+}
+
+.badge.danger {
+    background: #fee2e2;
+    color: #b91c1c;
+}
+
+/* =====================================
+   ACCIONES
+===================================== */
+
+.actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+/* BOTONES */
+
+.btn-sm {
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: 0.2s ease;
+    white-space: nowrap;
+}
+
+/* EDITAR */
+
+.btn-sm.edit {
+    background: #e0ecff;
+    color: #2563eb;
+}
+
+.btn-sm.edit:hover {
+    background: #c7dbff;
+}
+
+/* ELIMINAR / DESACTIVAR */
+
+.btn-sm.delete {
+    background: #fee2e2;
+    color: #dc2626;
+}
+
+.btn-sm.delete:hover {
+    background: #fecaca;
+}
+
+/* =====================================
+   RESPONSIVE
+===================================== */
+
+@media (max-width: 768px) {
+
+    .card-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .btn-primary {
+        width: 100%;
+        text-align: center;
+    }
+
+    .actions {
+        flex-direction: column;
+    }
+
+    .btn-sm {
+        width: 100%;
+        text-align: center;
+    }
+}

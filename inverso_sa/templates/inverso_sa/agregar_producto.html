@@ -3,62 +3,77 @@
 
 {% block title %}Agregar Producto{% endblock %}
 {% block page_title %}Agregar Producto{% endblock %}
+
 {% block css %}
 <link rel="stylesheet" href="{% static 'inverso_sa/css/agregarproducto.css' %}">
 {% endblock %}
 
-
-
 {% block content %}
-<div class="form-container">
-    <h2>Agregar Nuevo Producto</h2>
-    <form method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form.non_field_errors }}
 
-        <div class="form-group">
-            {{ form.nombre.label_tag }}
-            {{ form.nombre }}
-            {{ form.nombre.errors }}
-        </div>
+<div class="product-form-wrapper">
 
-        <div class="form-group">
-            {{ form.precio.label_tag }}
-            {{ form.precio }}
-            {{ form.precio.errors }}
-        </div>
+    <div class="product-card">
 
-        <div class="form-group">
-            {{ form.ingreso_diario.label_tag }}
-            {{ form.ingreso_diario }}
-            {{ form.ingreso_diario.errors }}
-        </div>
+        <h2 class="form-title">📦 Agregar nuevo producto</h2>
 
-        <div class="form-group">
-            {{ form.limite.label_tag }}
-            {{ form.limite }}
-            {{ form.limite.errors }}
-        </div>
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
 
-        <div class="form-group">
-            {{ form.duracion.label_tag }}
-            {{ form.duracion }}
-            {{ form.duracion.errors }}
-        </div>
+            {{ form.non_field_errors }}
 
-        <div class="form-group">
-            {{ form.imagen.label_tag }}
-            {{ form.imagen }}
-            {{ form.imagen.errors }}
-        </div>
+            <div class="form-grid">
 
-        <div class="form-group">
-            {{ form.activo.label_tag }}
-            {{ form.activo }}
-            {{ form.activo.errors }}
-        </div>
+                <div class="form-group">
+                    {{ form.nombre.label_tag }}
+                    {{ form.nombre }}
+                    {{ form.nombre.errors }}
+                </div>
 
-        <button type="submit" class="btn-submit">Agregar Producto</button>
-    </form>
+                <div class="form-group">
+                    {{ form.precio.label_tag }}
+                    {{ form.precio }}
+                    {{ form.precio.errors }}
+                </div>
+
+                <div class="form-group">
+                    {{ form.ingreso_diario.label_tag }}
+                    {{ form.ingreso_diario }}
+                    {{ form.ingreso_diario.errors }}
+                </div>
+
+                <div class="form-group">
+                    {{ form.limite.label_tag }}
+                    {{ form.limite }}
+                    {{ form.limite.errors }}
+                </div>
+
+                <div class="form-group">
+                    {{ form.duracion.label_tag }}
+                    {{ form.duracion }}
+                    {{ form.duracion.errors }}
+                </div>
+
+                <div class="form-group">
+                    {{ form.imagen.label_tag }}
+                    {{ form.imagen }}
+                    {{ form.imagen.errors }}
+                </div>
+
+                <div class="form-group checkbox-group">
+                    {{ form.activo }}
+                    {{ form.activo.label_tag }}
+                </div>
+
+            </div>
+
+            <button type="submit" class="btn-submit">
+                💾 Guardar producto
+            </button>
+
+        </form>
+
+    </div>
+
 </div>
+
 {% endblock %}

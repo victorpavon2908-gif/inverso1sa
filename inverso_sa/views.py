@@ -782,3 +782,13 @@ def ingresos_egresos(request):
         'filtro': filtro,
         'cuenta_id': cuenta_id
     })
+
+
+@login_required
+def acerca_de(request):
+    return render(request, "inverso_sa/acerca_de.html")
+
+
+@login_required
+def asistencia(request):
+    return render(request, "inverso_sa/asistencia.html")

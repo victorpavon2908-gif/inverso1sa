@@ -1,0 +1,110 @@
+{% extends "inverso_sa/dashboard.html" %}
+{% load static %}
+
+{% block title %}Asistencia | INVERSO{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'inverso_sa/css/asistencia.css' %}">
+{% endblock %}
+
+{% block contenido %}
+
+<div class="main-content container">
+
+    <h2 class="page-title">💬 Centro de Asistencia</h2>
+
+    <div class="support-card">
+
+        <p class="support-intro">
+            Bienvenido al Centro de Asistencia de INVERSO.  
+            Aquí encontrarás información detallada sobre el funcionamiento de la
+            plataforma, soluciones a problemas frecuentes y canales oficiales de
+            atención al usuario.
+        </p>
+
+        <!-- AYUDA GENERAL -->
+        <div class="support-section">
+            <h3>📌 Ayuda general</h3>
+            <p>
+                Nuestro objetivo es brindarte una experiencia clara, segura y sin
+                complicaciones. Antes de contactar soporte, te recomendamos revisar
+                las siguientes secciones.
+            </p>
+        </div>
+
+        <!-- OPCIONES -->
+        <div class="support-options">
+
+            <div class="support-item">
+                <i class="fas fa-wallet"></i>
+                <div>
+                    <strong>Recargas</strong>
+                    <p>Validación entre 10 y 60 minutos.</p>
+                </div>
+            </div>
+
+            <div class="support-item">
+                <i class="fas fa-university"></i>
+                <div>
+                    <strong>Retiros</strong>
+                    <p>Procesados en horario administrativo.</p>
+                </div>
+            </div>
+
+            <div class="support-item">
+                <i class="fas fa-user-shield"></i>
+                <div>
+                    <strong>Seguridad</strong>
+                    <p>No compartas tus datos con nadie.</p>
+                </div>
+            </div>
+
+            <div class="support-item">
+                <i class="fas fa-users"></i>
+                <div>
+                    <strong>Referidos</strong>
+                    <p>Bonos acreditados tras inversión activa.</p>
+                </div>
+            </div>
+
+            <div class="support-item">
+                <i class="fas fa-envelope"></i>
+                <div>
+                    <strong>Correo</strong>
+                    <p>soporte@inverso.com</p>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- BOTÓN WHATSAPP -->
+        <div class="whatsapp-box">
+            <h3>📲 Soporte por WhatsApp</h3>
+            <p>
+                Únete a nuestro grupo oficial de WhatsApp para recibir avisos,
+                soporte rápido y actualizaciones importantes.
+            </p>
+
+            <!-- 🔗 CAMBIA ESTE LINK POR EL TUYO -->
+            <a href="https://chat.whatsapp.com/EUl2FI07nFSBTMQeOX82oW?mode=gi_t"
+               target="_blank"
+               class="btn-whatsapp">
+                <i class="fab fa-whatsapp"></i>
+                Unirme al grupo de WhatsApp
+            </a>
+        </div>
+
+        <!-- HORARIO -->
+        <div class="support-footer">
+            <h4>🕘 Horario de atención</h4>
+            <p>
+                Lunes a sábado<br>
+                <strong>8:00 AM — 6:00 PM</strong>
+            </p>
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

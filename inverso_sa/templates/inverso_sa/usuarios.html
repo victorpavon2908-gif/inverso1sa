@@ -1,112 +1,91 @@
 {% extends "inverso_sa/panel.html" %}
+{% load static %}
 
 {% block title %}Usuarios — Panel{% endblock %}
 {% block page_title %}Usuarios{% endblock %}
 
+{% block css %}
+<link rel="stylesheet" href="{% static 'inverso_sa/css/usuarios.css' %}">
+{% endblock %}
+
 {% block content %}
 <div id="usuarios-section">
+
     <div class="table-container">
 
-        <h2 class="table-title">Usuarios</h2>
+        <div class="users-header">
+            <h2 class="table-title">Usuarios</h2>
 
-        <!-- FILTRO -->
-        <form method="get" class="filter-bar">
-            <select name="rol" onchange="this.form.submit()">
-                <option value="">Todos</option>
+            <form method="get" class="filter-bar">
+                <select name="rol" onchange="this.form.submit()">
+                    <option value="">Todos</option>
+                    <option value="admin" {% if filtro == 'admin' %}selected{% endif %}>
+                        Administradores
+                    </option>
+                    <option value="user" {% if filtro == 'user' %}selected{% endif %}>
+                        Usuarios normales
+                    </option>
+                </select>
+            </form>
+        </div>
 
-                <option value="admin"
-                    {% if filtro and filtro == 'admin' %}
-                        selected
-                    {% endif %}
-                >
-                    Administradores
-                </option>
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Apellido</th>
+                        <th>Email</th>
+                        <th>Usuario</th>
+                        <th>Rol</th>
+                        <th>Estado</th>
+                        <th>Registro</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
 
-                <option value="user"
-                    {% if filtro and filtro == 'user' %}
-                        selected
-                    {% endif %}
-                >
-                    Usuarios normales
-                </option>
-            </select>
-        </form>
-
-        <!-- TABLA -->
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Nombre</th>
-                    <th>Apellido</th>
-                    <th>Email</th>
-                    <th>Username</th>
-                    <th>Rol</th>
-                    <th>Estado</th>
-                    <th>Fecha de Registro</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-
-            <tbody>
+                <tbody>
                 {% for user in usuarios %}
-                <tr>
-                    <td>{{ user.id }}</td>
-                    <td>{{ user.first_name }}</td>
-                    <td>{{ user.last_name }}</td>
-                    <td>{{ user.email }}</td>
-                    <td>{{ user.username }}</td>
-                    <td>{{ user.groups.first.name|default:"Usuario" }}</td>
+                    <tr>
+                        <td>{{ user.id }}</td>
+                        <td>{{ user.first_name }}</td>
+                        <td>{{ user.last_name }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>{{ user.username }}</td>
+                        <td>{{ user.groups.first.name|default:"Usuario" }}</td>
 
-                    <td>
-                        {% if user.is_active %}
-                            <span class="status-badge status-active">Activo</span>
-                        {% else %}
-                            <span class="status-badge status-inactive">Inactivo</span>
-                        {% endif %}
-                    </td>
+                        <td>
+                            {% if user.is_active %}
+                                <span class="badge active">Activo</span>
+                            {% else %}
+                                <span class="badge inactive">Inactivo</span>
+                            {% endif %}
+                        </td>
 
-                    <td>{{ user.date_joined|date:"d/m/Y H:i" }}</td>
+                        <td>{{ user.date_joined|date:"d/m/Y" }}</td>
 
-                    <td class="action-buttons">
+                        <td class="actions">
+                            <a href="{% url 'editar_usuario' user.id %}" class="btn edit">Editar</a>
+                            <a href="{% url 'eliminar_usuario' user.id %}" class="btn delete">Eliminar</a>
 
-                        <!-- EDITAR -->
-                        <a href="{% url 'editar_usuario' user.id %}" class="btn-edit">
-                            Editar
-                        </a>
-
-                        <!-- ELIMINAR DEFINITIVO -->
-                        <a href="{% url 'eliminar_usuario' user.id %}"
-                           class="btn-delete">
-                            Eliminar
-                        </a>
-
-                        <!-- ACTIVAR / DESACTIVAR -->
-                        {% if user.is_active %}
-                            <a href="{% url 'desactivar_usuario' user.id %}"
-                               class="btn-disable"
-                               onclick="return confirm('¿Deseas desactivar este usuario?');">
-                                Desactivar
-                            </a>
-                        {% else %}
-                            <a href="{% url 'activar_usuario' user.id %}"
-                               class="btn-enable"
-                               onclick="return confirm('¿Deseas activar este usuario?');">
-                                Activar
-                            </a>
-                        {% endif %}
-
-                    </td>
-                </tr>
-
+                            {% if user.is_active %}
+                                <a href="{% url 'desactivar_usuario' user.id %}" class="btn warning">Desactivar</a>
+                            {% else %}
+                                <a href="{% url 'activar_usuario' user.id %}" class="btn success">Activar</a>
+                            {% endif %}
+                        </td>
+                    </tr>
                 {% empty %}
-                <tr>
-                    <td colspan="9">No hay usuarios registrados</td>
-                </tr>
+                    <tr>
+                        <td colspan="9" class="empty">No hay usuarios registrados</td>
+                    </tr>
                 {% endfor %}
-            </tbody>
-        </table>
+                </tbody>
+            </table>
+        </div>
 
     </div>
+
 </div>
 {% endblock %}

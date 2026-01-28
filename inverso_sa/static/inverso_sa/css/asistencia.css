@@ -1,0 +1,189 @@
+/* =====================================================
+   CENTRO DE ASISTENCIA — INVERSO
+   Estilo profesional financiero
+===================================================== */
+
+.page-title {
+    font-size: 26px;
+    font-weight: 700;
+    margin-bottom: 25px;
+    color: #1e293b;
+}
+
+.support-card {
+    background: #ffffff;
+    border-radius: 22px;
+    padding: 35px;
+    max-width: 950px;
+    margin: auto;
+    box-shadow: 0 18px 45px rgba(0,0,0,0.08);
+}
+
+.support-intro {
+    font-size: 15.5px;
+    color: #374151;
+    line-height: 1.8;
+    margin-bottom: 30px;
+    text-align: justify;
+}
+
+/* ==========================
+   SECCIONES
+========================== */
+
+.support-section h3 {
+    font-size: 20px;
+    margin-bottom: 8px;
+    color: #0f172a;
+}
+
+.support-section p {
+    font-size: 15px;
+    color: #475569;
+    line-height: 1.7;
+    margin-bottom: 25px;
+}
+
+/* ==========================
+   OPCIONES
+========================== */
+
+.support-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 22px;
+}
+
+.support-item {
+    display: flex;
+    gap: 16px;
+    background: #f8fafc;
+    padding: 18px;
+    border-radius: 16px;
+    border-left: 5px solid #2563eb;
+    transition: 0.25s ease;
+}
+
+.support-item:hover {
+    transform: translateY(-4px);
+    background: #f1f5f9;
+}
+
+.support-item i {
+    font-size: 28px;
+    color: #2563eb;
+    margin-top: 5px;
+}
+
+.support-item strong {
+    font-size: 15.5px;
+    color: #0f172a;
+}
+
+.support-item p {
+    font-size: 14.5px;
+    color: #475569;
+    margin-top: 5px;
+    line-height: 1.6;
+}
+
+/* ==========================
+   FOOTER
+========================== */
+
+.support-footer {
+    margin-top: 40px;
+    padding-top: 25px;
+    border-top: 1px solid #e5e7eb;
+    text-align: center;
+}
+
+.support-footer h4 {
+    font-size: 18px;
+    margin-bottom: 8px;
+    color: #0f172a;
+}
+
+.support-footer p {
+    font-size: 15px;
+    color: #334155;
+}
+
+.support-footer span {
+    display: block;
+    margin-top: 8px;
+    font-size: 14px;
+    color: #64748b;
+}
+
+/* ==========================
+   RESPONSIVE
+========================== */
+
+@media (max-width: 768px) {
+
+    .support-card {
+        padding: 25px;
+    }
+
+    .page-title {
+        font-size: 22px;
+    }
+
+    .support-item {
+        flex-direction: column;
+    }
+
+    .support-item i {
+        margin-bottom: 5px;
+    }
+}
+
+/* =====================================
+   BOTÓN WHATSAPP
+===================================== */
+
+.whatsapp-box {
+    margin-top: 40px;
+    padding: 25px;
+    background: #ecfdf5;
+    border-radius: 18px;
+    text-align: center;
+    border: 2px solid #22c55e;
+}
+
+.whatsapp-box h3 {
+    font-size: 20px;
+    margin-bottom: 10px;
+    color: #065f46;
+}
+
+.whatsapp-box p {
+    font-size: 15px;
+    color: #064e3b;
+    margin-bottom: 18px;
+}
+
+.btn-whatsapp {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: #22c55e;
+    color: #ffffff;
+    padding: 14px 26px;
+    border-radius: 40px;
+    font-size: 16px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: 0.25s ease;
+    box-shadow: 0 10px 25px rgba(34,197,94,0.35);
+}
+
+.btn-whatsapp i {
+    font-size: 22px;
+}
+
+.btn-whatsapp:hover {
+    background: #16a34a;
+    transform: translateY(-3px);
+}

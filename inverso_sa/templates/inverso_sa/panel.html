@@ -7,10 +7,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Panel de Control{% endblock %}</title>
 
-    <!-- ESTILOS GLOBALES -->
+    <!-- CSS BASE DEL PANEL -->
     <link rel="stylesheet" href="{% static 'inverso_sa/css/panel.css' %}">
 
-    <!-- CSS DE PLANTILLAS HIJAS -->
+    <!-- ✅ CSS DE PLANTILLAS HIJAS -->
     {% block css %}{% endblock %}
 
     <link rel="icon" type="image/x-icon" href="{% static 'inverso_sa/img/logo.jpeg' %}">
@@ -18,112 +18,123 @@
 
 <body>
 
-    <div class="container">
+<!-- OVERLAY MOBILE -->
+<div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
 
-        <!-- SIDEBAR -->
-        <aside class="sidebar">
+<div class="container">
 
-            <div class="sidebar-header">
-                <img src="{% static 'inverso_sa/img/logo.jpeg' %}" class="logo">
-                <a href="{% url 'inicio' %}" class="brand-name">
-                    INVERSO ADMIN
-                </a>
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
 
+        <div class="sidebar-header">
+            <img src="{% static 'inverso_sa/img/logo.jpeg' %}" class="logo">
+            <a href="{% url 'inicio' %}" class="brand-name">
+                INVERSO ADMIN
+            </a>
+        </div>
+
+        <nav>
+            <ul class="nav-menu">
+
+                <li class="nav-item {% if request.path == '/recargas/solicitudes/' %}active{% endif %}">
+                    <a href="{% url 'solicitudes_recarga' %}" class="nav-link">
+                        💷 Solicitudes de recarga
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="{% url 'panel_usuarios' %}" class="nav-link">
+                        👥 Usuarios
+                    </a>
+                </li>
+
+                <li class="nav-item {% if request.path == '/productos/agregar/' %}active{% endif %}">
+                    <a href="{% url 'agregar_producto' %}" class="nav-link">
+                        📋 Agregar producto
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="{% url 'ver_productos' %}" class="nav-link">
+                        📦 Ver productos
+                    </a>
+                </li>
+
+                <li class="nav-item {% if request.path == '/cuentas/bancarias/' %}active{% endif %}">
+                    <a href="{% url 'cuentas_bancarias' %}" class="nav-link">
+                        🏦 Cuentas bancarias
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="{% url 'ingresos_egresos' %}" class="nav-link">
+                        💹 Ingresos y egresos
+                    </a>
+                </li>
+
+                <li class="nav-item {% if request.path == '/retiros/solicitudes/' %}active{% endif %}">
+                    <a href="{% url 'solicitudes_retiro' %}" class="nav-link">
+                        ✅ Solicitudes de retiro
+                    </a>
+                </li>
+
+            </ul>
+        </nav>
+
+        <a href="{% url 'logout' %}" class="logout-btn">
+            🚪 Cerrar sesión
+        </a>
+
+    </aside>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <div class="main-wrapper">
+
+        <!-- HEADER -->
+        <header class="header">
+
+            <!-- BOTÓN HAMBURGUESA -->
+            <button class="menu-btn" onclick="toggleSidebar()">☰</button>
+
+            <div class="header-info">
+                <h1>{% block page_title %}Panel de Control{% endblock %}</h1>
+                <p>
+                    Bienvenido
+                    {{ request.user.first_name|default:request.user.username }}
+                </p>
             </div>
 
-            <nav>
-                <ul class="nav-menu">
+            <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
 
-                    <li class="nav-item {% if request.path == '/recargas/solicitudes/' %}active{% endif %}">
-                        <a href="{% url 'solicitudes_recarga' %}" class="nav-link">
-                            <span class="nav-icon">💷</span> Solicitudes de recarga
-                        </a>
-                    </li>
+        </header>
 
-                    <li class="nav-item">
-                        <a href="{% url 'panel_usuarios' %}" class="nav-link">
-                            <span class="nav-icon">👥</span> Usuarios
-                        </a>
-                    </li>
+        <!-- CONTENIDO -->
+        <main class="main-content">
+            {% block content %}{% endblock %}
+        </main>
 
-                    <li class="nav-item {% if request.path == '/productos/agregar/' %}active{% endif %}">
-                        <a href="{% url 'agregar_producto' %}" class="nav-link">
-                            <span class="nav-icon">📋</span> Agregar producto
-                        </a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a href="{% url 'ver_productos' %}" class="nav-link">
-                            <span class="nav-icon">📦</span> Ver productos
-                        </a>
-                    </li>
-
-                    <li class="nav-item {% if request.path == '/cuentas/bancarias/' %}active{% endif %}">
-                        <a href="{% url 'cuentas_bancarias' %}" class="nav-link">
-                            <span class="nav-icon">🏦</span> Cuentas bancarias
-                        </a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a href="{% url 'ingresos_egresos' %}" class="nav-link">
-                            <span class="nav-icon">👤</span>INGRESOS HE EGRESOS
-                        </a>
-                    </li>
-
-                    <li class="nav-item {% if request.path == '/retiros/solicitudes/' %}active{% endif %}">
-                        <a href="{% url 'solicitudes_retiro' %}" class="nav-link">
-                            <span class="nav-icon">✅</span> Solicitudes de retiro
-                        </a>
-                    </li>
-
-                </ul>
-            </nav>
-
-            <a href="{% url 'logout' %}" class="logout-btn">
-                <span class="nav-icon">🚪</span> Cerrar sesión
-            </a>
-
-        </aside>
-
-        <!-- CONTENIDO PRINCIPAL -->
-        <div class="main-wrapper">
-
-            <!-- HEADER -->
-            <header class="header">
-                <div class="header-top">
-                    <div class="header-info">
-                        <h1>{% block page_title %}Panel de Control{% endblock %}</h1>
-                        <p>
-                            Bienvenido
-                            {{ request.user.first_name|default:request.user.username }}
-                        </p>
-                    </div>
-
-                    <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
-                </div>
-            </header>
-
-            <!-- CONTENIDO -->
-            <main class="main-content">
-                {% block content %}
-                {% endblock %}
-            </main>
-
-            <!-- FOOTER -->
-            <footer class="footer">
-                © 2026 INVERSO — Panel Administrativo 🚀
-            </footer>
-
-        </div>
+        <!-- FOOTER -->
+        <footer class="footer">
+            © 2026 INVERSO — Panel Administrativo 🚀
+        </footer>
 
     </div>
 
-    <!-- JS GLOBAL -->
-    <script src="{% static 'inverso_sa/js/panel.js' %}"></script>
+</div>
 
-    <!-- JS DE PLANTILLAS HIJAS -->
-    {% block js %}{% endblock %}
+<!-- JS GLOBAL -->
+<script src="{% static 'inverso_sa/js/panel.js' %}"></script>
+
+<!-- ✅ JS DE PLANTILLAS HIJAS -->
+{% block js %}
+{% endblock %}
+
+<script>
+function toggleSidebar() {
+    document.getElementById("sidebar").classList.toggle("open");
+    document.getElementById("overlay").classList.toggle("show");
+}
+</script>
 
 </body>
-
 </html>

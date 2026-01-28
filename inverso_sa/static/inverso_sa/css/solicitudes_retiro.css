@@ -1,0 +1,141 @@
+/* ======================================================
+   SOLICITUDES DE RETIRO — PANEL ADMIN
+====================================================== */
+
+.custom-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #ffffff;
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 10px 28px rgba(0,0,0,0.05);
+    font-size: 14px;
+}
+
+/* ======================
+   CABECERA
+====================== */
+
+.custom-table thead {
+    background: #f9fafb;
+}
+
+.custom-table th {
+    padding: 14px 16px;
+    text-align: left;
+    font-weight: 700;
+    color: #374151;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+/* ======================
+   CUERPO
+====================== */
+
+.custom-table td {
+    padding: 14px 16px;
+    color: #374151;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.custom-table tbody tr:hover {
+    background: #f8fafc;
+}
+
+/* ======================
+   BADGES
+====================== */
+
+.badge {
+    padding: 6px 16px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.badge.pendiente {
+    background: #ffedd5;
+    color: #c2410c;
+}
+
+.badge.aprobado {
+    background: #dcfce7;
+    color: #15803d;
+}
+
+/* ======================
+   BOTONES
+====================== */
+
+.custom-table form {
+    display: flex;
+    gap: 8px;
+}
+
+.custom-table button {
+    border: none;
+    padding: 7px 16px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.25s ease;
+}
+
+/* APROBAR */
+.custom-table button[value="aprobar"] {
+    background: linear-gradient(135deg, #dcfce7, #bbf7d0);
+    color: #15803d;
+}
+
+.custom-table button[value="aprobar"]:hover {
+    box-shadow: 0 6px 14px rgba(22,163,74,0.35);
+    transform: translateY(-2px);
+}
+
+/* RECHAZAR */
+.custom-table button[value="rechazar"] {
+    background: linear-gradient(135deg, #fee2e2, #fecaca);
+    color: #b91c1c;
+}
+
+.custom-table button[value="rechazar"]:hover {
+    box-shadow: 0 6px 14px rgba(220,38,38,0.35);
+    transform: translateY(-2px);
+}
+
+/* ======================
+   MENSAJE VACÍO
+====================== */
+
+.custom-table td[colspan] {
+    text-align: center;
+    padding: 25px;
+    color: #6b7280;
+    font-weight: 600;
+}
+
+/* ======================
+   RESPONSIVE
+====================== */
+
+@media (max-width: 768px) {
+
+    .custom-table {
+        font-size: 13px;
+    }
+
+    .custom-table th,
+    .custom-table td {
+        padding: 12px;
+    }
+
+    .custom-table form {
+        flex-direction: column;
+    }
+
+    .custom-table button {
+        width: 100%;
+    }
+}

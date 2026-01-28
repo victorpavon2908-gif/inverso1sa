@@ -8,166 +8,165 @@
 <link rel="stylesheet" href="{% static 'inverso_sa/css/inicio.css' %}">
 {% endblock %}
 
-
 {% block contenido %}
 
-<!-- HERO BANNER -->
+<!-- HERO -->
 <header class="hero-banner">
     <div class="banner-text">
+
         <div class="stats">
-            <span>NIVEL 1: 8%</span>
-            <span>NIVEL 2: 1%</span>
-            <span>NIVEL 3: 1%</span>
+            <span>🔹 Nivel 1: 8%</span>
+            <span>🔸 Nivel 2: 1%</span>
+            <span>🔸 Nivel 3: 1%</span>
         </div>
-        <h2>Bonificación de Reembolso Por Primera Compra en Acciones</h2>
-        
+
+        <h2>
+            Gana ingresos diarios invirtiendo de forma inteligente
+        </h2>
+
+        <p class="hero-desc">
+            En Inverso te brindamos una plataforma segura donde tu dinero trabaja por ti.
+            Comienza hoy y genera ganancias todos los días.
+        </p>
+
     </div>
+
     <img src="{% static 'inverso_sa/img/logo.jpeg' %}" class="banner-img">
 </header>
 
-<!-- ACTION ROW -->
+<!-- ACCIONES -->
 <section class="action-row">
+
     <a href="{% url 'recargar' %}" class="action-card blue">
-        <div class="card-body">
-            <span>Recargar saldo</span>
-        </div>
+        <strong>💳 Recargar saldo</strong>
+        <span>Agrega fondos a tu cuenta</span>
     </a>
 
-    
-    <a href="{% url 'retirar' %}" class="action-card blue">
-        <div class="card-body">
-            <span>Retirar</span>
-        </div>
+    <a href="{% url 'retirar' %}" class="action-card dark-blue">
+        <strong>🏦 Retirar</strong>
+        <span>Solicita tus ganancias</span>
     </a>
+
 </section>
 
+<!-- PRODUCTOS -->
 <section class="products-grid-container">
-    <h3>Recomendaciones Favoritas</h3>
+    <h3>📈 Inversiones recomendadas</h3>
+    <p class="section-sub">
+        Productos con excelente rendimiento y alta demanda.
+    </p>
 
     <div class="products-grid">
         {% for producto in productos %}
         <div class="product-item">
+
             <img src="{{ producto.imagen.url }}">
+
             <div class="product-details">
                 <h4>{{ producto.nombre }}</h4>
-                <p>Duracion: <strong>{{ producto.duracion }}</strong></p>
-                <p>Precio: <strong>C$ {{ producto.precio }}</strong></p>
-                <p>Ingreso diario:
+
+                <p>⏳ Duración: <strong>{{ producto.duracion }}</strong></p>
+                <p>💰 Inversión: <strong>C$ {{ producto.precio }}</strong></p>
+
+                <p>
+                    📥 Ingreso diario:
                     <span class="income">C$ {{ producto.ingreso_diario }}</span>
                 </p>
-                <small>Límite: {{ producto.comprados }}/{{ producto.limite }}</small>
+
+                <small>
+                    Cupos disponibles: {{ producto.limite }}
+                </small>
+
+
                 <form method="POST" action="{% url 'invertir_producto' producto.id %}">
                     {% csrf_token %}
-                    <button class="btn-invert">Invertir</button>
+                    <button class="btn-invert">Invertir ahora</button>
                 </form>
-
-
             </div>
         </div>
         {% endfor %}
     </div>
 </section>
 
-
-
-
-<!-- QUIÉNES SOMOS -->
+<!-- SOBRE NOSOTROS -->
 <section class="about-us">
-    <h3>Quiénes Somos</h3>
-    <p class="about-intro">En Inverso, nos enfocamos en brindarte herramientas financieras modernas, seguras y
-        confiables, para que tus inversiones crezcan de manera inteligente.</p>
-    <div class="about-cards">
-        <div class="about-card">
-            <i class="fas fa-shield-alt"></i>
-            <h4>Seguridad</h4>
-            <p>Protegemos tus inversiones con tecnología de vanguardia y total transparencia.</p>
-        </div>
-        <div class="about-card">
-            <i class="fas fa-rocket"></i>
-            <h4>Innovación</h4>
-            <p>Plataforma intuitiva y herramientas de inversión modernas para todos los niveles.</p>
-        </div>
-        <div class="about-card">
-            <i class="fas fa-hand-holding-usd"></i>
-            <h4>Apoyo Financiero</h4>
-            <p>Asesoría personalizada para ayudarte a tomar las mejores decisiones.</p>
-        </div>
-        <div class="about-card">
-            <i class="fas fa-users"></i>
-            <h4>Comunidad</h4>
-            <p>Únete a nuestra comunidad de inversores y comparte experiencias y oportunidades.</p>
-        </div>
-    </div>
-</section>
+    <h3>¿Por qué elegir Inverso?</h3>
 
-<!-- SERVICIOS / BENEFICIOS -->
-<section class="services">
-    <h3>Nuestros Servicios</h3>
-    <div class="services-cards">
-        <div class="service-card">
-            <i class="fas fa-chart-line"></i>
-            <h4>Crecimiento Garantizado</h4>
-            <p>Programas de inversión diseñados para maximizar tus ingresos diarios.</p>
+    <p class="about-intro">
+        Somos una plataforma enfocada en brindar oportunidades reales de crecimiento financiero,
+        con procesos claros, soporte humano y tecnología confiable.
+    </p>
+
+    <div class="about-cards">
+
+        <div class="about-card">
+            <h4>🔐 Seguridad real</h4>
+            <p>
+                Protegemos cada transacción mediante sistemas de validación y control interno.
+            </p>
         </div>
-        <div class="service-card">
-            <i class="fas fa-mobile-alt"></i>
-            <h4>Acceso desde cualquier lugar</h4>
-            <p>Controla y monitorea tus inversiones desde tu computadora o teléfono.</p>
+
+        <div class="about-card">
+            <h4>⚡ Pagos eficientes</h4>
+            <p>
+                Procesamos recargas y retiros de forma rápida y ordenada.
+            </p>
         </div>
-        <div class="service-card">
-            <i class="fas fa-lock"></i>
-            <h4>Pagos Seguros</h4>
-            <p>Transacciones cifradas para mantener tu dinero protegido en todo momento.</p>
+
+        <div class="about-card">
+            <h4>📊 Rendimiento diario</h4>
+            <p>
+                Obtén ganancias todos los días según el plan que elijas.
+            </p>
         </div>
-        <div class="service-card">
-            <i class="fas fa-bolt"></i>
-            <h4>Rendimiento Rápido</h4>
-            <p>Recibe ingresos y bonificaciones de manera rápida y confiable.</p>
+
+        <div class="about-card">
+            <h4>🤝 Soporte humano</h4>
+            <p>
+                Nuestro equipo está disponible para ayudarte cuando lo necesites.
+            </p>
         </div>
+
     </div>
 </section>
 
 <!-- TESTIMONIOS -->
 <section class="testimonials">
-    <h3>Testimonios</h3>
+    <h3>Opiniones de nuestros usuarios</h3>
+
     <div class="testimonial-cards">
+
         <div class="testimonial-card">
-            <p>"Invertir en Inverso ha sido la mejor decisión. Seguridad y rentabilidad en un solo lugar."</p>
-            <h5>- María G.</h5>
+            <p>
+                “Al inicio tenía dudas, pero después del primer retiro confirmé que la plataforma es real.”
+            </p>
+            <h5>— Luis M.</h5>
         </div>
+
         <div class="testimonial-card">
-            <p>"La plataforma es muy intuitiva, y el soporte siempre está disponible para cualquier consulta."</p>
-            <h5>- Carlos R.</h5>
+            <p>
+                “Me gusta que todo es claro, sabes cuánto inviertes y cuánto ganas cada día.”
+            </p>
+            <h5>— Daniela R.</h5>
         </div>
+
         <div class="testimonial-card">
-            <p>"Gracias a Inverso mis ingresos diarios han aumentado y me siento seguro con mis inversiones."</p>
-            <h5>- Ana L.</h5>
+            <p>
+                “El soporte me respondió rápido cuando tuve una duda. Eso genera confianza.”
+            </p>
+            <h5>— José A.</h5>
         </div>
+
     </div>
 </section>
 
-<!-- CTA – ÚNETE HOY -->
+<!-- CTA -->
 <section class="cta">
-    <h3>Empieza a Invertir Hoy</h3>
-    <p>Únete a miles de usuarios que ya están creciendo con Inverso. Es seguro, rápido y fácil.</p>
+    <h3>Empieza hoy mismo</h3>
+    <p>
+        Miles de usuarios ya están generando ingresos con Inverso.
+        Tú también puedes hacerlo.
+    </p>
 </section>
-
-<!-- FAQ / PREGUNTAS FRECUENTES -->
-<section class="faq">
-    <h3>Preguntas Frecuentes</h3>
-    <div class="faq-item">
-        <h4>¿Es seguro invertir en Inverso?</h4>
-        <p>Sí, todas las transacciones están protegidas con cifrado de alto nivel.</p>
-    </div>
-    <div class="faq-item">
-        <h4>¿Puedo retirar mis fondos en cualquier momento?</h4>
-        <p>Sí, los retiros son rápidos y seguros directamente a tu cuenta bancaria.</p>
-    </div>
-    <div class="faq-item">
-        <h4>¿Necesito experiencia previa?</h4>
-        <p>No, la plataforma está diseñada para principiantes y expertos por igual.</p>
-    </div>
-</section>
-
 
 {% endblock %}

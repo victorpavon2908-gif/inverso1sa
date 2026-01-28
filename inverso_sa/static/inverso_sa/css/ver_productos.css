@@ -1,46 +1,76 @@
+/* ======================================
+   CONTENEDOR
+====================================== */
+
 .productos-container {
-    background: #000000;
+    background: #ffffff;
     padding: 25px;
-    border-radius: 12px;
-    box-shadow: 0 6px 18px rgba(0,0,0,0.05);
+    border-radius: 16px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
 }
+
+/* ======================================
+   TABLA
+====================================== */
 
 .productos-table {
     width: 100%;
-    border-collapse: collapse;
+    border-collapse: separate;
+    border-spacing: 0;
     font-size: 14px;
 }
 
-.productos-table th {
-    background: #1f2937;
-    color: #000000;
-    padding: 12px;
+/* ENCABEZADO */
+.productos-table thead th {
+    background: #f9fafb;
+    color: #374151;
+    padding: 14px 10px;
     text-align: center;
+    font-weight: 700;
+    border-bottom: 2px solid #e5e7eb;
 }
 
-.productos-table td {
-    padding: 10px;
-    text-align: center;
-    border-bottom: 1px solid #000000;
+/* FILAS */
+.productos-table tbody tr {
+    transition: 0.2s ease;
 }
 
-.productos-table tr:hover {
+.productos-table tbody tr:hover {
     background: #f9fafb;
 }
+
+/* CELDAS */
+.productos-table td {
+    padding: 12px 8px;
+    text-align: center;
+    border-bottom: 1px solid #e5e7eb;
+    color: #111827;
+}
+
+/* ======================================
+   IMAGEN
+====================================== */
 
 .producto-img {
     width: 55px;
     height: 55px;
     object-fit: cover;
-    border-radius: 8px;
-    border: 1px solid #ddd;
+    border-radius: 10px;
+    border: 1px solid #e5e7eb;
+    background: #ffffff;
 }
 
+/* ======================================
+   ESTADOS
+====================================== */
+
 .estado {
-    padding: 5px 10px;
-    border-radius: 20px;
+    padding: 6px 14px;
+    border-radius: 999px;
     font-size: 12px;
-    font-weight: bold;
+    font-weight: 700;
+    display: inline-block;
 }
 
 .estado.activo {
@@ -53,42 +83,77 @@
     color: #991b1b;
 }
 
-.empty {
-    padding: 20px;
-    text-align: center;
-    color: #6b7280;
-}
+/* ======================================
+   ACCIONES
+====================================== */
+
 .acciones {
     display: flex;
-    gap: 8px;
     justify-content: center;
-    align-items: center;
+    gap: 10px;
 }
 
+/* BOTONES */
 .btn {
-    padding: 6px 12px;
-    border-radius: 6px;
+    padding: 7px 14px;
+    border-radius: 10px;
     font-size: 12px;
-    cursor: pointer;
+    font-weight: 700;
     border: none;
-    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s ease;
 }
 
+/* EDITAR */
 .btn.editar {
     background: #2563eb;
-    color: #fff;
+    color: #ffffff;
 }
 
-.btn.desactivar {
-    background: #dc2626;
-    color: #fff;
-}
-
+/* ACTIVAR */
 .btn.activar {
     background: #16a34a;
-    color: #fff;
+    color: #ffffff;
 }
 
+/* DESACTIVAR */
+.btn.desactivar {
+    background: #dc2626;
+    color: #ffffff;
+}
+
+/* EFECTO */
 .btn:hover {
-    opacity: 0.85;
+    transform: translateY(-1px);
+    opacity: 0.9;
+}
+
+/* ======================================
+   VACÍO
+====================================== */
+
+.empty {
+    padding: 30px;
+    text-align: center;
+    color: #6b7280;
+    font-size: 14px;
+}
+
+/* ======================================
+   RESPONSIVE
+====================================== */
+
+@media (max-width: 900px) {
+
+    .productos-table {
+        font-size: 13px;
+    }
+
+    .acciones {
+        flex-direction: column;
+    }
+
+    .btn {
+        width: 100%;
+    }
 }

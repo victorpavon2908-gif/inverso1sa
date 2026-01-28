@@ -1,13 +1,17 @@
 {% extends "inverso_sa/panel.html" %}
+{% load static %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'inverso_sa/css/crear_editar_cuenta.css' %}">
+{% endblock %}
+
 
 {% block title %}{{ titulo }}{% endblock %}
 {% block page_title %}{{ titulo }}{% endblock %}
 
 {% block content %}
 
-<div class="card" style="max-width:600px;margin:auto;">
+<div class="form-card">
 
-    {# 🔔 MENSAJES DJANGO #}
     {% if messages %}
         {% for message in messages %}
             <div class="alert {{ message.tags }}">
@@ -16,37 +20,44 @@
         {% endfor %}
     {% endif %}
 
-    {# ❌ ERRORES GENERALES DEL FORM #}
     {% if form.non_field_errors %}
         <div class="alert error">
             {{ form.non_field_errors }}
         </div>
     {% endif %}
 
-    <form method="POST">
+    <form method="POST" class="bank-form">
         {% csrf_token %}
 
-        <label>Banco</label>
-        {{ form.banco }}
-        {{ form.banco.errors }}
+        <div class="form-group">
+            <label>Banco</label>
+            {{ form.banco }}
+            {{ form.banco.errors }}
+        </div>
 
-        <label>Destinatario</label>
-        {{ form.destinatario }}
-        {{ form.destinatario.errors }}
+        <div class="form-group">
+            <label>Destinatario</label>
+            {{ form.destinatario }}
+            {{ form.destinatario.errors }}
+        </div>
 
-        <label>Número de cuenta</label>
-        {{ form.numero_cuenta }}
-        {{ form.numero_cuenta.errors }}
+        <div class="form-group">
+            <label>Número de cuenta</label>
+            {{ form.numero_cuenta }}
+            {{ form.numero_cuenta.errors }}
+        </div>
 
-        <label style="margin-top:10px;">
-            {{ form.activa }} Activa
-        </label>
+        <div class="form-group checkbox">
+            <label>
+                {{ form.activa }} Cuenta activa
+            </label>
+        </div>
 
-        <div style="margin-top:20px;display:flex;gap:10px;">
-            <button type="submit" class="btn-primary">Guardar</button>
+        <div class="form-actions">
+            <button type="submit" class="btn-primary">💾 Guardar</button>
 
-            <a href="{% url 'cuentas_bancarias' %}" class="btn-sm delete">
-                Cancelar
+            <a href="{% url 'cuentas_bancarias' %}" class="btn-cancel">
+                ↩ Cancelar
             </a>
         </div>
 

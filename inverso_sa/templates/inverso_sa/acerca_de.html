@@ -1,0 +1,135 @@
+{% extends "inverso_sa/dashboard.html" %}
+{% load static %}
+
+{% block title %}Acerca de | INVERSO{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'inverso_sa/css/acerca.css' %}">
+{% endblock %}
+
+{% block contenido %}
+
+<div class="main-content container">
+
+    <h2 class="page-title">📘 Acerca de INVERSO</h2>
+
+    <div class="about-card">
+
+        <img src="{% static 'inverso_sa/img/logo.jpeg' %}" class="about-logo">
+
+        <p class="about-text">
+            INVERSO es una plataforma financiera digital creada con el objetivo de
+            brindar a los usuarios una experiencia moderna, segura y confiable en
+            la administración de inversiones y generación de ingresos.
+            Nuestro sistema ha sido diseñado para permitir el crecimiento económico
+            progresivo mediante mecanismos de inversión claros, transparentes y
+            estructurados.
+        </p>
+
+        <p class="about-text">
+            La plataforma surge como respuesta a la necesidad de contar con
+            alternativas digitales que permitan a las personas administrar su dinero
+            de manera inteligente, sin procesos complicados y con total visibilidad
+            de sus movimientos financieros.
+        </p>
+
+        <!-- MISIÓN -->
+        <div class="about-section">
+            <h4>🎯 Nuestra misión</h4>
+            <p>
+                Nuestra misión es proporcionar oportunidades de inversión accesibles,
+                confiables y sostenibles, permitiendo que cada usuario pueda generar
+                ingresos diarios de forma progresiva, manteniendo siempre la
+                transparencia y la seguridad como pilares fundamentales.
+            </p>
+            <p>
+                Buscamos empoderar a nuestros usuarios a través de herramientas
+                digitales que faciliten el control financiero, fomenten el ahorro
+                inteligente y promuevan una cultura de crecimiento económico responsable.
+            </p>
+        </div>
+
+        <!-- VISIÓN -->
+        <div class="about-section">
+            <h4>🚀 Nuestra visión</h4>
+            <p>
+                Aspiramos a convertirnos en una plataforma financiera digital líder
+                en la región, reconocida por su seriedad, innovación y compromiso con
+                el desarrollo económico de nuestros usuarios.
+            </p>
+            <p>
+                Nuestra visión contempla la expansión constante de funcionalidades,
+                integrando nuevos métodos de inversión, automatización financiera,
+                sistemas de referidos y herramientas avanzadas de análisis económico.
+            </p>
+        </div>
+
+        <!-- VALORES -->
+        <div class="about-section">
+            <h4>💎 Nuestros valores</h4>
+            <ul class="about-list">
+                <li>✔ Transparencia total en cada operación</li>
+                <li>✔ Compromiso con nuestros usuarios</li>
+                <li>✔ Seguridad financiera</li>
+                <li>✔ Crecimiento sostenible</li>
+                <li>✔ Innovación constante</li>
+                <li>✔ Responsabilidad y ética digital</li>
+            </ul>
+        </div>
+
+        <!-- SEGURIDAD -->
+        <div class="about-section">
+            <h4>🔐 Seguridad y confianza</h4>
+            <p>
+                En INVERSO, la seguridad es una prioridad absoluta. Todas las
+                operaciones son monitoreadas y verificadas para garantizar que cada
+                movimiento financiero sea legítimo.
+            </p>
+            <p>
+                Implementamos mecanismos de control interno, validaciones manuales y
+                protección de datos que permiten resguardar la información personal
+                y financiera de nuestros usuarios.
+            </p>
+        </div>
+
+        <!-- FUNCIONAMIENTO -->
+        <div class="about-section">
+            <h4>⚙️ ¿Cómo funciona INVERSO?</h4>
+            <p>
+                El usuario puede realizar recargas, invertir en los planes
+                disponibles y generar ganancias diarias según su nivel de inversión.
+            </p>
+            <p>
+                Las ganancias se reflejan directamente en el saldo del usuario,
+                el cual puede ser retirado mediante cuentas bancarias registradas
+                dentro del sistema.
+            </p>
+            <p>
+                Todos los procesos están diseñados para ser simples, claros y
+                fáciles de utilizar incluso para usuarios sin experiencia previa.
+            </p>
+        </div>
+
+        <!-- COMPROMISO -->
+        <div class="about-section highlight">
+            <h4>🤝 Nuestro compromiso</h4>
+            <p>
+                Nos comprometemos a mantener una plataforma estable, clara y en
+                constante mejora, escuchando siempre las sugerencias de nuestros
+                usuarios y fortaleciendo cada área del sistema.
+            </p>
+            <p>
+                INVERSO no solo es una plataforma, es una comunidad orientada al
+                crecimiento financiero responsable.
+            </p>
+        </div>
+
+        <div class="about-footer">
+            <span>INVERSO © 2026 — Plataforma financiera digital</span>
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
