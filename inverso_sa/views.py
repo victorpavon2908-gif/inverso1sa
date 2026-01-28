@@ -147,7 +147,6 @@ def registro_view(request):
 
 
 
-
 # --------------------
 # OTRAS VISTAS
 # --------------------

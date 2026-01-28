@@ -1,102 +1,176 @@
-{% extends "inverso_sa/dashboard.html" %}
 {% load static %}
 
-{% block extra_css %}
-<link rel="stylesheet" href="{% static 'inverso_sa/css/recarga.css' %}">
-{% endblock %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Registro | INVERSO</title>
+    <link rel="stylesheet" href="{% static 'inverso_sa/css/registro.css' %}">
+    <link rel="icon" type="image/x-icon" href="{% static 'inverso_sa/img/favicon.jpeg' %}">
+</head>
+<body>
 
-{% block contenido %}
-<div class="container">
+<div class="registro-container">
 
-    <h2>💳 Recargar saldo</h2>
+    <h2>Crear cuenta</h2>
 
-    <a href="{% url 'inicio' %}" class="btn-cta">⬅ Regresar</a>
-
-    <!-- ✅ MENSAJES -->
     {% if messages %}
-        <div class="alerts-container">
+        <div class="mensajes">
             {% for message in messages %}
-                <div class="alert {{ message.tags }}">
-                    {{ message }}
-                </div>
+                <div class="mensaje {{ message.tags }}">{{ message }}</div>
             {% endfor %}
         </div>
     {% endif %}
 
-    <!-- ===============================
-        TARJETA DATOS BANCARIOS
-    =============================== -->
-    <div class="card-bg">
+    {% if error %}
+        <div class="error">{{ error }}</div>
+    {% endif %}
 
-        <p>
-            <span><strong>Banco:</strong> {{ cuenta.banco }}</span>
-            <button type="button" onclick="copiar('{{ cuenta.banco }}')">
-                Copiar
-            </button>
-        </p>
+    {% if invitador %}
+        <div class="invitador">
+            🔗 Has sido invitado por: <strong>{{ invitador.username }}</strong>
+        </div>
+    {% endif %}
 
-        <p>
-            <span><strong>Destinatario:</strong> {{ cuenta.destinatario }}</span>
-            <button type="button" onclick="copiar('{{ cuenta.destinatario }}')">
-                Copiar
-            </button>
-        </p>
-
-        <p>
-            <span><strong>N° Cuenta:</strong> {{ cuenta.numero_cuenta }}</span>
-            <button type="button" onclick="copiar('{{ cuenta.numero_cuenta }}')">
-                Copiar
-            </button>
-        </p>
-
-    </div>
-
-    <!-- ===============================
-        FORMULARIO
-    =============================== -->
-    <form method="POST" enctype="multipart/form-data">
+    <form method="POST" action="">
         {% csrf_token %}
 
-        <label>Monto</label>
-        <input type="number" name="monto" id="monto" required>
-
-        <!-- montos rápidos -->
-        <div class="quick-amounts">
-            <button type="button" onclick="setMonto(300)">C$300</button>
-            <button type="button" onclick="setMonto(500)">C$500</button>
-            <button type="button" onclick="setMonto(1000)">C$1000</button>
-            <button type="button" onclick="setMonto(3000)">C$3000</button>
-            <button type="button" onclick="setMonto(5000)">C$5000</button>
-            <button type="button" onclick="setMonto(10000)">C$10000</button>
-            <button type="button" onclick="setMonto(50000)">C$50000</button>
-            <button type="button" onclick="setMonto(100000)">C$100000</button>
+        <div class="form-group">
+            <label for="first_name">Nombre</label>
+            <input type="text" id="first_name" name="first_name" required placeholder="Tu nombre">
         </div>
 
-        <label>Referencia</label>
-        <input type="text" name="referencia" required>
+        <div class="form-group">
+            <label for="last_name">Apellido</label>
+            <input type="text" id="last_name" name="last_name" required placeholder="Tu apellido">
+        </div>
 
-        <label>Voucher</label>
-        <input type="file" name="voucher" required>
+        <div class="form-group">
+            <label for="email">Correo electrónico</label>
+            <input type="email" id="email" name="email" required placeholder="ejemplo@correo.com">
+        </div>
 
-        <button type="submit" class="btn-cta">
-            Enviar recarga
-        </button>
+        <div class="form-group">
+            <label for="username">Usuario</label>
+            <input type="text" id="username" name="username" required placeholder="Nombre de usuario">
+        </div>
+
+        <div class="form-group">
+            <label for="password1">Contraseña</label>
+            <input type="password" id="password1" name="password1" required placeholder="Contraseña">
+        </div>
+
+        <div class="form-group">
+            <label for="password2">Confirmar Contraseña</label>
+            <input type="password" id="password2" name="password2" required placeholder="Repite la contraseña">
+        </div>
+
+        <button type="submit" class="btn-cta">Registrarse</button>
     </form>
+
+    <p class="login-link">
+        ¿Ya tienes cuenta? <a href="{% url 'login' %}">Inicia sesión aquí</a>
+    </p>
 
 </div>
 
-<!-- ===============================
-    JS COPIAR
-================================ -->
-<script>
-function copiar(texto) {
-    navigator.clipboard.writeText(texto);
-    alert("Copiado correctamente ✅");
+<style>
+/* Estilo básico, puedes adaptarlo a tu CSS existente */
+body {
+    font-family: Arial, sans-serif;
+    background: #f5f5f5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
 }
 
-function setMonto(valor) {
-    document.getElementById("monto").value = valor;
+.registro-container {
+    background: #fff;
+    padding: 30px 40px;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    width: 400px;
 }
-</script>
 
-{% endblock %}
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+input {
+    width: 100%;
+    padding: 8px 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.btn-cta {
+    width: 100%;
+    padding: 10px;
+    background: #007bff;
+    color: #fff;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.btn-cta:hover {
+    background: #0056b3;
+}
+
+.error {
+    background: #ffcccc;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    color: #a33;
+}
+
+.mensajes .mensaje {
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.mensaje.success { background: #ccffcc; color: #2d7a2d; }
+.mensaje.warning { background: #fff0cc; color: #a66a00; }
+.mensaje.error { background: #ffcccc; color: #a33; }
+
+.invitador {
+    background: #e6f7ff;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    border-left: 4px solid #3399ff;
+}
+
+.login-link {
+    text-align: center;
+    margin-top: 15px;
+}
+
+.login-link a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.login-link a:hover {
+    text-decoration: underline;
+}
+</style>
+
+</body>
+</html>
