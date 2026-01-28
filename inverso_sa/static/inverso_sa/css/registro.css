@@ -1,174 +1,199 @@
 :root {
     --bg-deep: #05070a;
-    --accent-blue: #007bff;
+    --accent-blue: #1e90ff;
     --accent-gold: #f5a623;
     --card-bg: rgba(15, 20, 35, 0.95);
     --text-main: #ffffff;
-    --text-muted: #8892b0;
+    --text-muted: #9aa4c7;
+    --border-soft: rgba(255, 255, 255, 0.08);
 }
 
 * {
     box-sizing: border-box;
 }
 
-body, html {
+html, body {
     margin: 0;
     padding: 0;
     min-height: 100vh;
     font-family: 'Montserrat', sans-serif;
-    background-color: var(--bg-deep);
+    background: radial-gradient(circle at center, #111b3d 0%, #05070a 100%);
     color: var(--text-main);
 }
 
-.page-container {
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 40px 20px;
-    background: radial-gradient(circle at center, #111b3d 0%, #05070a 100%);
-}
+/* ===========================
+   CONTENEDOR GENERAL
+=========================== */
 
-.register-card {
-    background: var(--card-bg);
+.registro-container {
     width: 100%;
-    max-width: 500px;
-    padding: 40px;
+    max-width: 460px;
+    padding: 45px;
+    background: var(--card-bg);
     border-radius: 28px;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(10px);
+    border: 1px solid var(--border-soft);
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(12px);
+    animation: fadeInUp 0.7s ease forwards;
+    margin: auto;
+    margin-top: 5vh;
 }
 
-.brand-header {
+/* ===========================
+   TITULO
+=========================== */
+
+.registro-container h2 {
     text-align: center;
-    margin-bottom: 30px;
-}
-
-.logo-img {
-    width: 70px;
-    height: auto;
-    margin-bottom: 10px;
-    filter: drop-shadow(0 0 10px rgba(0, 123, 255, 0.3));
-}
-
-.brand-title {
-    font-size: 1.5rem;
-    font-weight: 800;
+    font-size: 1.7rem;
     letter-spacing: 2px;
-    margin: 0;
-}
-
-.brand-title span {
+    font-weight: 800;
+    margin-bottom: 30px;
     color: var(--accent-gold);
 }
 
-.brand-subtitle {
-    color: var(--text-muted);
-    font-size: 0.9rem;
-    margin-top: 5px;
+/* ===========================
+   MENSAJES
+=========================== */
+
+.mensajes .mensaje {
+    padding: 12px 14px;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    margin-bottom: 12px;
+    text-align: center;
 }
 
-.form-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 15px;
+.mensaje.success {
+    background: rgba(0, 255, 170, 0.12);
+    color: #3cffc4;
 }
 
-.input-group {
+.mensaje.warning {
+    background: rgba(255, 193, 7, 0.15);
+    color: #ffc107;
+}
+
+.mensaje.error {
+    background: rgba(255, 60, 60, 0.15);
+    color: #ff6b6b;
+}
+
+.error {
+    background: rgba(255, 60, 60, 0.15);
+    color: #ff6b6b;
+    padding: 12px;
+    border-radius: 10px;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+/* ===========================
+   INVITADOR
+=========================== */
+
+.invitador {
+    background: rgba(30, 144, 255, 0.12);
+    border-left: 4px solid var(--accent-blue);
+    padding: 12px 14px;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    margin-bottom: 22px;
+    color: #8fc7ff;
+}
+
+/* ===========================
+   FORMULARIO
+=========================== */
+
+.form-group {
     margin-bottom: 18px;
-    text-align: left;
 }
 
-.input-group label {
+.form-group label {
     display: block;
     font-size: 0.65rem;
     font-weight: 700;
+    letter-spacing: 1.2px;
     color: var(--accent-blue);
     margin-bottom: 6px;
-    letter-spacing: 1px;
 }
 
-.input-group input {
+.form-group input {
     width: 100%;
-    padding: 12px 15px;
+    padding: 13px 15px;
     background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 10px;
-    color: white;
+    border: 1px solid var(--border-soft);
+    border-radius: 12px;
+    color: #fff;
     font-size: 0.9rem;
     outline: none;
-    transition: all 0.3s ease;
+    transition: all 0.25s ease;
 }
 
-.input-group input:focus {
+.form-group input::placeholder {
+    color: #8a92b2;
+}
+
+.form-group input:focus {
     border-color: var(--accent-blue);
-    background: rgba(0, 123, 255, 0.05);
-    box-shadow: 0 0 15px rgba(0, 123, 255, 0.1);
+    background: rgba(30, 144, 255, 0.05);
+    box-shadow: 0 0 20px rgba(30, 144, 255, 0.2);
 }
 
-.terms-check {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 25px;
-    text-align: left;
-}
+/* ===========================
+   BOTON
+=========================== */
 
-.terms-check input {
-    accent-color: var(--accent-gold);
-    width: 16px;
-    height: 16px;
-}
-
-.terms-check label {
-    font-size: 0.75rem;
-    color: var(--text-muted);
-}
-
-.submit-btn {
+.btn-cta {
     width: 100%;
     padding: 16px;
     border: none;
-    border-radius: 12px;
+    border-radius: 14px;
     background: linear-gradient(135deg, var(--accent-gold), #ffc107);
     color: #05070a;
-    font-weight: 800;
-    font-size: 0.9rem;
+    font-weight: 900;
     letter-spacing: 1px;
+    font-size: 0.9rem;
     cursor: pointer;
-    transition: transform 0.2s;
+    margin-top: 10px;
+    transition: all 0.25s ease;
 }
 
-.submit-btn:hover {
+.btn-cta:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(245, 166, 35, 0.3);
+    box-shadow: 0 10px 25px rgba(245, 166, 35, 0.4);
 }
 
-.form-footer {
-    margin-top: 25px;
+/* ===========================
+   LOGIN LINK
+=========================== */
+
+.login-link {
     text-align: center;
+    margin-top: 25px;
     font-size: 0.85rem;
     color: var(--text-muted);
 }
 
-.form-footer .highlight {
+.login-link a {
     color: var(--accent-gold);
-    text-decoration: none;
     font-weight: 700;
-    margin-left: 5px;
+    text-decoration: none;
 }
 
-@media (max-width: 480px) {
-    .form-grid {
-        grid-template-columns: 1fr;
-    }
+.login-link a:hover {
+    text-decoration: underline;
 }
+
+/* ===========================
+   ANIMACIÓN
+=========================== */
 
 @keyframes fadeInUp {
     from {
         opacity: 0;
-        transform: translateY(20px);
+        transform: translateY(25px);
     }
     to {
         opacity: 1;
@@ -176,10 +201,12 @@ body, html {
     }
 }
 
-.login-card, .register-card {
-    animation: fadeInUp 0.6s ease-out forwards;
-}
+/* ===========================
+   RESPONSIVE
+=========================== */
 
-body {
-    transition: background 0.5s ease;
+@media (max-width: 480px) {
+    .registro-container {
+        padding: 35px 25px;
+    }
 }
