@@ -1,0 +1,75 @@
+.container-historial {
+    max-width: 900px;
+    margin: auto;
+    background: #fff;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,.08);
+}
+
+.container-historial h2 {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.tabla-retiros {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.tabla-retiros th,
+.tabla-retiros td {
+    padding: 12px;
+    border-bottom: 1px solid #e5e7eb;
+    text-align: center;
+}
+
+.tabla-retiros th {
+    background: #1f2937;
+    color: #fff;
+}
+
+.estado {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 13px;
+}
+
+.estado.pendiente {
+    background: #facc15;
+    color: #000;
+}
+
+.estado.aprobado {
+    background: #22c55e;
+    color: #fff;
+}
+
+.estado.rechazado {
+    background: #ef4444;
+    color: #fff;
+}
+
+.sin-retiros {
+    text-align: center;
+    margin: 30px 0;
+    font-weight: 600;
+    color: #6b7280;
+}
+
+.btn-volver {
+    display: block;
+    margin-top: 25px;
+    text-align: center;
+    padding: 12px;
+    background: #1f2937;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: .3s;
+}
+
+.btn-volver:hover {
+    background: #111827;
+}

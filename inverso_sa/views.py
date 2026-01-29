@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group
 from datetime import date
-from .models import Usuario, Transaccion, Producto, Recarga, CuentaBancaria, Inversion, Retiro, CuentaUsuario
+from .models import Usuario, Transaccion, Producto, Recarga, CuentaBancaria, Inversion, Retiro, CuentaUsuario, ComisionReferido
 from django.contrib.auth.hashers import make_password
 from django.db.models import Sum
 from.forms import ProductoForm, CuentaBancariaForm
@@ -407,6 +407,7 @@ def solicitudes_recarga(request):
 
 @login_required
 def aprobar_rechazar_recarga(request, id):
+
     recarga = get_object_or_404(Recarga, id=id)
 
     if request.method == "POST":
@@ -416,31 +417,48 @@ def aprobar_rechazar_recarga(request, id):
             messages.warning(request, "Esta recarga ya fue procesada")
             return redirect('solicitudes_recarga')
 
-        if accion == "aprobar":
-            recarga.estado = 'aprobada'
+        usuario = recarga.usuario
 
-            usuario = recarga.usuario
-            usuario.saldo += recarga.monto
-            usuario.save()
+        if accion == "aprobar":
+
+            # =========================
+            # APROBAR RECARGA
+            # =========================
+            recarga.estado = 'aprobada'
             recarga.save()
 
-            # ✅ COMISIÓN SOLO PRIMERA RECARGA
-            if (
-                usuario.referido_por
-                and not usuario.recarga_comision_pagada
-            ):
-                invitador = usuario.referido_por
-                comision = recarga.monto * Decimal("0.04")
+            usuario.saldo += recarga.monto
+            usuario.save()
 
+            # =========================
+            # COMISIÓN SOLO PRIMERA RECARGA
+            # =========================
+            if usuario.referido_por and not usuario.recarga_comision_pagada:
+
+                invitador = usuario.referido_por
+                porcentaje = Decimal("4")
+                comision = (recarga.monto * porcentaje) / 100
+
+                # 💰 pagar comisión
                 invitador.saldo += comision
                 invitador.save()
 
+                # ✅ REGISTRAR HISTORIAL (ESTO ES LO QUE FALTABA)
+                ComisionReferido.objects.create(
+                    invitador=invitador,
+                    referido=usuario,
+                    monto_base=recarga.monto,
+                    porcentaje=porcentaje,
+                    comision=comision
+                )
+
+                # 🔒 bloquear segunda comisión
                 usuario.recarga_comision_pagada = True
                 usuario.save()
 
                 messages.success(
                     request,
-                    f"🎉 Comisión de C$ {comision:.2f} pagada al invitador"
+                    f"🎉 Comisión C$ {comision:.2f} pagada al invitador"
                 )
 
             messages.success(request, "✅ Recarga aprobada correctamente")
@@ -570,55 +588,70 @@ from decimal import Decimal
 @login_required
 def retirar_view(request):
 
-    cuentas = CuentaUsuario.objects.filter(usuario=request.user)
+    usuario = request.user
+    cuentas = CuentaUsuario.objects.filter(usuario=usuario)
 
     if not cuentas.exists():
         messages.warning(request, "Primero debes agregar una cuenta bancaria")
         return redirect("agregar_cuenta_usuario")
 
+    # 🚫 bloquear si hay retiro pendiente
+    if Retiro.objects.filter(usuario=usuario, estado='pendiente').exists():
+        messages.warning(
+            request,
+            "Ya tienes un retiro en proceso. Espera que sea aprobado."
+        )
+        return redirect("mio")
+
     if request.method == "POST":
+
         try:
             monto = Decimal(request.POST.get("monto"))
         except:
             messages.error(request, "Monto inválido")
             return redirect("retirar")
 
-        cuenta_id = request.POST.get("cuenta")
-
-        if monto <= 300:
-            messages.error(request, "El monto debe ser mayor a 300")
+        if monto <= Decimal("300"):
+            messages.error(request, "El monto debe ser mayor a C$300")
             return redirect("retirar")
 
-        if monto > request.user.saldo:
+        if monto > usuario.saldo:
             messages.error(request, "Saldo insuficiente")
             return redirect("retirar")
 
         cuenta = get_object_or_404(
             CuentaUsuario,
-            id=cuenta_id,
-            usuario=request.user
+            id=request.POST.get("cuenta"),
+            usuario=usuario
         )
 
-        # 🔻 DESCONTAR SALDO (YA ES DECIMAL)
-        request.user.saldo -= monto
-        request.user.save()
+        # 💸 descontar saldo
+        usuario.saldo -= monto
+        usuario.save()
 
-        # 📝 CREAR RETIRO
-        Retiro.objects.create(
-            usuario=request.user,
+        # 📝 crear retiro
+        retiro = Retiro.objects.create(
+            usuario=usuario,
             cuenta=cuenta,
             monto=monto,
             estado='pendiente'
         )
 
+        # 🧾 registrar egreso
+        Transaccion.objects.create(
+            usuario=usuario,
+            monto=monto,
+            tipo='egreso',
+            referencia=f"RETIRO-{retiro.id}"
+        )
+
         messages.success(request, "✅ Retiro enviado correctamente")
-        return redirect("mio")
+        return redirect("historial_retiros")
 
     return render(request, "inverso_sa/retirar.html", {
         "cuentas": cuentas,
-        "saldo": request.user.saldo
+        "saldo": usuario.saldo
     })
-
 
 
 @login_required
@@ -661,28 +694,24 @@ def procesar_retiro(request, id):
 def equipo_view(request):
     usuario = request.user
 
-    # 🔗 NIVELES DE EQUIPO
-    nivel_1 = Usuario.objects.filter(referido_por=usuario)
-    nivel_2 = Usuario.objects.filter(referido_por__in=nivel_1)
-    nivel_3 = Usuario.objects.filter(referido_por__in=nivel_2)
+    equipo = (
+        ComisionReferido.objects
+        .filter(invitador=usuario)
+        .values("referido__username")
+        .annotate(
+            total_invertido=Sum("monto_base"),
+            total_comision=Sum("comision")
+        )
+        .order_by("-total_comision")
+    )
 
-    # 🔢 CONTADORES
-    n1_total = nivel_1.count()
-    n2_total = nivel_2.count()
-    n3_total = nivel_3.count()
-
-    # 🔗 LINK DE INVITACIÓN
     link = f"https://inverso1sa-5.onrender.com/registro/?ref={usuario.codigo_invitacion}"
 
-    context = {
+    return render(request, "inverso_sa/equipo.html", {
         "codigo": usuario.codigo_invitacion,
         "link": link,
-        "n1_total": n1_total,
-        "n2_total": n2_total,
-        "n3_total": n3_total,
-    }
-
-    return render(request, "inverso_sa/equipo.html", context)
+        "equipo": equipo
+    })
 
 @login_required
 def toggle_usuario(request, id):
@@ -838,6 +867,14 @@ def acerca_de(request):
 @login_required
 def asistencia(request):
     return render(request, "inverso_sa/asistencia.html")
+
+@login_required
+def historial_retiros(request):
+    retiros = Retiro.objects.filter(usuario=request.user).order_by('-fecha')
+
+    return render(request, 'inverso_sa/historial_retiros.html', {
+        'retiros': retiros
+    })
 
 
 def custom_404_view(request, exception):

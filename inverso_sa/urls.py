@@ -77,6 +77,7 @@ urlpatterns = [
 
 path("acerca/", views.acerca_de, name="acerca_de"),
 path("asistencia/", views.asistencia, name="asistencia"),
+path('retiros/historial/', views.historial_retiros, name='historial_retiros'),
 
 
 ]

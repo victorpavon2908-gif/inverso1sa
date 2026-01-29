@@ -71,6 +71,23 @@ button {
 button:hover {
     background: #09355a;
 }
+.btn-historial {
+    display: block;
+    margin-top: 20px;
+    width: 100%;
+    padding: 12px;
+    background: #1f2937;
+    color: #fff;
+    text-align: center;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.btn-historial:hover {
+    background: #111827;
+}
 
 /* ===============================
    RESPONSIVE

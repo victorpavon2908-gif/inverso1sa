@@ -1,7 +1,7 @@
 {% extends "inverso_sa/dashboard.html" %}
 {% load static %}
 
-{% block title %}Equipo | INVERSO{% endblock %}
+{% block title %}Mi Equipo | INVERSO{% endblock %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'inverso_sa/css/equipo.css' %}">
@@ -11,42 +11,24 @@
 
 {% block contenido %}
 
-<!-- MENSAJES -->
-{% if messages %}
-    {% for message in messages %}
-        <div class="alert {{ message.tags }}">
-            {{ message }}
-        </div>
-    {% endfor %}
-{% endif %}
-
 <header class="main-header">
-    <h1>👥 Mi Equipo</h1>
+    <h1>👥 Mi Equipo Directo</h1>
 </header>
 
-<!-- 🔗 MÉTODO DE COMPARTIR -->
 <section class="card-section">
-    <h3>Método de compartir</h3>
+    <h3>Método de invitación</h3>
 
     <div class="share-container">
 
         <div class="share-box">
-            <div class="icon">🎁</div>
-            <div class="details">
-                <span class="label">Código de invitación</span>
-                <span class="code">{{ codigo }}</span>
-            </div>
+            <strong>Código:</strong>
+            <span class="code">{{ codigo }}</span>
         </div>
 
         <div class="share-box">
-            <div class="icon">🔗</div>
-            <div class="details">
-                <span class="label">Enlace de invitación</span>
-                <span class="link">{{ link }}</span>
-            </div>
-
-            <button class="copy-pill"
-                    onclick="copiarLink('{{ link }}')">
+            <strong>Enlace:</strong>
+            <span class="link">{{ link }}</span>
+            <button onclick="copiarLink('{{ link }}')" class="copy-btn">
                 Copiar
             </button>
         </div>
@@ -54,52 +36,44 @@
     </div>
 </section>
 
-<!-- 🏆 BENEFICIOS -->
 <section class="card-section">
-    <h3>Beneficios de mi equipo</h3>
+    <h3>👥 Mi equipo</h3>
 
-    <div class="levels-grid">
+    <table class="equipo-table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Usuario</th>
+                <th>Total invertido</th>
+                <th>Mi comisión</th>
+            </tr>
+        </thead>
 
-        <div class="level-card lvl-1">
-            <div class="lvl-header">👑 Nivel 1</div>
-            <div class="lvl-body">
-                <div class="main-stat">8% <small>Comisión</small></div>
-                <div class="sub-stats">
-                    <span>{{ n1_total }} Miembros</span>
-                    <span>Comisión directa</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="level-card lvl-2">
-            <div class="lvl-header">🥈 Nivel 2</div>
-            <div class="lvl-body">
-                <div class="main-stat">1% <small>Comisión</small></div>
-                <div class="sub-stats">
-                    <span>{{ n2_total }} Miembros</span>
-                    <span>Comisión indirecta</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="level-card lvl-3">
-            <div class="lvl-header">🥉 Nivel 3</div>
-            <div class="lvl-body">
-                <div class="main-stat">1% <small>Comisión</small></div>
-                <div class="sub-stats">
-                    <span>{{ n3_total }} Miembros</span>
-                    <span>Comisión pasiva</span>
-                </div>
-            </div>
-        </div>
-
-    </div>
+        <tbody>
+            {% for m in equipo %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ m.referido__username }}</td>
+                <td>C$ {{ m.total_invertido }}</td>
+                <td class="comision">
+                    C$ {{ m.total_comision|floatformat:2 }}
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4" class="empty">
+                    No tienes comisiones aún
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </section>
 
 <script>
 function copiarLink(texto) {
     navigator.clipboard.writeText(texto);
-    alert("✅ Enlace copiado correctamente");
+    alert("✅ Enlace copiado");
 }
 </script>
 
