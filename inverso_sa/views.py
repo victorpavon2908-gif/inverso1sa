@@ -436,7 +436,7 @@ def aprobar_rechazar_recarga(request, id):
             if usuario.referido_por and not usuario.recarga_comision_pagada:
 
                 invitador = usuario.referido_por
-                porcentaje = Decimal("4")
+                porcentaje = Decimal("7.7")
                 comision = (recarga.monto * porcentaje) / 100
 
                 # 💰 pagar comisión
